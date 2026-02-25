@@ -9,14 +9,18 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  checks: write
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      deploy-url: ${{ steps.deployment-info.outputs.url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,59 +30,75 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --configuration Release
 
       - name: Run xUnit tests
-        run: dotnet test tests/SiteGenerator.Tests/SiteGenerator.Tests.csproj --no-build --verbosity normal
-
-      - name: Generate site for E2E tests
-        run: dotnet run --project src/SiteGenerator/SiteGenerator.csproj --no-build
-
-      - name: Install Playwright browsers
-        run: pwsh tests/Site.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 install chromium
-
-      - name: Run Playwright tests
-        run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --verbosity normal
-
-  build:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --no-restore
+        run: dotnet test tests/SiteGenerator.Tests/SiteGenerator.Tests.csproj --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx"
 
       - name: Generate site
-        run: dotnet run --project src/SiteGenerator/SiteGenerator.csproj --no-build
+        run: dotnet run --project src/SiteGenerator/SiteGenerator.csproj --no-build --configuration Release
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pwsh tests/Site.PlaywrightTests/bin/Release/net10.0/playwright.ps1 install chromium
+
+      - name: Run Playwright tests
+        run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=e2e-test-results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/TestResults/**/*.trx
+            tests/Site.PlaywrightTests/bin/Release/net10.0/playwright-results/**
+          retention-days: 30
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './output'
+
+      - name: Upload build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-site
+          path: output/
+          retention-days: 7
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-and-test
+    timeout-minutes: 10
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
