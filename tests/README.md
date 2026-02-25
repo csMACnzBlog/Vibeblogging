@@ -2,6 +2,10 @@
 
 This directory contains tests for the Vibeblogging static site generator.
 
+## Test Framework
+
+Both test projects use **xUnit v3** (package `xunit.v3` version 3.0.1).
+
 ## Test Projects
 
 ### SiteGenerator.Tests
@@ -19,7 +23,7 @@ dotnet test tests/SiteGenerator.Tests/SiteGenerator.Tests.csproj
 ```
 
 ### Site.PlaywrightTests
-Playwright E2E tests for the generated static site. These tests verify:
+xUnit + Playwright E2E tests for the generated static site. These tests verify:
 - Index page loads correctly
 - Stylesheets are applied
 - Posts are listed
