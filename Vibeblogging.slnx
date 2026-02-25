@@ -2,4 +2,8 @@
   <Folder Name="/src/">
     <Project Path="src/SiteGenerator/SiteGenerator.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SiteGenerator.Tests/SiteGenerator.Tests.csproj" />
+    <Project Path="tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj" />
+  </Folder>
 </Solution>
