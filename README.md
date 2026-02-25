@@ -1,0 +1,2 @@
+# Vibeblogging
+A vibe blog
