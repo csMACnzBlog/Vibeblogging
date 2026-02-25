@@ -22,10 +22,10 @@ The Vibeblogging CI/CD pipeline includes comprehensive quality checks to ensure:
 - Runs via the `lychee-action` GitHub Action
 - Checks all `*.html` files in the `output/` directory
 - Excludes `mailto:` links
-- Uses the output directory as the base for relative links
+- Uses the output directory as the root directory for relative links
 - Fails the build if broken links are found
 
-**Command**: Automatically handled by `lycheeverse/lychee-action@v2.0.0`
+**Command**: Automatically handled by `lycheeverse/lychee-action@v2`
 
 ### 2. HTML Validation
 

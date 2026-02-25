@@ -67,9 +67,9 @@ jobs:
         run: npm install -g html-validate pa11y-ci http-server
           
       - name: Check links in generated site
-        uses: lycheeverse/lychee-action@v2.0.0
+        uses: lycheeverse/lychee-action@v2
         with:
-          args: --verbose --no-progress --exclude-mail --base output 'output/**/*.html'
+          args: --verbose --no-progress --exclude-mail --root-dir output 'output/**/*.html'
           fail: true
           
       - name: Validate HTML
