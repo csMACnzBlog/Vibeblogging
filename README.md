@@ -92,6 +92,17 @@ Then open http://localhost:8000 in your browser.
 
 The blog automatically deploys to GitHub Pages when you push to the `main` branch.
 
+### Quality Checks
+
+Every build runs comprehensive quality checks:
+
+- **Unit Tests**: xUnit tests verify core site generator functionality
+- **E2E Tests**: Playwright tests validate the generated site
+- **Link Checking**: All links are validated using [lychee](https://github.com/lycheeverse/lychee)
+- **HTML Validation**: HTML is validated using [html-validate](https://html-validate.org/)
+- **Accessibility Testing**: Automated accessibility checks using [pa11y-ci](https://github.com/pa11y/pa11y-ci)
+- **Security Scanning**: CodeQL and dependency review protect against vulnerabilities
+
 ### Setup GitHub Pages
 
 1. Go to your repository Settings > Pages
