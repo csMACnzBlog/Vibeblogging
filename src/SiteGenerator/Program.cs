@@ -217,7 +217,7 @@ public class StaticSiteGenerator
         {
             var excerpt = GetExcerpt(post.Content);
             postList.AppendLine("<div class=\"post-item\">");
-            postList.AppendLine($"  <h2><a href=\"/{post.Slug}.html\">{post.Title}</a></h2>");
+            postList.AppendLine($"  <h2><a href=\"{post.Slug}.html\">{post.Title}</a></h2>");
             postList.AppendLine($"  <div class=\"post-meta\">");
             postList.AppendLine($"    <time datetime=\"{post.Date:yyyy-MM-dd}\">{post.Date:MMMM dd, yyyy}</time>");
             if (post.Tags.Any())
