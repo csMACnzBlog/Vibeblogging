@@ -1,0 +1,32 @@
+# Build outputs
+bin/
+obj/
+output/
+
+# .NET
+*.dll
+*.exe
+*.pdb
+*.cache
+*.tmp
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE
+.vscode/
+.vs/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.swp
+*.bak
+*~
