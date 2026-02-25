@@ -66,21 +66,24 @@ tags: tag1, tag2, tag3 (optional but recommended)
 
 ### Tag Categories
 
-Organize tags into categories:
-- **Technology**: dotnet, csharp, javascript, python, etc.
-- **Topics**: tutorial, opinion, review, guide, etc.
-- **Themes**: productivity, career, tools, etc.
+Organize tags based on actual blog usage:
+- **Technology**: dotnet, dotnetcore, csharp, c-sharp, aspnetcore, etc.
+- **Event Type**: conference, review, etc.
+- **Content Type**: tutorial, opinion, architecture, etc.
+- **Specific Topics**: testing, deployment, debugging, patterns, etc.
 
 ### Quality Checklist
 
-- [ ] Proper frontmatter format
-- [ ] Meaningful title and tags
-- [ ] Well-structured content with headings
-- [ ] No spelling or grammar errors
-- [ ] Code blocks have language syntax
+- [ ] Proper frontmatter format with title, date, and tags
+- [ ] Title is descriptive and matches author's style (e.g., "Looking back on C# 6: Elvis Operator")
+- [ ] Content follows conversational, direct tone
+- [ ] Well-structured with clear H2/H3 headings
+- [ ] Code examples are included with proper syntax highlighting
+- [ ] Technical explanations progress from simple to complex
+- [ ] Parenthetical asides used appropriately for caveats
+- [ ] Short paragraphs (2-4 sentences) for readability
 - [ ] Links are valid and working
-- [ ] Images (if any) are optimized
-- [ ] Content provides value to readers
+- [ ] Content teaches something valuable or provides curated recommendations
 
 ## Maintenance Tasks
 
@@ -124,11 +127,12 @@ Maintain a content calendar to plan posts:
 
 When working with blog post writers:
 
-1. Provide clear topic briefs
-2. Review drafts for quality
-3. Suggest improvements
-4. Ensure consistency across posts
-5. Maintain editorial standards
+1. **Provide clear topic briefs** with context and target audience
+2. **Review drafts for quality** and alignment with writing style
+3. **Check for style consistency**: Conversational tone, progressive examples, clear structure
+4. **Verify technical accuracy**: Code examples work, explanations are correct
+5. **Ensure author's voice**: Direct, pragmatic, with appropriate humor and asides
+6. **Maintain editorial standards**: Follow established patterns and formatting
 
 ## Tools and Resources
 
