@@ -42,7 +42,7 @@ jobs:
         run: pwsh tests/Site.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 install chromium
 
       - name: Run Playwright tests
-        run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --verbosity normal -- NUnit.NumberOfTestWorkers=1
+        run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --verbosity normal
 
   build:
     runs-on: ubuntu-latest
