@@ -15,8 +15,38 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Run xUnit tests
+        run: dotnet test tests/SiteGenerator.Tests/SiteGenerator.Tests.csproj --no-build --verbosity normal
+
+      - name: Generate site for E2E tests
+        run: dotnet run --project src/SiteGenerator/SiteGenerator.csproj --no-build
+
+      - name: Install Playwright browsers
+        run: pwsh tests/Site.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 install chromium
+
+      - name: Run Playwright tests
+        run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --verbosity normal -- NUnit.NumberOfTestWorkers=1
+
   build:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
