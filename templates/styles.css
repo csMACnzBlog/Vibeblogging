@@ -201,6 +201,28 @@ pre code {
     position: relative;
 }
 
+/* Accessible colors for menu items on white background */
+.header-bar .menu-item-content {
+    color: #a36a00;
+}
+
+.header-bar .menu-item-content:link,
+.header-bar .menu-item-content:visited {
+    color: #a36a00;
+}
+
+.header-bar .menu-item-content:visited:hover,
+.header-bar .menu-item-content:link:hover {
+    color: #bfc6c5;
+    background: #0080a6;
+}
+
+.header-bar .CurrentButton,
+.header-bar .CurrentButton:link,
+.header-bar .CurrentButton:visited {
+    color: #0080a6;
+}
+
 .content-area {
     box-sizing: border-box;
     padding: 0 10px;
