@@ -7,30 +7,35 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="rss.xml">RSS</a>
-        </nav>
-    </header>
-    <main>
-        <article>
-            <h1>{{TITLE}}</h1>
-            <div class="post-meta">
-                <time datetime="{{DATE}}">{{FORMATTED_DATE}}</time>
-                {{#TAGS}}
-                <span class="tags">
-                    {{TAGS}}
-                </span>
-                {{/TAGS}}
+    <div class="page-container">
+        <header>
+            <h1>Vibeblogging</h1>
+            <div class="header-bar">
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="rss.xml">RSS</a>
+                </nav>
             </div>
-            <div class="post-content">
-                {{CONTENT}}
-            </div>
-        </article>
-    </main>
-    <footer>
-        <p>&copy; 2026 Vibeblogging. All rights reserved.</p>
-    </footer>
+        </header>
+        <main class="content-box">
+            <article>
+                <h1>{{TITLE}}</h1>
+                <div class="post-meta">
+                    <time datetime="{{DATE}}">{{FORMATTED_DATE}}</time>
+                    {{#TAGS}}
+                    <span class="tags">
+                        {{TAGS}}
+                    </span>
+                    {{/TAGS}}
+                </div>
+                <div class="post-content">
+                    {{CONTENT}}
+                </div>
+            </article>
+        </main>
+        <footer>
+            <p>&copy; 2026 Vibeblogging. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>

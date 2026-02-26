@@ -7,21 +7,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Vibeblogging</h1>
-        <p>A vibe blog</p>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="rss.xml">RSS</a>
-        </nav>
-    </header>
-    <main>
-        <div class="posts-list">
-            {{POST_LIST}}
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2026 Vibeblogging. All rights reserved.</p>
-    </footer>
+    <div class="page-container">
+        <header>
+            <h1>Vibeblogging</h1>
+            <p>A vibe blog</p>
+            <div class="header-bar">
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="rss.xml">RSS</a>
+                </nav>
+            </div>
+        </header>
+        <main class="content-box">
+            <h1>Blog</h1>
+            <div class="posts-list">
+                {{POST_LIST}}
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2026 Vibeblogging. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>
