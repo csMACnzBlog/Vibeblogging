@@ -68,7 +68,8 @@ a:visited:hover {
 }
 
 .page-container {
-    max-width: 1200px;
+    max-width: 1600px;
+    min-width: 300px;
     margin: 0 auto;
 }
 
@@ -283,4 +284,41 @@ footer {
     text-align: center;
     color: #666;
     font-size: 0.9rem;
+}
+
+/* Responsive styling for larger screens */
+@media screen and (min-width: 950px) {
+    body {
+        background-color: #4b4b4b;
+        padding: 0;
+    }
+    
+    .page-container {
+        background-clip: padding-box;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 25px;
+        box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.7);
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    .content-box {
+        box-shadow: 3px 3px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    header {
+        box-shadow: 3px 3px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    footer {
+        box-shadow: 3px 3px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header-bar {
+        border-width: 3px;
+        box-shadow: 3px 3px 2px 2px rgba(0, 0, 0, 0.3);
+        height: 32px;
+        margin: -15px -15px 10px -15px;
+        padding-left: 10px;
+    }
 }
