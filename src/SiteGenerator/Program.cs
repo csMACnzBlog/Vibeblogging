@@ -305,7 +305,7 @@ public class StaticSiteGenerator
             foreach (var file in Directory.GetFiles(sourceImagesDir))
             {
                 var fileName = Path.GetFileName(file);
-                var destFile = Path.Combine(destImagesDir, fileName);
+                var destFile = Path.Join(destImagesDir, fileName);
                 File.Copy(file, destFile, true);
             }
         }
