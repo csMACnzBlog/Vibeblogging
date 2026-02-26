@@ -290,6 +290,25 @@ public class StaticSiteGenerator
         var sourceCss = Path.Combine(_templatesDir, "styles.css");
         var destCss = Path.Combine(_outputDir, "styles.css");
         File.Copy(sourceCss, destCss, true);
+        
+        // Copy images folder
+        var sourceImagesDir = Path.Combine(_templatesDir, "images");
+        var destImagesDir = Path.Combine(_outputDir, "images");
+        
+        if (Directory.Exists(sourceImagesDir))
+        {
+            if (!Directory.Exists(destImagesDir))
+            {
+                Directory.CreateDirectory(destImagesDir);
+            }
+            
+            foreach (var file in Directory.GetFiles(sourceImagesDir))
+            {
+                var fileName = Path.GetFileName(file);
+                var destFile = Path.Combine(destImagesDir, fileName);
+                File.Copy(file, destFile, true);
+            }
+        }
     }
 }
 
