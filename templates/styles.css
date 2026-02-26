@@ -78,7 +78,7 @@ a:visited:hover {
     border-radius: 18px;
     border-style: solid;
     border-width: 1px;
-    padding: 20px 20px 20px 20px;
+    padding: 20px;
     margin-bottom: 10px;
 }
 
@@ -110,6 +110,7 @@ header p {
     border-radius: 6px;
     border-style: solid;
     font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    /* Negative margin to extend bar to header edges */
     margin: -10px -10px 10px -10px;
     padding: 5px 10px;
 }
@@ -192,7 +193,7 @@ article h1 {
     font-family: Consolas, monospace;
     font-size: 0.75em;
     padding: 1px 3px;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 .post-content pre {
