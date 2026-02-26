@@ -10,6 +10,10 @@ output/
 *.cache
 *.tmp
 
+# Node.js
+node_modules/
+package-lock.json
+
 # User-specific files
 *.suo
 *.user

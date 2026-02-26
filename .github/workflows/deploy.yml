@@ -66,6 +66,26 @@ jobs:
       - name: Run Playwright tests
         run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=e2e-test-results.trx"
 
+      - name: Setup Node.js for validation tools
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install validation tools
+        run: npm install -g html-validate pa11y-ci http-server
+          
+      - name: Check links in generated site
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress --exclude '^mailto:' --root-dir output 'output/**/*.html'
+          fail: true
+          
+      - name: Validate HTML
+        run: html-validate 'output/**/*.html'
+          
+      - name: Run accessibility tests
+        run: bash scripts/run-a11y-tests.sh
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
