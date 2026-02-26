@@ -137,10 +137,12 @@ public class GeneratedSiteTests : IAsyncLifetime
     {
         await _page.GotoAsync(_fixture.ServerUrl);
         
-        // Check that the main heading is present
-        var heading = _page.Locator("h1");
-        await Assertions.Expect(heading).ToBeVisibleAsync();
-        await Assertions.Expect(heading).ToContainTextAsync("Vibeblogging");
+        // Check that the page title contains "Vibeblogging"
+        await Assertions.Expect(_page).ToHaveTitleAsync(new Regex("Vibeblogging"));
+        
+        // Check that the header area with background image is present
+        var headerArea = _page.Locator(".header-area");
+        await Assertions.Expect(headerArea).ToBeVisibleAsync();
     }
 
     [Fact]
