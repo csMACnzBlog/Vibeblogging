@@ -178,6 +178,12 @@ pre code {
     background: #00bbf2;
 }
 
+.CurrentButton,
+.CurrentButton:link,
+.CurrentButton:visited {
+    color: #00bbf2;
+}
+
 .content-area {
     box-sizing: border-box;
     padding: 0 10px;
