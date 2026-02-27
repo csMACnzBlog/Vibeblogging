@@ -99,8 +99,8 @@ Write-Host $imagePrompt
 Write-Host "----------------------------------------`n"
 
 # Gemini API endpoint for Imagen
-# Note: As of early 2024, Gemini's Imagen API might be in preview
-# The endpoint structure may need adjustment based on current API version
+# Note: Endpoint structure may need adjustment based on current API version
+# Refer to https://ai.google.dev/docs for latest API documentation
 $apiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict"
 
 # Construct request body
