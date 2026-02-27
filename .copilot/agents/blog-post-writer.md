@@ -17,7 +17,7 @@ Every blog post must follow this structure:
 
 ```markdown
 ---
-title: Your Engaging Post Title
+title: Your Engaging Post Title (max 70 characters)
 date: YYYY-MM-DD
 tags: tag1, tag2, tag3
 ---
@@ -42,6 +42,8 @@ Continue the narrative...
 
 Wrap up with key takeaways...
 ```
+
+**Important**: The title in frontmatter must not exceed 70 characters to pass validation.
 
 ## Writing Style Guidelines
 
