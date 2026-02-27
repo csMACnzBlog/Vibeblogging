@@ -32,6 +32,7 @@ A static site generated blog where articles are written in markdown and rendered
 title: Your Post Title
 date: 2026-02-25
 tags: tag1, tag2, tag3
+image: post-slug.png
 ---
 
 # Main Heading
@@ -42,6 +43,8 @@ Your content here...
 
 More content...
 ```
+
+**Featured Images**: Each post should include a featured image. Use the `@image-generator` Copilot agent to create AI-generated images using HuggingFace Inference API. Images are saved to `posts/images/` with the post slug as filename.
 
 ### Example
 
@@ -124,12 +127,17 @@ Vibeblogging/
 ├── .copilot/
 │   └── agents/               # Agentic instruction files
 │       ├── blog-post-writer.md
-│       └── content-manager.md
+│       ├── content-manager.md
+│       └── image-generator.md
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml        # GitHub Actions workflow
 ├── posts/                    # Markdown blog posts
+│   ├── images/              # Blog post featured images
 │   └── 2026-02-25-welcome.md
+├── scripts/                  # Utility scripts
+│   ├── Generate-BlogImage.ps1  # HuggingFace API image generator
+│   └── run-a11y-tests.sh
 ├── src/
 │   └── SiteGenerator/        # C# static site generator
 │       ├── Program.cs
@@ -150,6 +158,29 @@ This repository includes Copilot agent instruction files to assist with content 
 
 - **blog-post-writer.md**: Guidelines for writing engaging blog posts
 - **content-manager.md**: Instructions for managing and organizing content
+- **image-generator.md**: AI-powered image generation using HuggingFace Inference API
+
+### Featured Image Generation
+
+Blog posts can include AI-generated featured images created using HuggingFace Inference API:
+
+**Setup**:
+1. Create a free account at [HuggingFace.co](https://huggingface.co/)
+2. Generate an API token at [HuggingFace Settings](https://huggingface.co/settings/tokens)
+3. Set the `HUGGINGFACE_API_KEY` environment variable
+4. Use the `@image-generator` agent to generate images
+
+**Style**: Images are generated in a "pseudo realistic cell-shaded" style with focus and blur effects, featuring everyday scenes or objects (such as office items, household objects, or empty spaces) suitable for technical blog posts.
+
+**Manual Usage**:
+```bash
+python scripts/generate_blog_image.py \
+  --title "Your Post Title" \
+  --content "Brief description of themes" \
+  --output "post-slug.png"
+```
+
+See `scripts/README.md` for detailed documentation.
 
 These files help Copilot understand the blog structure and provide better assistance when creating or editing content.
 
