@@ -17,7 +17,7 @@ Every blog post must follow this structure:
 
 ```markdown
 ---
-title: Your Engaging Post Title
+title: Your Engaging Post Title (max 54 characters)
 date: YYYY-MM-DD
 tags: tag1, tag2, tag3
 ---
@@ -42,6 +42,8 @@ Continue the narrative...
 
 Wrap up with key takeaways...
 ```
+
+**Important**: The title in frontmatter must not exceed 54 characters. The HTML template adds " - Vibeblogging" (16 chars) to create the page title, and the total HTML `<title>` tag content must not exceed 70 characters to pass html-validate validation.
 
 ## Writing Style Guidelines
 
@@ -153,6 +155,7 @@ Example: `2026-02-25-getting-started-with-dotnet.md`
 6. **Visual Structure**: Break up text with headings, code blocks, lists, and embedded media
 7. **Conversational Flow**: Write as if explaining to a colleague, using natural transitions
 8. **Value-Focused**: Every post should teach something useful or provide curated recommendations
+9. **Relative Links**: When linking to other blog posts, use relative paths with just the HTML filename (e.g., `other-post-slug.html`), NOT absolute paths like `/2026/02/25/post-slug.html`. This ensures links work correctly in both local development and when deployed to GitHub Pages subpaths.
 
 ## Example Topics
 
