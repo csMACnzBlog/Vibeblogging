@@ -113,6 +113,50 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 - Automatic PR comments with findings
 - License compliance checks
 
+### Copilot Agent Environment (`copilot-agent.yml`)
+[![Copilot Agent Environment](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml)
+
+**Trigger**: Manual workflow dispatch
+
+**Purpose**: Provides a standardized environment for GitHub Copilot agents with all required development tools pre-installed
+
+**Tools Installed**:
+- ✅ .NET 10 SDK
+- ✅ Python 3.12 (with huggingface_hub, Pillow)
+- ✅ Node.js 20 (with html-validate, pa11y-ci, http-server)
+- ✅ PowerShell Core (pwsh)
+- ✅ Playwright browsers (Chromium)
+- ✅ NuGet packages (cached)
+
+**Steps**:
+1. Checkout code
+2. Setup .NET 10.0 with NuGet caching
+3. Setup Python 3.12 with pip caching
+4. Install Python dependencies (huggingface_hub, Pillow)
+5. Setup Node.js 20 with npm caching
+6. Install Node.js validation tools globally
+7. Verify PowerShell availability
+8. Restore .NET dependencies
+9. Build solution in Release configuration
+10. Generate static site
+11. Cache and install Playwright browsers
+12. Run tests (optional, controlled by input)
+13. Generate environment summary
+14. Upload artifacts (generated site, test results)
+
+**Options**:
+- `skip_tests`: Set to 'true' to skip running tests for faster setup (default: 'false')
+
+**Use Cases**:
+- Testing Copilot agent workflows before deployment
+- Validating that all tools are properly installed
+- Troubleshooting environment issues
+- Providing a clean environment for Copilot operations
+
+**Output Artifacts**:
+- `generated-site`: The built static site in output/ directory
+- `test-results`: Test results and Playwright screenshots (if tests are run)
+
 ## Key Improvements Summary
 
 ### Performance Optimizations
@@ -161,6 +205,7 @@ Add these badges to your README.md:
 [![Build and Deploy](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/deploy.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/deploy.yml)
 [![PR Validation](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/pr-validation.yml)
 [![CodeQL](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/codeql.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/codeql.yml)
+[![Copilot Agent Environment](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml)
 ```
 
 ## Troubleshooting

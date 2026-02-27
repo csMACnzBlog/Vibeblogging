@@ -22,6 +22,10 @@ Python script that generates blog post featured images using HuggingFace's Infer
 
 1. Install required Python packages:
    ```bash
+   # Option 1: Install using requirements file (recommended)
+   pip install -r scripts/requirements.txt
+   
+   # Option 2: Install individually
    pip install huggingface_hub Pillow
    ```
 
