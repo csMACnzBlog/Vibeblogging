@@ -17,7 +17,7 @@ Every blog post must follow this structure:
 
 ```markdown
 ---
-title: Your Engaging Post Title (max 70 characters)
+title: Your Engaging Post Title (max 54 characters)
 date: YYYY-MM-DD
 tags: tag1, tag2, tag3
 ---
@@ -43,7 +43,7 @@ Continue the narrative...
 Wrap up with key takeaways...
 ```
 
-**Important**: The title in frontmatter must not exceed 70 characters to pass validation.
+**Important**: The title in frontmatter must not exceed 54 characters. The HTML template adds " - Vibeblogging" (16 chars) to create the page title, and the total HTML `<title>` tag content must not exceed 70 characters to pass html-validate validation.
 
 ## Writing Style Guidelines
 
