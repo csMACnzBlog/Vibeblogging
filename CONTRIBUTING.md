@@ -76,6 +76,7 @@ Vibeblogging/
 │   └── images/          # Featured images for posts
 ├── scripts/              # Utility scripts
 │   ├── generate_blog_image.py
+│   ├── requirements.txt
 │   └── run-a11y-tests.sh
 ├── src/SiteGenerator/    # C# static site generator
 ├── templates/            # HTML templates and CSS
@@ -143,6 +144,26 @@ Before submitting changes:
 5. Verify links and navigation work
 6. Test on different screen sizes
 7. Validate HTML and CSS if possible
+
+### Copilot Setup Steps
+
+For GitHub Copilot coding agent, the repository includes an official setup steps workflow that prepares the development environment with all required tools:
+
+**Workflow**: `.github/workflows/copilot-setup-steps.yml`
+
+This workflow follows [GitHub's official Copilot setup steps format](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) and provides:
+- .NET 10 SDK
+- Python 3.12 (with huggingface_hub, Pillow)
+- Node.js 20 (with html-validate, pa11y-ci, http-server)
+- PowerShell Core
+- Playwright browsers (Chromium)
+- All dependencies cached for efficiency
+
+**How it works**: When Copilot coding agent works on a task, it runs these setup steps in an ephemeral GitHub Actions environment before starting. This ensures all project dependencies are installed deterministically.
+
+**Validation**: The workflow runs automatically when modified, so you can verify setup steps work correctly before Copilot uses them.
+
+See `.github/workflows/README.md` for detailed documentation.
 
 ## 📦 Submitting Changes
 

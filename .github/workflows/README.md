@@ -113,6 +113,51 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 - Automatic PR comments with findings
 - License compliance checks
 
+### Copilot Setup Steps (`copilot-setup-steps.yml`)
+[![Copilot Setup Steps](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml)
+
+**Trigger**: 
+- Manual workflow dispatch
+- Push to the workflow file
+- Pull requests modifying the workflow file
+
+**Purpose**: Customizes GitHub Copilot coding agent's ephemeral development environment with project-specific tools and dependencies
+
+**Official Format**: This workflow follows [GitHub's official Copilot setup steps format](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment). The job name `copilot-setup-steps` is required for Copilot to recognize this workflow.
+
+**Tools Installed**:
+- ✅ .NET 10 SDK
+- ✅ Python 3.12 (with huggingface_hub, Pillow)
+- ✅ Node.js 20 (with html-validate, pa11y-ci, http-server)
+- ✅ PowerShell Core (pwsh)
+- ✅ Playwright browsers (Chromium)
+- ✅ NuGet packages (cached)
+
+**Setup Steps**:
+1. Checkout code
+2. Setup .NET 10.0 with NuGet caching
+3. Setup Python 3.12
+4. Install Python dependencies from scripts/requirements.txt
+5. Setup Node.js 20
+6. Install Node.js validation tools globally
+7. Verify PowerShell availability
+8. Cache and restore NuGet packages
+9. Build solution in Release configuration
+10. Generate static site
+11. Cache and install Playwright browsers
+
+**How It Works**:
+- Runs automatically when the workflow file is modified (for validation)
+- Executes before Copilot starts working on tasks
+- If any step fails, Copilot continues with the current environment state
+- Copilot can then run tests, linters, and other tools in the prepared environment
+
+**Use Cases**:
+- Deterministically installs project dependencies before Copilot starts
+- Ensures consistent development environment for all Copilot sessions
+- Avoids trial-and-error dependency installation by Copilot
+- Validates setup steps automatically on workflow changes
+
 ## Key Improvements Summary
 
 ### Performance Optimizations
@@ -161,6 +206,7 @@ Add these badges to your README.md:
 [![Build and Deploy](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/deploy.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/deploy.yml)
 [![PR Validation](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/pr-validation.yml)
 [![CodeQL](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/codeql.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/codeql.yml)
+[![Copilot Setup Steps](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml)
 ```
 
 ## Troubleshooting
