@@ -25,9 +25,10 @@
     ./Generate-BlogImage.ps1 -PostTitle "Understanding SOLID Principles" -PostContent "Software design principles for maintainable code" -OutputFileName "solid-principles.png"
 
 .NOTES
-    Requires: DeepAI API key (free tier: 500 calls/month)
-    Output: 800x500px PNG image in posts/images/ directory
+    Requires: DeepAI API key with Pro account (paid subscription required)
+    Output: PNG image in posts/images/ directory
     Style: Pseudo realistic cell-shaded with focus and blur effects
+    API: https://deepai.org/docs
 #>
 
 [CmdletBinding()]
@@ -171,6 +172,19 @@ try {
     
 } catch {
     Write-Error "Failed to generate image: $_"
+    
+    # Check for specific error conditions and provide helpful messages
+    if ($_.Exception.Response) {
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        if ($statusCode -eq 402) {
+            Write-Host ""
+            Write-Host "⚠️  DeepAI API Error: Payment Required" -ForegroundColor Yellow
+            Write-Host "   The free tier of DeepAI has limited access to image generation APIs." -ForegroundColor Yellow
+            Write-Host "   Please upgrade to a Pro account at: https://deepai.org/dashboard" -ForegroundColor Yellow
+            Write-Host ""
+        }
+    }
+    
     Write-Error "Response: $($_.Exception.Response)"
     exit 1
 }

@@ -184,8 +184,8 @@ Solution: Ensure DEEPAI_API_KEY environment variable is set or pass -ApiKey para
 
 **API Rate Limits:**
 ```
-Error: Rate limit exceeded
-Solution: Free tier has 500 calls/month. Wait until quota resets or upgrade to paid plan
+Error: Rate limit exceeded or Payment Required (402)
+Solution: DeepAI's image generation requires a Pro account. Upgrade at https://deepai.org/dashboard
 ```
 
 **Invalid Response:**

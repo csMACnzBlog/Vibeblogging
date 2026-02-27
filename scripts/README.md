@@ -12,12 +12,14 @@ PowerShell script that generates blog post featured images using DeepAI's text-t
 
 **Requirements**:
 - PowerShell Core (pwsh) 7.0+
-- DeepAI API key (free tier: 500 calls/month)
+- DeepAI API key with **Pro account** (image generation requires paid subscription)
 - Internet connection
+
+**Note**: DeepAI's text-to-image API requires a Pro membership. Free tier API keys will return a 402 Payment Required error. Upgrade at https://deepai.org/dashboard
 
 **Setup**:
 
-1. Obtain a DeepAI API key from [DeepAI.org](https://deepai.org/docs)
+1. Obtain a DeepAI API key with Pro access from [DeepAI.org](https://deepai.org/docs)
 2. Set the API key as an environment variable:
    ```bash
    # Linux/macOS
@@ -162,9 +164,9 @@ When adding new scripts to this directory:
 - Verify disk space is available
 
 **Rate limiting errors**
-- Free tier: 500 calls/month limit
-- Wait and retry, or upgrade to a paid plan
-- Check your API quota at https://deepai.org/dashboard
+- Pro account required for image generation API
+- Check your subscription status at https://deepai.org/dashboard
+- Ensure your API key has Pro membership access
 
 ### General Script Issues
 
