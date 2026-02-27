@@ -145,7 +145,7 @@ After generation, verify:
 **Visual Concepts**:
 - Coffee maker in motion with steam blur effect
 - Bicycle leaning against wall with motion-blurred wheel
-- Keyboard with hands (blurred) typing at speed
+- Keyboard with motion blur effect on keys showing activity
 **Colors**: Oranges and reds (energy, action)
 
 ### Conferences/Reviews
