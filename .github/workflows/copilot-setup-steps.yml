@@ -1,0 +1,90 @@
+name: "Copilot Setup Steps"
+
+# Automatically run the setup steps when they are changed to allow for easy validation, and
+# allow manual testing through the repository's "Actions" tab
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # Set the permissions to the lowest permissions possible needed for your steps.
+    # Copilot will be given its own token for its operations.
+    permissions:
+      # Clone the repository to install dependencies
+      contents: read
+
+    # Define setup steps that will run before the agent starts.
+    # Copilot will automatically checkout the code after these steps if not done here.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # .NET Setup for C# site generator
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Python Setup for image generation scripts
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install -r scripts/requirements.txt
+
+      # Node.js Setup for validation tools
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node.js validation tools
+        run: npm install -g html-validate pa11y-ci http-server
+
+      # PowerShell Core (verify it's available for Playwright installer)
+      - name: Verify PowerShell
+        run: pwsh --version
+
+      # Cache and restore .NET dependencies
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore .NET dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Generate site
+        run: dotnet run --project src/SiteGenerator/SiteGenerator.csproj --no-build --configuration Release
+
+      # Cache and install Playwright browsers for E2E tests
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pwsh tests/Site.PlaywrightTests/bin/Release/net10.0/playwright.ps1 install chromium

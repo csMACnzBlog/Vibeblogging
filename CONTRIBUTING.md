@@ -145,13 +145,13 @@ Before submitting changes:
 6. Test on different screen sizes
 7. Validate HTML and CSS if possible
 
-### Copilot Agent Environment
+### Copilot Setup Steps
 
-For GitHub Copilot agents, a standardized workflow is available to ensure all development tools are properly installed:
+For GitHub Copilot coding agent, the repository includes an official setup steps workflow that prepares the development environment with all required tools:
 
-**Workflow**: `.github/workflows/copilot-agent.yml`
+**Workflow**: `.github/workflows/copilot-setup-steps.yml`
 
-This workflow provides a pre-configured environment with:
+This workflow follows [GitHub's official Copilot setup steps format](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) and provides:
 - .NET 10 SDK
 - Python 3.12 (with huggingface_hub, Pillow)
 - Node.js 20 (with html-validate, pa11y-ci, http-server)
@@ -159,7 +159,9 @@ This workflow provides a pre-configured environment with:
 - Playwright browsers (Chromium)
 - All dependencies cached for efficiency
 
-**Usage**: Manually trigger the workflow from the GitHub Actions tab. It can be configured to skip tests for faster setup when needed.
+**How it works**: When Copilot coding agent works on a task, it runs these setup steps in an ephemeral GitHub Actions environment before starting. This ensures all project dependencies are installed deterministically.
+
+**Validation**: The workflow runs automatically when modified, so you can verify setup steps work correctly before Copilot uses them.
 
 See `.github/workflows/README.md` for detailed documentation.
 

@@ -113,12 +113,17 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 - Automatic PR comments with findings
 - License compliance checks
 
-### Copilot Agent Environment (`copilot-agent.yml`)
-[![Copilot Agent Environment](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml)
+### Copilot Setup Steps (`copilot-setup-steps.yml`)
+[![Copilot Setup Steps](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml)
 
-**Trigger**: Manual workflow dispatch
+**Trigger**: 
+- Manual workflow dispatch
+- Push to the workflow file
+- Pull requests modifying the workflow file
 
-**Purpose**: Provides a standardized environment for GitHub Copilot agents with all required development tools pre-installed
+**Purpose**: Customizes GitHub Copilot coding agent's ephemeral development environment with project-specific tools and dependencies
+
+**Official Format**: This workflow follows [GitHub's official Copilot setup steps format](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment). The job name `copilot-setup-steps` is required for Copilot to recognize this workflow.
 
 **Tools Installed**:
 - ✅ .NET 10 SDK
@@ -128,34 +133,30 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 - ✅ Playwright browsers (Chromium)
 - ✅ NuGet packages (cached)
 
-**Steps**:
+**Setup Steps**:
 1. Checkout code
 2. Setup .NET 10.0 with NuGet caching
-3. Setup Python 3.12 with pip caching
-4. Install Python dependencies (huggingface_hub, Pillow)
-5. Setup Node.js 20 with npm caching
+3. Setup Python 3.12
+4. Install Python dependencies from scripts/requirements.txt
+5. Setup Node.js 20
 6. Install Node.js validation tools globally
 7. Verify PowerShell availability
-8. Restore .NET dependencies
+8. Cache and restore NuGet packages
 9. Build solution in Release configuration
 10. Generate static site
 11. Cache and install Playwright browsers
-12. Run tests (optional, controlled by input)
-13. Generate environment summary
-14. Upload artifacts (generated site, test results)
 
-**Options**:
-- `skip_tests`: Set to 'true' to skip running tests for faster setup (default: 'false')
+**How It Works**:
+- Runs automatically when the workflow file is modified (for validation)
+- Executes before Copilot starts working on tasks
+- If any step fails, Copilot continues with the current environment state
+- Copilot can then run tests, linters, and other tools in the prepared environment
 
 **Use Cases**:
-- Testing Copilot agent workflows before deployment
-- Validating that all tools are properly installed
-- Troubleshooting environment issues
-- Providing a clean environment for Copilot operations
-
-**Output Artifacts**:
-- `generated-site`: The built static site in output/ directory
-- `test-results`: Test results and Playwright screenshots (if tests are run)
+- Deterministically installs project dependencies before Copilot starts
+- Ensures consistent development environment for all Copilot sessions
+- Avoids trial-and-error dependency installation by Copilot
+- Validates setup steps automatically on workflow changes
 
 ## Key Improvements Summary
 
@@ -205,7 +206,7 @@ Add these badges to your README.md:
 [![Build and Deploy](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/deploy.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/deploy.yml)
 [![PR Validation](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/pr-validation.yml)
 [![CodeQL](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/codeql.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/codeql.yml)
-[![Copilot Agent Environment](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-agent.yml)
+[![Copilot Setup Steps](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml)
 ```
 
 ## Troubleshooting
