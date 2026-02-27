@@ -171,6 +171,43 @@ public class StaticSiteGeneratorTests
         Assert.True(File.Exists(Path.Combine(_outputDir, "post3.html")));
     }
 
+    [Fact]
+    public void Generate_HandlesFeaturedImages()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPostWithImage("2026-02-25-image-post.md", "Image Post", "2026-02-25", "test", "test-image.png");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postPath = Path.Combine(_outputDir, "image-post.html");
+        var content = File.ReadAllText(postPath);
+        Assert.Contains("test-image.png", content);
+        Assert.Contains("images/posts/", content);
+    }
+
+    [Fact]
+    public void Generate_CopiesPostImagesDirectory()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        var postImagesDir = Path.Combine(_postsDir, "images");
+        Directory.CreateDirectory(postImagesDir);
+        File.WriteAllText(Path.Combine(postImagesDir, "test.png"), "fake image content");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var outputImagesDir = Path.Combine(_outputDir, "images", "posts");
+        Assert.True(Directory.Exists(outputImagesDir));
+        Assert.True(File.Exists(Path.Combine(outputImagesDir, "test.png")));
+    }
+
     private StaticSiteGenerator CreateGenerator()
     {
         // Save current directory
@@ -198,6 +235,7 @@ public class StaticSiteGeneratorTests
 </head>
 <body>
     <article>
+        {{#FEATURED_IMAGE}}<div class=""featured-image"">{{FEATURED_IMAGE}}</div>{{/FEATURED_IMAGE}}
         <h1>{{TITLE}}</h1>
         <time datetime=""{{DATE}}"">{{FORMATTED_DATE}}</time>
         {{#TAGS}}<div class=""tags"">{{TAGS}}</div>{{/TAGS}}
@@ -233,6 +271,20 @@ public class StaticSiteGeneratorTests
 title: {title}
 date: {date}
 tags: {tags}
+---
+
+{content}";
+
+        File.WriteAllText(Path.Combine(_postsDir, filename), frontmatter);
+    }
+
+    private void CreateTestPostWithImage(string filename, string title, string date, string tags, string image, string content = "Test content")
+    {
+        var frontmatter = $@"---
+title: {title}
+date: {date}
+tags: {tags}
+image: {image}
 ---
 
 {content}";
