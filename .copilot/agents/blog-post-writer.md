@@ -20,6 +20,7 @@ Every blog post must follow this structure:
 title: Your Engaging Post Title (max 54 characters)
 date: YYYY-MM-DD
 tags: tag1, tag2, tag3
+image: post-slug.png
 ---
 
 # Main Title
@@ -43,7 +44,28 @@ Continue the narrative...
 Wrap up with key takeaways...
 ```
 
-**Important**: The title in frontmatter must not exceed 54 characters. The HTML template adds " - Vibeblogging" (16 chars) to create the page title, and the total HTML `<title>` tag content must not exceed 70 characters to pass html-validate validation.
+**Important**: 
+- The title in frontmatter must not exceed 54 characters. The HTML template adds " - Vibeblogging" (16 chars) to create the page title, and the total HTML `<title>` tag content must not exceed 70 characters to pass html-validate validation.
+- Every post must include an `image` field in the frontmatter. After writing the post, generate an abstract, cell-shaded featured image based on the post content.
+
+## Featured Image Requirements
+
+Each blog post requires a featured image with these specifications:
+
+**Style Requirements:**
+- Abstract geometric content (not literal representations)
+- Cell-shaded style with limited color palette
+- Must include at least one element in sharp focus and one element out of focus
+- Modern, tech-oriented color scheme
+
+**Technical Specifications:**
+- Size: 800x500 pixels (landscape aspect ratio, suitable for desktop viewing and index thumbnails)
+- Format: PNG with optimization
+- Location: Save to `posts/images/[post-slug].png`
+- Naming: Use the post slug (filename without date prefix)
+
+**Generation Guidance:**
+After completing the blog post content, create the image using tools like Python/PIL or similar. The image should reflect themes or concepts from the post content while maintaining an abstract aesthetic. Use geometric shapes, gradients, and modern color palettes inspired by the tech/development world.
 
 ## Writing Style Guidelines
 

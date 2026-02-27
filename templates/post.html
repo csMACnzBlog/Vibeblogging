@@ -26,6 +26,11 @@
             <div class="content-box">
                 <main>
                     <article>
+                        {{#FEATURED_IMAGE}}
+                        <div class="post-featured-image">
+                            {{FEATURED_IMAGE}}
+                        </div>
+                        {{/FEATURED_IMAGE}}
                         <h1>{{TITLE}}</h1>
                         <div class="post-meta">
                             <time datetime="{{DATE}}">{{FORMATTED_DATE}}</time>
