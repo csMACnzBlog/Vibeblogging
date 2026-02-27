@@ -44,7 +44,7 @@ pwsh scripts/Generate-BlogImage.ps1 \
 - `-PostContent` (required): Summary of key themes/concepts for visual inspiration
 - `-OutputFileName` (required): Filename for the image (e.g., "my-post.png")
 - `-ApiKey` (optional): HuggingFace API token (defaults to `$env:HUGGINGFACE_API_KEY`)
-- `-Model` (optional): HuggingFace model ID (defaults to `black-forest-labs/FLUX.1-dev`)
+- `-Model` (optional): HuggingFace model ID (defaults to `runwayml/stable-diffusion-v1-5`)
 
 **Output**:
 - Location: `posts/images/[filename].png`
@@ -174,6 +174,12 @@ When adding new scripts to this directory:
 - Free tier: Several hundred requests per hour
 - Wait and retry, or consider upgrading to PRO for higher limits
 - Check your usage at https://huggingface.co/settings/billing
+
+**API endpoint errors (410 Gone or 404 Not Found)**
+- HuggingFace is currently migrating endpoints from `api-inference.huggingface.co` to `router.huggingface.co`
+- The migration is in progress and endpoints may be temporarily unavailable
+- Check https://huggingface.co/docs/inference-providers for the latest endpoint information
+- Existing generated images remain functional
 
 ### General Script Issues
 

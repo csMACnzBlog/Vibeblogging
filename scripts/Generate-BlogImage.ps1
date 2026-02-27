@@ -49,7 +49,7 @@ param(
     [string]$ApiKey = $env:HUGGINGFACE_API_KEY,
 
     [Parameter(Mandatory = $false)]
-    [string]$Model = "black-forest-labs/FLUX.1-dev"
+    [string]$Model = "runwayml/stable-diffusion-v1-5"
 )
 
 # Validate API key
@@ -108,8 +108,8 @@ Write-Host $imagePrompt
 Write-Host "----------------------------------------`n"
 
 # HuggingFace Inference API endpoint for text-to-image generation
-# Using the new router-based hf-inference endpoint
-$apiEndpoint = "https://router.huggingface.co/hf-inference/$Model"
+# Using the api-inference endpoint which is still functional for free tier
+$apiEndpoint = "https://api-inference.huggingface.co/models/$Model"
 
 # Construct request body for HuggingFace API
 # HuggingFace accepts JSON with 'inputs' parameter for the prompt
