@@ -197,7 +197,7 @@ public class StaticSiteGenerator
             // Handle featured image
             if (!string.IsNullOrEmpty(post.FeaturedImage))
             {
-                var imageHtml = $"<div class=\"post-featured-image\">\n                            <img src=\"images/posts/{post.FeaturedImage}\" alt=\"{post.Title}\" class=\"featured-image\" />\n                        </div>";
+                var imageHtml = $"<div class=\"post-featured-image\"><img src=\"images/posts/{post.FeaturedImage}\" alt=\"{post.Title}\" class=\"featured-image\" /></div>";
                 html = Regex.Replace(html, @"\{\{#FEATURED_IMAGE\}\}.*?\{\{/FEATURED_IMAGE\}\}", 
                     imageHtml, RegexOptions.Singleline);
             }

@@ -343,6 +343,9 @@ article h1 {
 .post-item {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
 }
 
 .post-item:last-child {
@@ -382,12 +385,6 @@ article h1 {
 }
 
 /* Post thumbnail on index page */
-.post-item {
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-}
-
 .post-thumbnail {
     flex-shrink: 0;
     width: 200px;

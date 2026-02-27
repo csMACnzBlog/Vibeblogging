@@ -59,7 +59,7 @@ Each blog post requires a featured image with these specifications:
 - Modern, tech-oriented color scheme
 
 **Technical Specifications:**
-- Size: 800x500 pixels (suitable for mobile portrait and index thumbnails)
+- Size: 800x500 pixels (landscape aspect ratio, suitable for desktop viewing and index thumbnails)
 - Format: PNG with optimization
 - Location: Save to `posts/images/[post-slug].png`
 - Naming: Use the post slug (filename without date prefix)
