@@ -197,7 +197,7 @@ public class StaticSiteGenerator
             // Handle featured image
             if (!string.IsNullOrEmpty(post.FeaturedImage))
             {
-                var imageHtml = $"<div class=\"post-featured-image\"><img src=\"images/posts/{post.FeaturedImage}\" alt=\"{post.Title}\" class=\"featured-image\" /></div>";
+                var imageHtml = $"<div class=\"post-featured-image\"><img src=\"images/posts/{post.FeaturedImage}\" alt=\"{EscapeHtmlAttribute(post.Title)}\" class=\"featured-image\"></div>";
                 html = Regex.Replace(html, @"\{\{#FEATURED_IMAGE\}\}.*?\{\{/FEATURED_IMAGE\}\}", 
                     imageHtml, RegexOptions.Singleline);
             }
@@ -236,7 +236,7 @@ public class StaticSiteGenerator
             // Add featured image if available
             if (!string.IsNullOrEmpty(post.FeaturedImage))
             {
-                postList.AppendLine($"  <img src=\"images/posts/{post.FeaturedImage}\" alt=\"{post.Title}\" class=\"post-thumbnail\" />");
+                postList.AppendLine($"  <img src=\"images/posts/{post.FeaturedImage}\" alt=\"{EscapeHtmlAttribute(post.Title)}\" class=\"post-thumbnail\">");
             }
             
             postList.AppendLine("  <div class=\"post-item-content\">");
@@ -307,6 +307,13 @@ public class StaticSiteGenerator
             .Replace(">", "&gt;")
             .Replace("\"", "&quot;")
             .Replace("'", "&apos;");
+    }
+
+    private string EscapeHtmlAttribute(string text)
+    {
+        return text
+            .Replace("&", "&amp;")
+            .Replace("\"", "&quot;");
     }
 
     private void CopyStyles()
