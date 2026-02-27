@@ -46,26 +46,38 @@ Wrap up with key takeaways...
 
 **Important**: 
 - The title in frontmatter must not exceed 54 characters. The HTML template adds " - Vibeblogging" (16 chars) to create the page title, and the total HTML `<title>` tag content must not exceed 70 characters to pass html-validate validation.
-- Every post must include an `image` field in the frontmatter. After writing the post, generate an abstract, cell-shaded featured image based on the post content.
+- Every post must include an `image` field in the frontmatter. After writing the post, use the **image-generator** agent to create a featured image.
 
 ## Featured Image Requirements
 
 Each blog post requires a featured image with these specifications:
 
 **Style Requirements:**
+- Pseudo realistic cell-shaded style with focus and focus blur effects
 - Abstract geometric content (not literal representations)
-- Cell-shaded style with limited color palette
-- Must include at least one element in sharp focus and one element out of focus
+- Limited color palette (3-5 colors)
+- Must include at least one element in sharp focus and one element with depth-of-field blur
 - Modern, tech-oriented color scheme
+- No text or words in the image
 
 **Technical Specifications:**
-- Size: 800x500 pixels (landscape aspect ratio, suitable for desktop viewing and index thumbnails)
+- Size: 800x500 pixels (16:10 aspect ratio, landscape orientation)
 - Format: PNG with optimization
 - Location: Save to `posts/images/[post-slug].png`
 - Naming: Use the post slug (filename without date prefix)
 
-**Generation Guidance:**
-After completing the blog post content, create the image using tools like Python/PIL or similar. The image should reflect themes or concepts from the post content while maintaining an abstract aesthetic. Use geometric shapes, gradients, and modern color palettes inspired by the tech/development world.
+**Generation Workflow:**
+After completing the blog post content:
+1. Use the `@image-generator` agent (or task tool with agent_type="general-purpose" mentioning image-generator) to generate the featured image
+2. Provide the agent with:
+   - Post title
+   - Key themes and concepts from the post
+   - Post slug for filename
+3. The agent will use Google's Gemini API (Imagen) to generate the image
+4. Verify the image is saved to `posts/images/[post-slug].png`
+5. Ensure the frontmatter includes `image: [post-slug].png`
+
+The image-generator agent handles all aspects of image creation using the Gemini API with the specified style prompt. You don't need to create images manually anymore - just delegate to the image-generator agent.
 
 ## Writing Style Guidelines
 
