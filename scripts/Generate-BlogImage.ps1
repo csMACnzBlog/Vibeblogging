@@ -103,7 +103,7 @@ Write-Host "----------------------------------------`n"
 # Gemini API endpoint for Imagen
 # Note: Endpoint structure may need adjustment based on current API version
 # Refer to https://ai.google.dev/docs for latest API documentation
-$apiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict"
+$apiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001:predict"
 
 # Construct request body
 $requestBody = @{
@@ -114,9 +114,7 @@ $requestBody = @{
     )
     parameters = @{
         sampleCount = 1
-        aspectRatio = "16:10"  # Approximately 800x500
-        negativePrompt = "text, words, letters, watermark, signature, blurry overall, low quality"
-        safetyFilterLevel = "block_some"
+        aspectRatio = "16:9"  # Closest to 800x500 (16:10) - will be 800x450 or similar
     }
 } | ConvertTo-Json -Depth 10
 
@@ -135,10 +133,13 @@ try {
     # Note: Response structure may vary based on API version
     $imageData = $null
     
+    # For predict endpoint, response is: { "predictions": [{ "bytesBase64Encoded": "..." }] }
     if ($response.predictions -and $response.predictions[0].bytesBase64Encoded) {
         $imageData = $response.predictions[0].bytesBase64Encoded
     } elseif ($response.predictions -and $response.predictions[0].image) {
         $imageData = $response.predictions[0].image
+    } elseif ($response.generatedImages -and $response.generatedImages[0].bytesBase64Encoded) {
+        $imageData = $response.generatedImages[0].bytesBase64Encoded
     } elseif ($response.images -and $response.images[0]) {
         $imageData = $response.images[0]
     } else {
