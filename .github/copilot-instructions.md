@@ -24,9 +24,11 @@ Vibeblogging is a static site generated blog where articles are written in markd
 ### Project Structure
 ```
 Vibeblogging/
-├── .copilot/agents/       # Specialized agent instructions (blog-post-writer, content-manager)
+├── .copilot/agents/       # Specialized agent instructions (blog-post-writer, content-manager, image-generator)
 ├── .github/workflows/      # CI/CD workflows
 ├── posts/                  # Markdown blog posts (YYYY-MM-DD-slug.md format)
+│   └── images/            # Featured images for blog posts
+├── scripts/                # Utility scripts (image generation, testing)
 ├── src/SiteGenerator/      # C# static site generator
 ├── templates/              # HTML templates and CSS
 ├── tests/                  # Unit and E2E tests
@@ -42,8 +44,11 @@ Every blog post must include YAML frontmatter:
 title: Your Post Title
 date: YYYY-MM-DD
 tags: tag1, tag2, tag3
+image: post-slug.png
 ---
 ```
+
+**Note**: The `image` field is optional but recommended. Use the `@image-generator` agent to create AI-generated featured images.
 
 ### File Naming Convention
 - Format: `YYYY-MM-DD-descriptive-slug.md`
@@ -155,6 +160,16 @@ Use for organizing and maintaining blog content. The agent:
 - Updates templates and site configuration
 - Ensures SEO optimization
 
+### image-generator.md
+Use for generating featured images for blog posts. The agent:
+- Creates AI-generated images using Google's Gemini API (Imagen)
+- Produces pseudo realistic cell-shaded style with focus and blur effects
+- Generates abstract geometric images suitable for technical blog posts
+- Handles image prompt construction and API integration
+- Requires `GEMINI_API_KEY` environment variable
+
+To generate an image, use `@image-generator` with the post title and key themes.
+
 ## Best Practices
 
 ### When Adding New Features
@@ -185,6 +200,20 @@ Use for organizing and maintaining blog content. The agent:
 # Let Copilot assist by mentioning @blog-post-writer
 # Or manually create: posts/YYYY-MM-DD-title-slug.md
 ```
+
+### Generate a Featured Image
+```bash
+# Use the image-generator agent (recommended)
+# @image-generator with post title and themes
+
+# Or manually run the script
+pwsh scripts/Generate-BlogImage.ps1 \
+  -PostTitle "Your Post Title" \
+  -PostContent "Brief description of themes" \
+  -OutputFileName "post-slug.png"
+```
+
+Requires `GEMINI_API_KEY` environment variable. See `scripts/README.md` for details.
 
 ### Test Changes
 ```bash

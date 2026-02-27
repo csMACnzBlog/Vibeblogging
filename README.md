@@ -32,6 +32,7 @@ A static site generated blog where articles are written in markdown and rendered
 title: Your Post Title
 date: 2026-02-25
 tags: tag1, tag2, tag3
+image: post-slug.png
 ---
 
 # Main Heading
@@ -42,6 +43,8 @@ Your content here...
 
 More content...
 ```
+
+**Featured Images**: Each post should include a featured image. Use the `@image-generator` Copilot agent to create AI-generated images using Google's Gemini API. Images are saved to `posts/images/` with the post slug as filename.
 
 ### Example
 
@@ -124,12 +127,17 @@ Vibeblogging/
 ├── .copilot/
 │   └── agents/               # Agentic instruction files
 │       ├── blog-post-writer.md
-│       └── content-manager.md
+│       ├── content-manager.md
+│       └── image-generator.md
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml        # GitHub Actions workflow
 ├── posts/                    # Markdown blog posts
+│   ├── images/              # Blog post featured images
 │   └── 2026-02-25-welcome.md
+├── scripts/                  # Utility scripts
+│   ├── Generate-BlogImage.ps1  # Gemini API image generator
+│   └── run-a11y-tests.sh
 ├── src/
 │   └── SiteGenerator/        # C# static site generator
 │       ├── Program.cs
@@ -150,6 +158,28 @@ This repository includes Copilot agent instruction files to assist with content 
 
 - **blog-post-writer.md**: Guidelines for writing engaging blog posts
 - **content-manager.md**: Instructions for managing and organizing content
+- **image-generator.md**: AI-powered image generation using Google's Gemini API
+
+### Featured Image Generation
+
+Blog posts can include AI-generated featured images created using Google's Gemini API (Imagen):
+
+**Setup**:
+1. Obtain a Google Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Set the `GEMINI_API_KEY` environment variable
+3. Use the `@image-generator` agent to generate images
+
+**Style**: Images are generated in a "pseudo realistic cell-shaded" style with focus and blur effects, featuring abstract geometric content suitable for technical blog posts.
+
+**Manual Usage**:
+```bash
+pwsh scripts/Generate-BlogImage.ps1 \
+  -PostTitle "Your Post Title" \
+  -PostContent "Brief description of themes" \
+  -OutputFileName "post-slug.png"
+```
+
+See `scripts/README.md` for detailed documentation.
 
 These files help Copilot understand the blog structure and provide better assistance when creating or editing content.
 

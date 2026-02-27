@@ -23,14 +23,34 @@ Thank you for your interest in contributing to Vibeblogging! This document provi
 title: Your Post Title
 date: 2026-02-25
 tags: tag1, tag2, tag3
+image: post-slug.png
 ---
 
 # Your Content Here
 ```
 
 4. Write your content using markdown
-5. Generate the site to preview your changes
-6. Commit and push your changes
+5. Generate a featured image using the `@image-generator` agent (optional but recommended)
+6. Generate the site to preview your changes
+7. Commit and push your changes
+
+### Featured Images
+
+Blog posts can include AI-generated featured images:
+
+**Using Copilot Agent** (Recommended):
+- Use `@image-generator` agent with your post title and content
+- The agent will generate a stylized image using Google's Gemini API
+
+**Manual Generation**:
+```bash
+pwsh scripts/Generate-BlogImage.ps1 \
+  -PostTitle "Your Post Title" \
+  -PostContent "Brief description of post themes" \
+  -OutputFileName "post-slug.png"
+```
+
+Requires `GEMINI_API_KEY` environment variable. See `scripts/README.md` for details.
 
 ### Post Guidelines
 
@@ -48,8 +68,15 @@ tags: tag1, tag2, tag3
 ```
 Vibeblogging/
 ├── .copilot/agents/      # Agentic instruction files
+│   ├── blog-post-writer.md
+│   ├── content-manager.md
+│   └── image-generator.md
 ├── .github/workflows/    # GitHub Actions workflows
 ├── posts/                # Markdown blog posts
+│   └── images/          # Featured images for posts
+├── scripts/              # Utility scripts
+│   ├── Generate-BlogImage.ps1
+│   └── run-a11y-tests.sh
 ├── src/SiteGenerator/    # C# static site generator
 ├── templates/            # HTML templates and CSS
 └── output/              # Generated site (not committed)
