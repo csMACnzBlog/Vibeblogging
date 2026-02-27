@@ -2,6 +2,7 @@
 title: "SOLID Principles: Foundation of Good Design"
 date: 2026-02-26
 tags: csharp, solid, architecture, design-patterns, best-practices
+image: solid-principles-foundation-of-good-design.png
 ---
 
 # SOLID Principles: Foundation of Good Design

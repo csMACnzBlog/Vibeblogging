@@ -2,6 +2,7 @@
 title: Composition Over Inheritance - Flexible Systems
 date: 2026-02-27
 tags: csharp, design-patterns, architecture, composition, best-practices
+image: composition-over-inheritance-building-flexible-systems.png
 ---
 
 Remember when we kicked off this [design patterns series](design-patterns-series-composition-over-complexity.html)? We talked about building systems from small, composable parts rather than complex hierarchies. Today we're diving into one of the most important principles in that toolkit: composition over inheritance.

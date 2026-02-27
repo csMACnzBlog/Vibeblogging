@@ -152,6 +152,9 @@ public class StaticSiteGenerator
                     case "tags":
                         post.Tags = value.Split(',').Select(t => t.Trim()).ToList();
                         break;
+                    case "image":
+                        post.FeaturedImage = value;
+                        break;
                 }
             }
         }
@@ -191,6 +194,18 @@ public class StaticSiteGenerator
                 .Replace("{{FORMATTED_DATE}}", post.Date.ToString("MMMM dd, yyyy"))
                 .Replace("{{CONTENT}}", post.Content);
             
+            // Handle featured image
+            if (!string.IsNullOrEmpty(post.FeaturedImage))
+            {
+                var imageHtml = $"<div class=\"post-featured-image\">\n                            <img src=\"images/posts/{post.FeaturedImage}\" alt=\"{post.Title}\" class=\"featured-image\" />\n                        </div>";
+                html = Regex.Replace(html, @"\{\{#FEATURED_IMAGE\}\}.*?\{\{/FEATURED_IMAGE\}\}", 
+                    imageHtml, RegexOptions.Singleline);
+            }
+            else
+            {
+                html = Regex.Replace(html, @"\{\{#FEATURED_IMAGE\}\}.*?\{\{/FEATURED_IMAGE\}\}", "", RegexOptions.Singleline);
+            }
+            
             // Handle tags
             if (post.Tags.Any())
             {
@@ -217,15 +232,24 @@ public class StaticSiteGenerator
         {
             var excerpt = GetExcerpt(post.Content);
             postList.AppendLine("<div class=\"post-item\">");
-            postList.AppendLine($"  <h2><a href=\"{post.Slug}.html\">{post.Title}</a></h2>");
-            postList.AppendLine($"  <div class=\"post-meta\">");
-            postList.AppendLine($"    <time datetime=\"{post.Date:yyyy-MM-dd}\">{post.Date:MMMM dd, yyyy}</time>");
+            
+            // Add featured image if available
+            if (!string.IsNullOrEmpty(post.FeaturedImage))
+            {
+                postList.AppendLine($"  <img src=\"images/posts/{post.FeaturedImage}\" alt=\"{post.Title}\" class=\"post-thumbnail\" />");
+            }
+            
+            postList.AppendLine("  <div class=\"post-item-content\">");
+            postList.AppendLine($"    <h2><a href=\"{post.Slug}.html\">{post.Title}</a></h2>");
+            postList.AppendLine($"    <div class=\"post-meta\">");
+            postList.AppendLine($"      <time datetime=\"{post.Date:yyyy-MM-dd}\">{post.Date:MMMM dd, yyyy}</time>");
             if (post.Tags.Any())
             {
-                postList.AppendLine($"    <span class=\"tags\">{string.Join(", ", post.Tags)}</span>");
+                postList.AppendLine($"      <span class=\"tags\">{string.Join(", ", post.Tags)}</span>");
             }
-            postList.AppendLine($"  </div>");
-            postList.AppendLine($"  <div class=\"post-excerpt\">{excerpt}</div>");
+            postList.AppendLine($"    </div>");
+            postList.AppendLine($"    <div class=\"post-excerpt\">{excerpt}</div>");
+            postList.AppendLine("  </div>");
             postList.AppendLine("</div>");
         }
         
@@ -291,7 +315,7 @@ public class StaticSiteGenerator
         var destCss = Path.Join(_outputDir, "styles.css");
         File.Copy(sourceCss, destCss, true);
         
-        // Copy images folder
+        // Copy template images folder
         var sourceImagesDir = Path.Join(_templatesDir, "images");
         var destImagesDir = Path.Join(_outputDir, "images");
         
@@ -309,6 +333,25 @@ public class StaticSiteGenerator
                 File.Copy(file, destFile, true);
             }
         }
+        
+        // Copy post images folder
+        var sourcePostImagesDir = Path.Join(_postsDir, "images");
+        var destPostImagesDir = Path.Join(_outputDir, "images", "posts");
+        
+        if (Directory.Exists(sourcePostImagesDir))
+        {
+            if (!Directory.Exists(destPostImagesDir))
+            {
+                Directory.CreateDirectory(destPostImagesDir);
+            }
+            
+            foreach (var file in Directory.GetFiles(sourcePostImagesDir))
+            {
+                var fileName = Path.GetFileName(file);
+                var destFile = Path.Join(destPostImagesDir, fileName);
+                File.Copy(file, destFile, true);
+            }
+        }
     }
 }
 
@@ -320,4 +363,5 @@ public class BlogPost
     public List<string> Tags { get; set; } = new List<string>();
     public string Content { get; set; } = "";
     public string Slug { get; set; } = "";
+    public string? FeaturedImage { get; set; }
 }

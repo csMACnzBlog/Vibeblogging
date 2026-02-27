@@ -2,6 +2,7 @@
 title: "Design Patterns Series: Composition Over Complexity"
 date: 2026-02-25
 tags: csharp, design-patterns, architecture, best-practices
+image: design-patterns-series-composition-over-complexity.png
 ---
 
 # Design Patterns Series: Composition Over Complexity
