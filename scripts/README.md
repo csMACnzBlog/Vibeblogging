@@ -4,12 +4,6 @@ This directory contains utility scripts for managing and generating blog content
 
 ## Available Scripts
 
-# Vibeblogging Scripts
-
-This directory contains utility scripts for managing and generating blog content.
-
-## Available Scripts
-
 ### generate_blog_image.py
 
 Python script that generates blog post featured images using HuggingFace's Inference API.
@@ -56,6 +50,7 @@ python scripts/generate_blog_image.py \
 **Parameters**:
 - `--title` (required): The title of the blog post
 - `--content` (required): Summary of key themes/concepts for visual inspiration
+- `--scene` (optional): Specific scene description for creative prompting (recommended)
 - `--output` (required): Filename for the image (e.g., "my-post.png")
 - `--api-key` (optional): HuggingFace API token (defaults to `HUGGINGFACE_API_KEY` env var)
 - `--model` (optional): HuggingFace model ID (defaults to `black-forest-labs/FLUX.1-schnell`)
@@ -68,24 +63,25 @@ python scripts/generate_blog_image.py \
 **Examples**:
 
 ```bash
-# Generate image for a design patterns post
+# Generate image with creative scene description (recommended)
 python scripts/generate_blog_image.py \
   --title "Composition Over Inheritance" \
-  --content "Software design pattern emphasizing flexible composition of behaviors over rigid class hierarchies" \
+  --content "Software design pattern emphasizing flexible composition" \
+  --scene "A modular desk organizer with colorful compartments in focus, blurred laptop behind. Orange and teal color scheme." \
   --output "composition-over-inheritance.png"
 
 # Generate image for a conference review
 python scripts/generate_blog_image.py \
   --title ".NET Conf 2024 Review" \
-  --content "Conference highlights featuring new .NET features and community presentations" \
+  --content "Conference highlights featuring new .NET features" \
+  --scene "An empty auditorium with plush theater seats in focus, projection screen blurred. Burgundy seats with blue lighting." \
   --output "dotnet-conf-2024-review.png"
 
-# Use a different model
+# Generate without scene (uses generic guidance)
 python scripts/generate_blog_image.py \
   --title "Getting Started with Async/Await" \
   --content "Tutorial on C# asynchronous programming patterns" \
-  --output "async-await-tutorial.png" \
-  --model "stabilityai/stable-diffusion-xl-base-1.0"
+  --output "async-await-tutorial.png"
 ```
 
 **Style Details**:
@@ -128,9 +124,9 @@ Starts a local HTTP server, runs pa11y-ci on all HTML files in `output/`, and re
 When adding new scripts to this directory:
 
 1. **Choose the right language**:
-   - Use PowerShell (`.ps1`) for cross-platform scripts that need .NET integration
+   - Use Python (`.py`) for complex data processing, ML tasks, or API integrations
    - Use Bash (`.sh`) for simple Unix-like system scripts
-   - Use Python (`.py`) for complex data processing or ML tasks
+   - Use PowerShell (`.ps1`) only if cross-platform .NET integration is specifically required
 
 2. **Document thoroughly**:
    - Include synopsis, description, parameters, and examples
@@ -162,11 +158,11 @@ When adding new scripts to this directory:
 
 ## Troubleshooting
 
-### Generate-BlogImage.ps1 Issues
+### generate_blog_image.py Issues
 
 **"HuggingFace API token not provided"**
 - Ensure `HUGGINGFACE_API_KEY` environment variable is set
-- Or pass `-ApiKey` parameter explicitly
+- Or pass `--api-key` parameter explicitly
 - Generate a token at https://huggingface.co/settings/tokens
 
 **"Unauthorized (401)"**
@@ -184,16 +180,15 @@ When adding new scripts to this directory:
 - Check file permissions on the directory
 - Verify disk space is available
 
-**Rate limiting errors**
+**Rate limiting errors (429)**
 - Free tier: Several hundred requests per hour
-- Wait and retry, or consider upgrading to PRO for higher limits
+- Wait and retry, or consider upgrading for higher limits
 - Check your usage at https://huggingface.co/settings/billing
 
-**API endpoint errors (410 Gone or 404 Not Found)**
-- HuggingFace is currently migrating endpoints from `api-inference.huggingface.co` to `router.huggingface.co`
-- The migration is in progress and endpoints may be temporarily unavailable
-- Check https://huggingface.co/docs/inference-providers for the latest endpoint information
-- Existing generated images remain functional
+**Module not found errors**
+- Install required packages: `pip install huggingface_hub Pillow`
+- Ensure you're using Python 3.8 or later
+- Consider using a virtual environment for dependencies
 
 ### General Script Issues
 
