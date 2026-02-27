@@ -186,9 +186,14 @@ public class FileReader : IReader
 public class ApiReader : IReader
 {
     private readonly string _endpoint;
-    public ApiReader(string endpoint) => _endpoint = endpoint;
+    private readonly HttpClient _httpClient;
+    public ApiReader(string endpoint, HttpClient httpClient)
+    {
+        _endpoint = endpoint;
+        _httpClient = httpClient;
+    }
     public string Read() 
-        => new HttpClient().GetStringAsync(_endpoint).Result;
+        => _httpClient.GetStringAsync(_endpoint).Result; // In production, use async/await
 }
 
 public class UpperCaseTransformer : ITransformer
@@ -213,7 +218,7 @@ public class FileWriter : IWriter
 public class DatabaseWriter : IWriter
 {
     public void Write(string content) 
-        => SaveToDatabase(content);
+        => SaveToDatabase(content); // Pseudocode - implement based on your DB
 }
 ```
 
