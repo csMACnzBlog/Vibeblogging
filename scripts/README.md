@@ -4,24 +4,38 @@ This directory contains utility scripts for managing and generating blog content
 
 ## Available Scripts
 
-### Generate-BlogImage.ps1
+# Vibeblogging Scripts
 
-PowerShell script that generates blog post featured images using HuggingFace's Inference API.
+This directory contains utility scripts for managing and generating blog content.
+
+## Available Scripts
+
+### generate_blog_image.py
+
+Python script that generates blog post featured images using HuggingFace's Inference API.
 
 **Purpose**: Creates abstract, cell-shaded featured images for blog posts with consistent style.
 
 **Requirements**:
-- PowerShell Core (pwsh) 7.0+
+- Python 3.8+
 - HuggingFace API token (free tier available)
+- Python packages: `huggingface_hub`, `Pillow`
 - Internet connection
 
 **Note**: HuggingFace offers a generous free tier for text-to-image generation with several hundred requests per hour.
 
 **Setup**:
 
-1. Create a free account at [HuggingFace.co](https://huggingface.co/)
-2. Generate an API token at [HuggingFace Settings](https://huggingface.co/settings/tokens)
-3. Set the API token as an environment variable:
+1. Install required Python packages:
+   ```bash
+   pip install huggingface_hub Pillow
+   ```
+
+2. Create a free account at [HuggingFace.co](https://huggingface.co/)
+
+3. Generate an API token at [HuggingFace Settings](https://huggingface.co/settings/tokens)
+
+4. Set the API token as an environment variable:
    ```bash
    # Linux/macOS
    export HUGGINGFACE_API_KEY="your-token-here"
@@ -33,45 +47,45 @@ PowerShell script that generates blog post featured images using HuggingFace's I
 **Usage**:
 
 ```bash
-pwsh scripts/Generate-BlogImage.ps1 \
-  -PostTitle "Your Blog Post Title" \
-  -PostContent "Brief description of post themes and concepts" \
-  -OutputFileName "post-slug.png"
+python scripts/generate_blog_image.py \
+  --title "Your Blog Post Title" \
+  --content "Brief description of post themes and concepts" \
+  --output "post-slug.png"
 ```
 
 **Parameters**:
-- `-PostTitle` (required): The title of the blog post
-- `-PostContent` (required): Summary of key themes/concepts for visual inspiration
-- `-OutputFileName` (required): Filename for the image (e.g., "my-post.png")
-- `-ApiKey` (optional): HuggingFace API token (defaults to `$env:HUGGINGFACE_API_KEY`)
-- `-Model` (optional): HuggingFace model ID (defaults to `runwayml/stable-diffusion-v1-5`)
+- `--title` (required): The title of the blog post
+- `--content` (required): Summary of key themes/concepts for visual inspiration
+- `--output` (required): Filename for the image (e.g., "my-post.png")
+- `--api-key` (optional): HuggingFace API token (defaults to `HUGGINGFACE_API_KEY` env var)
+- `--model` (optional): HuggingFace model ID (defaults to `black-forest-labs/FLUX.1-schnell`)
 
 **Output**:
 - Location: `posts/images/[filename].png`
-- Format: PNG (800x500 pixels)
+- Format: PNG (1024x1024 pixels)
 - Style: Pseudo realistic cell-shaded with focus and blur effects
 
 **Examples**:
 
 ```bash
 # Generate image for a design patterns post
-pwsh scripts/Generate-BlogImage.ps1 \
-  -PostTitle "Composition Over Inheritance" \
-  -PostContent "Software design pattern emphasizing flexible composition of behaviors over rigid class hierarchies" \
-  -OutputFileName "composition-over-inheritance.png"
+python scripts/generate_blog_image.py \
+  --title "Composition Over Inheritance" \
+  --content "Software design pattern emphasizing flexible composition of behaviors over rigid class hierarchies" \
+  --output "composition-over-inheritance.png"
 
 # Generate image for a conference review
-pwsh scripts/Generate-BlogImage.ps1 \
-  -PostTitle ".NET Conf 2024 Review" \
-  -PostContent "Conference highlights featuring new .NET features and community presentations" \
-  -OutputFileName "dotnet-conf-2024-review.png"
+python scripts/generate_blog_image.py \
+  --title ".NET Conf 2024 Review" \
+  --content "Conference highlights featuring new .NET features and community presentations" \
+  --output "dotnet-conf-2024-review.png"
 
-# Provide API key inline
-pwsh scripts/Generate-BlogImage.ps1 \
-  -PostTitle "Getting Started with Async/Await" \
-  -PostContent "Tutorial on C# asynchronous programming patterns" \
-  -OutputFileName "async-await-tutorial.png" \
-  -ApiKey "your-api-key-here"
+# Use a different model
+python scripts/generate_blog_image.py \
+  --title "Getting Started with Async/Await" \
+  --content "Tutorial on C# asynchronous programming patterns" \
+  --output "async-await-tutorial.png" \
+  --model "stabilityai/stable-diffusion-xl-base-1.0"
 ```
 
 **Style Details**:
