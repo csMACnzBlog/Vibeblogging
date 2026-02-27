@@ -76,6 +76,7 @@ Vibeblogging/
 │   └── images/          # Featured images for posts
 ├── scripts/              # Utility scripts
 │   ├── generate_blog_image.py
+│   ├── requirements.txt
 │   └── run-a11y-tests.sh
 ├── src/SiteGenerator/    # C# static site generator
 ├── templates/            # HTML templates and CSS
@@ -143,6 +144,24 @@ Before submitting changes:
 5. Verify links and navigation work
 6. Test on different screen sizes
 7. Validate HTML and CSS if possible
+
+### Copilot Agent Environment
+
+For GitHub Copilot agents, a standardized workflow is available to ensure all development tools are properly installed:
+
+**Workflow**: `.github/workflows/copilot-agent.yml`
+
+This workflow provides a pre-configured environment with:
+- .NET 10 SDK
+- Python 3.12 (with huggingface_hub, Pillow)
+- Node.js 20 (with html-validate, pa11y-ci, http-server)
+- PowerShell Core
+- Playwright browsers (Chromium)
+- All dependencies cached for efficiency
+
+**Usage**: Manually trigger the workflow from the GitHub Actions tab. It can be configured to skip tests for faster setup when needed.
+
+See `.github/workflows/README.md` for detailed documentation.
 
 ## 📦 Submitting Changes
 
