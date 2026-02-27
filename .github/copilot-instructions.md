@@ -162,11 +162,11 @@ Use for organizing and maintaining blog content. The agent:
 
 ### image-generator.md
 Use for generating featured images for blog posts. The agent:
-- Creates AI-generated images using Google's Gemini API (Imagen)
+- Creates AI-generated images using HuggingFace Inference API
 - Produces pseudo realistic cell-shaded style with focus and blur effects
 - Generates images using everyday scenes and objects (no people, animals, or geometric shapes)
 - Handles image prompt construction and API integration
-- Requires `GEMINI_API_KEY` environment variable
+- Requires `HUGGINGFACE_API_KEY` environment variable
 
 To generate an image, use `@image-generator` with the post title and key themes.
 
@@ -213,7 +213,7 @@ pwsh scripts/Generate-BlogImage.ps1 \
   -OutputFileName "post-slug.png"
 ```
 
-Requires `GEMINI_API_KEY` environment variable. See `scripts/README.md` for details.
+Requires `HUGGINGFACE_API_KEY` environment variable. See `scripts/README.md` for details.
 
 ### Test Changes
 ```bash

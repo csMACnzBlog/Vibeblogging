@@ -199,6 +199,6 @@ When contributing new scripts or improvements:
 
 ## Resources
 
-- [Google Gemini API Documentation](https://ai.google.dev/docs)
+- [HuggingFace Inference API Documentation](https://huggingface.co/docs/inference-providers/tasks/text-to-image)
 - [PowerShell Core](https://docs.microsoft.com/powershell/scripting/install/installing-powershell)
 - [pa11y-ci](https://github.com/pa11y/pa11y-ci)

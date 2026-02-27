@@ -108,8 +108,8 @@ Write-Host $imagePrompt
 Write-Host "----------------------------------------`n"
 
 # HuggingFace Inference API endpoint for text-to-image generation
-# Refer to https://huggingface.co/docs/inference-providers/tasks/text-to-image for latest API documentation
-$apiEndpoint = "https://api-inference.huggingface.co/models/$Model"
+# Using the new router-based hf-inference endpoint
+$apiEndpoint = "https://router.huggingface.co/hf-inference/$Model"
 
 # Construct request body for HuggingFace API
 # HuggingFace accepts JSON with 'inputs' parameter for the prompt

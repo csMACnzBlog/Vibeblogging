@@ -44,7 +44,7 @@ Your content here...
 More content...
 ```
 
-**Featured Images**: Each post should include a featured image. Use the `@image-generator` Copilot agent to create AI-generated images using Google's Gemini API. Images are saved to `posts/images/` with the post slug as filename.
+**Featured Images**: Each post should include a featured image. Use the `@image-generator` Copilot agent to create AI-generated images using HuggingFace Inference API. Images are saved to `posts/images/` with the post slug as filename.
 
 ### Example
 
@@ -136,7 +136,7 @@ Vibeblogging/
 │   ├── images/              # Blog post featured images
 │   └── 2026-02-25-welcome.md
 ├── scripts/                  # Utility scripts
-│   ├── Generate-BlogImage.ps1  # Gemini API image generator
+│   ├── Generate-BlogImage.ps1  # HuggingFace API image generator
 │   └── run-a11y-tests.sh
 ├── src/
 │   └── SiteGenerator/        # C# static site generator
@@ -158,16 +158,17 @@ This repository includes Copilot agent instruction files to assist with content 
 
 - **blog-post-writer.md**: Guidelines for writing engaging blog posts
 - **content-manager.md**: Instructions for managing and organizing content
-- **image-generator.md**: AI-powered image generation using Google's Gemini API
+- **image-generator.md**: AI-powered image generation using HuggingFace Inference API
 
 ### Featured Image Generation
 
-Blog posts can include AI-generated featured images created using Google's Gemini API (Imagen):
+Blog posts can include AI-generated featured images created using HuggingFace Inference API:
 
 **Setup**:
-1. Obtain a Google Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Set the `GEMINI_API_KEY` environment variable
-3. Use the `@image-generator` agent to generate images
+1. Create a free account at [HuggingFace.co](https://huggingface.co/)
+2. Generate an API token at [HuggingFace Settings](https://huggingface.co/settings/tokens)
+3. Set the `HUGGINGFACE_API_KEY` environment variable
+4. Use the `@image-generator` agent to generate images
 
 **Style**: Images are generated in a "pseudo realistic cell-shaded" style with focus and blur effects, featuring everyday scenes or objects (such as office items, household objects, or empty spaces) suitable for technical blog posts.
 

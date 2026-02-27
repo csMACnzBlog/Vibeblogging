@@ -40,7 +40,7 @@ Blog posts can include AI-generated featured images:
 
 **Using Copilot Agent** (Recommended):
 - Use `@image-generator` agent with your post title and content
-- The agent will generate a stylized image using Google's Gemini API
+- The agent will generate a stylized image using HuggingFace Inference API
 
 **Manual Generation**:
 ```bash
@@ -50,7 +50,7 @@ pwsh scripts/Generate-BlogImage.ps1 \
   -OutputFileName "post-slug.png"
 ```
 
-Requires `GEMINI_API_KEY` environment variable. See `scripts/README.md` for details.
+Requires `HUGGINGFACE_API_KEY` environment variable. See `scripts/README.md` for details.
 
 ### Post Guidelines
 

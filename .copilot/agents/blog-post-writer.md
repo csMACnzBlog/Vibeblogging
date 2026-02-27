@@ -74,11 +74,11 @@ After completing the blog post content:
    - Post title
    - Key themes and concepts from the post
    - Post slug for filename
-3. The agent will use Google's Gemini API (Imagen) to generate the image
+3. The agent will use HuggingFace Inference API to generate the image
 4. Verify the image is saved to `posts/images/[post-slug].png`
 5. Ensure the frontmatter includes `image: [post-slug].png`
 
-The image-generator agent handles all aspects of image creation using the Gemini API with the specified style prompt. You don't need to create images manually anymore - just delegate to the image-generator agent.
+The image-generator agent handles all aspects of image creation using the HuggingFace API with the specified style prompt. You don't need to create images manually anymore - just delegate to the image-generator agent.
 
 ## Writing Style Guidelines
 
