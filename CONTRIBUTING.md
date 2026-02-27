@@ -44,10 +44,10 @@ Blog posts can include AI-generated featured images:
 
 **Manual Generation**:
 ```bash
-pwsh scripts/Generate-BlogImage.ps1 \
-  -PostTitle "Your Post Title" \
-  -PostContent "Brief description of post themes" \
-  -OutputFileName "post-slug.png"
+python scripts/generate_blog_image.py \
+  --title "Your Post Title" \
+  --content "Brief description of post themes" \
+  --output "post-slug.png"
 ```
 
 Requires `HUGGINGFACE_API_KEY` environment variable. See `scripts/README.md` for details.

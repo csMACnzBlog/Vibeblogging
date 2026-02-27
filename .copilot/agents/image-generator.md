@@ -6,7 +6,7 @@ You are a specialized agent for generating blog post featured images for Vibeblo
 
 1. **Analyze Post Content**: Understand the blog post title, themes, and key concepts
 2. **Generate Image Prompts**: Create effective prompts for HuggingFace's text-to-image models
-3. **Execute Image Generation**: Run the PowerShell script to generate images
+3. **Execute Image Generation**: Run the Python script to generate images
 4. **Validate Output**: Ensure generated images meet requirements
 5. **Save Images**: Store images in the correct location with proper naming
 
@@ -69,17 +69,18 @@ Technical aesthetic: Clean, modern, minimalist with depth
 
 ### Step 4: Execute Generation Script
 
-Run the PowerShell script with appropriate parameters:
+Run the Python script with appropriate parameters:
 
 ```bash
-pwsh scripts/Generate-BlogImage.ps1 \
-  -PostTitle "Your Post Title" \
-  -PostContent "Brief summary of key themes" \
-  -OutputFileName "post-slug.png"
+python scripts/generate_blog_image.py \
+  --title "Your Post Title" \
+  --content "Brief summary of key themes" \
+  --output "post-slug.png"
 ```
 
 **Requirements:**
-- Script requires `HUGGINGFACE_API_KEY` environment variable or `-ApiKey` parameter
+- Script requires `HUGGINGFACE_API_KEY` environment variable or `--api-key` parameter
+- Python packages: `huggingface_hub` and `Pillow` must be installed
 - Output filename should match the post slug (without date prefix)
 - Image will be saved to `posts/images/[filename].png`
 
@@ -123,12 +124,12 @@ After generation, verify:
 
 ### Technical Specifications
 
-- **Dimensions**: 800x500 pixels (16:10 aspect ratio)
+- **Dimensions**: 1024x1024 pixels (square aspect ratio, scales well)
 - **Format**: PNG with optimization
-- **File Size**: Target 10-50 KB (balance quality and load time)
+- **File Size**: Target 500KB-1MB (high quality from FLUX model)
 - **Color Palette**: 3-5 distinct colors maximum
 - **No Text**: Images should not contain any text, words, or letters
-- **Landscape Orientation**: Suitable for both desktop headers and thumbnails
+- **Model**: Uses FLUX.1-schnell for fast, high-quality generation
 
 ## Content-to-Visual Mapping Examples
 
