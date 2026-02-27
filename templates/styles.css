@@ -336,15 +336,14 @@ article h1 {
 }
 
 .blog-intro {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid #00bbf2;
+    margin: 0;
 }
 
 .blog-intro p {
     font-size: 1.05em;
-    line-height: 1.6;
+    line-height: 1.8;
     color: #4b4b4b;
+    margin: 0;
 }
 
 .posts-list {
