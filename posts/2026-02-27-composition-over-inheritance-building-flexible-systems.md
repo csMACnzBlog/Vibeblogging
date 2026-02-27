@@ -1,5 +1,5 @@
 ---
-title: Composition over Inheritance - Building flexible systems
+title: Composition over Inheritance - Flexible systems
 date: 2026-02-27
 tags: csharp, design-patterns, architecture, composition, best-practices
 ---
