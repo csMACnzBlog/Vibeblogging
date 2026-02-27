@@ -4,9 +4,9 @@ date: 2026-02-27
 tags: csharp, design-patterns, architecture, composition, best-practices
 ---
 
-Remember when we kicked off this [design patterns series](/2026/02/25/design-patterns-series-composition-over-complexity.html)? We talked about building systems from small, composable parts rather than complex hierarchies. Today we're diving into one of the most important principles in that toolkit: composition over inheritance.
+Remember when we kicked off this [design patterns series](design-patterns-series-composition-over-complexity.html)? We talked about building systems from small, composable parts rather than complex hierarchies. Today we're diving into one of the most important principles in that toolkit: composition over inheritance.
 
-If you read yesterday's [SOLID Principles post](/2026/02/26/solid-principles-foundation-good-design.html), you'll recognize this fits right in with the Open/Closed Principle and Dependency Inversion. Those principles give us the "why" – this post gives us the "how."
+If you read yesterday's [SOLID Principles post](solid-principles-foundation-of-good-design.html), you'll recognize this fits right in with the Open/Closed Principle and Dependency Inversion. Those principles give us the "why" – this post gives us the "how."
 
 ## The Inheritance Trap
 
