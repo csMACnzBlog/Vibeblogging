@@ -76,17 +76,19 @@ $stylePrompt = "pseudo realistic cell-shaded style with focus and focus blur eff
 
 # Construct the content prompt based on post title and content
 $imagePrompt = @"
-Create an abstract, tech-oriented featured image for a blog post.
+Create a tech-oriented featured image for a blog post using everyday scenes or objects.
 
 Post Title: $PostTitle
 Post Theme: $PostContent
 
 Style Requirements:
 - $stylePrompt
-- Abstract geometric shapes and patterns
+- Scene or object-based imagery: rooms, courtyards, open city/suburban spaces, OR closeup of everyday household/office items
+- Examples: red stapler on desk, keyboard with coffee cup, violin on stand, pots in kitchen sink, towel on towel rail, empty office room, urban courtyard
 - Modern, tech-oriented color scheme
 - Limited color palette (3-5 colors)
 - Include at least one element in sharp focus and one element with blur/depth-of-field effect
+- No people or animals
 - No text or words in the image
 - Landscape orientation suitable for a blog header
 

@@ -164,7 +164,7 @@ Use for organizing and maintaining blog content. The agent:
 Use for generating featured images for blog posts. The agent:
 - Creates AI-generated images using Google's Gemini API (Imagen)
 - Produces pseudo realistic cell-shaded style with focus and blur effects
-- Generates abstract geometric images suitable for technical blog posts
+- Generates images using everyday scenes and objects (no people, animals, or geometric shapes)
 - Handles image prompt construction and API integration
 - Requires `GEMINI_API_KEY` environment variable
 

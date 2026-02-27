@@ -169,7 +169,7 @@ Blog posts can include AI-generated featured images created using Google's Gemin
 2. Set the `GEMINI_API_KEY` environment variable
 3. Use the `@image-generator` agent to generate images
 
-**Style**: Images are generated in a "pseudo realistic cell-shaded" style with focus and blur effects, featuring abstract geometric content suitable for technical blog posts.
+**Style**: Images are generated in a "pseudo realistic cell-shaded" style with focus and blur effects, featuring everyday scenes or objects (such as office items, household objects, or empty spaces) suitable for technical blog posts.
 
 **Manual Usage**:
 ```bash

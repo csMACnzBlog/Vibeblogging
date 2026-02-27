@@ -54,10 +54,11 @@ Each blog post requires a featured image with these specifications:
 
 **Style Requirements:**
 - Pseudo realistic cell-shaded style with focus and focus blur effects
-- Abstract geometric content (not literal representations)
+- Scene or object-based imagery (everyday household/office items or settings)
 - Limited color palette (3-5 colors)
 - Must include at least one element in sharp focus and one element with depth-of-field blur
 - Modern, tech-oriented color scheme
+- No people or animals
 - No text or words in the image
 
 **Technical Specifications:**

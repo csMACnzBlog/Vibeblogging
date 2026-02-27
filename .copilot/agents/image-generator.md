@@ -22,43 +22,46 @@ When given a blog post or post request, analyze:
 
 ### Step 2: Extract Visual Concepts
 
-Transform technical content into visual concepts:
+Transform technical content into visual concepts using everyday scenes and objects:
 
 **For Technical Concepts:**
-- Design patterns → Geometric shapes, modular blocks, interconnected nodes
-- Architecture → Layered structures, building blocks, hierarchies
-- Code flow → Flowing lines, directed graphs, pathways
-- Performance → Speed lines, gradients, dynamic motion blur
+- Design patterns → Office workspace scenes with organized desk items (keyboard, mouse, notebook)
+- Architecture → Room layouts, courtyard spaces, structured urban/suburban settings
+- Code flow → Objects arranged in sequence (books on shelf, items on conveyor)
+- Performance → Dynamic motion blur on everyday objects (bicycle, coffee machine in action)
 
 **For Conference/Review Posts:**
-- Events → Stylized stage/presentation elements, abstract crowds
-- Learning → Books, lightbulbs, pathways, connections
+- Events → Empty auditorium or conference room setup, presentation screen
+- Learning → Study desk with open books, coffee cup, reading lamp
 
 **For Best Practices/Principles:**
-- Foundations → Solid structures, pillars, frameworks
-- Flexibility → Fluid shapes, adaptive patterns
-- Complexity → Intricate patterns that simplify into focus
+- Foundations → Solid household items (brick wall, wooden table, kitchen counter)
+- Flexibility → Objects that adapt (adjustable desk lamp, modular shelving)
+- Complexity → Cluttered then organized desk scenes, before/after kitchen spaces
 
 ### Step 3: Construct the Image Prompt
 
 Create a detailed prompt that balances specificity with abstraction:
 
 ```
-Create an abstract, tech-oriented featured image for a blog post.
+Create a tech-oriented featured image for a blog post using everyday scenes or objects.
 
 Post Title: [Title]
 Post Theme: [Brief description of key concepts]
 
 Style Requirements:
 - pseudo realistic cell-shaded style with focus and focus blur effects
-- Abstract geometric shapes and patterns
+- Scene or object-based imagery (rooms, courtyards, city/suburban spaces, OR everyday household/office items)
 - Modern, tech-oriented color scheme
 - Limited color palette (3-5 colors)
 - Include at least one element in sharp focus and one element with blur/depth-of-field effect
+- No people or animals
 - No text or words in the image
 - Landscape orientation suitable for a blog header
 
-Visual Concept: [Specific abstract representation of the post themes]
+Visual Concept: [Specific scene or object(s) that represent the post themes]
+Examples: red stapler on desk, keyboard with coffee cup, violin on stand, pots in kitchen sink, towel on towel rail, empty office room, urban courtyard, suburban backyard
+
 Color Palette: [Suggested colors based on content - e.g., blues/greens for stability, oranges/reds for action]
 
 Technical aesthetic: Clean, modern, minimalist with depth
@@ -104,12 +107,13 @@ After generation, verify:
 - Creates visual depth and directs viewer attention
 - Mimics camera lens effects for professional look
 
-**Abstract Geometric Content:**
-- Use shapes like cubes, spheres, cylinders, pyramids
-- Overlapping transparent layers
-- Interconnected nodes or networks
-- Flowing ribbons or pathways
-- Modular building blocks
+**Scene and Object-Based Content:**
+- Everyday household items: staplers, keyboards, coffee cups, books, lamps, towels
+- Office scenes: desks with monitors, organized workspace, meeting rooms
+- Household spaces: kitchen counters, living room corners, home office setups
+- Outdoor settings: courtyards, suburban backyards, city plazas (without people)
+- Closeup compositions of single or grouped everyday objects
+- No people or animals in any scenes
 
 **Tech-Oriented Aesthetic:**
 - Clean, minimalist composition
@@ -131,41 +135,41 @@ After generation, verify:
 ### Software Design Patterns
 **Themes**: Design patterns, architecture, code structure
 **Visual Concepts**: 
-- Interlocking geometric shapes representing modular components
-- Layered transparent planes showing separation of concerns
-- Connected nodes in a network pattern
+- Organized office desk with modular filing system and labeled containers
+- Kitchen counter with neatly arranged pots and utensils showing organization
+- Bookshelf with books organized by size and color
 **Colors**: Blues and greens (stability, structure)
 
 ### Performance/Optimization
 **Themes**: Speed, efficiency, async operations
 **Visual Concepts**:
-- Dynamic motion lines or trails
-- Streamlined shapes with speed blur
-- Flowing gradient paths
+- Coffee maker in motion with steam blur effect
+- Bicycle leaning against wall with motion-blurred wheel
+- Keyboard with hands (blurred) typing at speed
 **Colors**: Oranges and reds (energy, action)
 
 ### Conferences/Reviews
 **Themes**: Learning, events, knowledge sharing
 **Visual Concepts**:
-- Stylized stage or presentation elements
-- Abstract representations of connections between people
-- Flowing information streams
+- Empty conference room with chairs and presentation screen
+- Study desk with open laptop, coffee cup, and notebooks
+- Auditorium seating from stage perspective (no people)
 **Colors**: Purples and teals (creativity, technology)
 
 ### Best Practices/Principles
 **Themes**: Foundations, rules, guidelines
 **Visual Concepts**:
-- Solid geometric pillars or foundations
-- Balanced compositions showing stability
-- Framework-like structures
+- Solid wooden desk with professional workspace setup
+- Kitchen with stable counter and organized drawers
+- Office room with clean walls and structured furniture layout
 **Colors**: Dark blues and grays (professionalism, reliability)
 
 ### Tutorials/How-To
 **Themes**: Learning, step-by-step, progression
 **Visual Concepts**:
-- Ascending pathways or staircases
-- Progressive building blocks stacking
-- Flowing ribbons showing journey
+- Desk scene showing progression: closed book → open book → notebook with notes
+- Kitchen scene with cooking stages: ingredients → prep → cooking tools
+- Workshop table with tools arranged in sequence
 **Colors**: Greens and blues (growth, learning)
 
 ## Error Handling
@@ -250,7 +254,8 @@ Before completing image generation, verify:
 - [ ] Filename matches post slug (without date prefix)
 - [ ] Post frontmatter includes `image: filename.png` field
 - [ ] Image style matches requirements (cell-shaded, focus/blur)
-- [ ] Image is abstract and tech-oriented
+- [ ] Image uses everyday scenes or objects (no geometric shapes)
+- [ ] No people or animals appear in the image
 - [ ] No text or words appear in the image
 - [ ] Colors complement post content and mood
 

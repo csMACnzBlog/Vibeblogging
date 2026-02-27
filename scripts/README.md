@@ -75,7 +75,8 @@ pwsh scripts/Generate-BlogImage.ps1 \
 All generated images follow a consistent visual style:
 - **Pseudo realistic cell-shaded**: Flat color areas with defined edges, modern illustration aesthetic
 - **Focus and blur effects**: Sharp foreground elements with blurred background for depth
-- **Abstract geometric**: Uses shapes, patterns, and modern tech colors
+- **Scene and object-based**: Uses everyday items (staplers, keyboards, coffee cups, etc.) or settings (rooms, courtyards, city spaces)
+- **No people or animals**: Images are devoid of any human or animal subjects
 - **No text**: Images contain no words, letters, or text
 - **Limited palette**: 3-5 colors for clean, cohesive look
 
