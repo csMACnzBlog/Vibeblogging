@@ -34,6 +34,9 @@ Python script that generates blog post featured images using HuggingFace's Infer
    # Linux/macOS
    export HUGGINGFACE_API_KEY="your-token-here"
    
+   # Windows Command Prompt
+   set HUGGINGFACE_API_KEY=your-token-here
+   
    # Windows PowerShell
    $env:HUGGINGFACE_API_KEY="your-token-here"
    ```
@@ -126,7 +129,6 @@ When adding new scripts to this directory:
 1. **Choose the right language**:
    - Use Python (`.py`) for complex data processing, ML tasks, or API integrations
    - Use Bash (`.sh`) for simple Unix-like system scripts
-   - Use PowerShell (`.ps1`) only if cross-platform .NET integration is specifically required
 
 2. **Document thoroughly**:
    - Include synopsis, description, parameters, and examples
@@ -139,7 +141,7 @@ When adding new scripts to this directory:
    ```
 
 4. **Test on multiple platforms**:
-   - PowerShell scripts should work on Linux, macOS, and Windows
+   - Python scripts should work on Linux, macOS, and Windows
    - Bash scripts should work on Linux and macOS
 
 5. **Handle errors gracefully**:
@@ -194,12 +196,10 @@ When adding new scripts to this directory:
 
 **Permission denied**
 - Make script executable: `chmod +x scripts/script-name.sh`
-- For PowerShell: Check execution policy with `Get-ExecutionPolicy`
 
 **Command not found**
-- Ensure required tools are installed (pwsh, node, npm, etc.)
+- Ensure required tools are installed (python3, node, npm, etc.)
 - Check that tools are in your PATH
-- For PowerShell scripts, use `pwsh` not `powershell`
 
 ## Contributing
 
@@ -215,5 +215,4 @@ When contributing new scripts or improvements:
 ## Resources
 
 - [HuggingFace Inference API Documentation](https://huggingface.co/docs/inference-providers/tasks/text-to-image)
-- [PowerShell Core](https://docs.microsoft.com/powershell/scripting/install/installing-powershell)
 - [pa11y-ci](https://github.com/pa11y/pa11y-ci)
