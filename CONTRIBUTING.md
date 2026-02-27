@@ -75,7 +75,7 @@ Vibeblogging/
 ├── posts/                # Markdown blog posts
 │   └── images/          # Featured images for posts
 ├── scripts/              # Utility scripts
-│   ├── Generate-BlogImage.ps1
+│   ├── generate_blog_image.py
 │   └── run-a11y-tests.sh
 ├── src/SiteGenerator/    # C# static site generator
 ├── templates/            # HTML templates and CSS

@@ -136,7 +136,7 @@ Vibeblogging/
 │   ├── images/              # Blog post featured images
 │   └── 2026-02-25-welcome.md
 ├── scripts/                  # Utility scripts
-│   ├── Generate-BlogImage.ps1  # HuggingFace API image generator
+│   ├── generate_blog_image.py  # HuggingFace API image generator
 │   └── run-a11y-tests.sh
 ├── src/
 │   └── SiteGenerator/        # C# static site generator
