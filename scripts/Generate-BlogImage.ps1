@@ -100,22 +100,23 @@ Write-Host "----------------------------------------"
 Write-Host $imagePrompt
 Write-Host "----------------------------------------`n"
 
-# Gemini API endpoint for Imagen
-# Note: Endpoint structure may need adjustment based on current API version
+# Gemini API endpoint for Nano Banana 2 (gemini-3.1-flash-image-preview)
+# This is a free-tier model available for image generation
 # Refer to https://ai.google.dev/docs for latest API documentation
-$apiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001:predict"
+$apiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent"
 
-# Construct request body
+# Construct request body for generateContent API
+# Note: This uses a different format than the predict API
 $requestBody = @{
-    instances = @(
+    contents = @(
         @{
-            prompt = $imagePrompt
+            parts = @(
+                @{
+                    text = $imagePrompt
+                }
+            )
         }
     )
-    parameters = @{
-        sampleCount = 1
-        aspectRatio = "16:9"  # Closest to 800x500 (16:10) - will be 800x450 or similar
-    }
 } | ConvertTo-Json -Depth 10
 
 try {
@@ -133,8 +134,19 @@ try {
     # Note: Response structure may vary based on API version
     $imageData = $null
     
-    # For predict endpoint, response is: { "predictions": [{ "bytesBase64Encoded": "..." }] }
-    if ($response.predictions -and $response.predictions[0].bytesBase64Encoded) {
+    # For generateContent endpoint, response is: 
+    # { "candidates": [{ "content": { "parts": [{ "inlineData": { "mimeType": "image/png", "data": "..." } }] } }] }
+    if ($response.candidates -and $response.candidates[0].content.parts) {
+        $parts = $response.candidates[0].content.parts
+        foreach ($part in $parts) {
+            if ($part.inlineData -and $part.inlineData.data) {
+                $imageData = $part.inlineData.data
+                break
+            }
+        }
+    }
+    # Fallback to predict API format (for backward compatibility)
+    elseif ($response.predictions -and $response.predictions[0].bytesBase64Encoded) {
         $imageData = $response.predictions[0].bytesBase64Encoded
     } elseif ($response.predictions -and $response.predictions[0].image) {
         $imageData = $response.predictions[0].image
@@ -142,13 +154,10 @@ try {
         $imageData = $response.generatedImages[0].bytesBase64Encoded
     } elseif ($response.images -and $response.images[0]) {
         $imageData = $response.images[0]
-    } else {
-        Write-Error "Unexpected API response structure. Response: $($response | ConvertTo-Json -Depth 5)"
-        exit 1
     }
     
     if ([string]::IsNullOrWhiteSpace($imageData)) {
-        Write-Error "No image data received from API"
+        Write-Error "No image data received from API. Response structure: $($response | ConvertTo-Json -Depth 3 -Compress)"
         exit 1
     }
     
