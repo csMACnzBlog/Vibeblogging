@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Generates a blog post featured image using DeepAI API.
+    Generates a blog post featured image using HuggingFace Inference API.
 
 .DESCRIPTION
-    This script calls DeepAI's text-to-image API to generate a featured image
+    This script calls HuggingFace's text-to-image API to generate a featured image
     for a blog post based on the post content and title. The image is saved
     to the posts/images/ directory with the specified filename.
 
@@ -18,17 +18,20 @@
     The filename for the generated image (e.g., "my-post-slug.png").
 
 .PARAMETER ApiKey
-    DeepAI API key. If not provided, will attempt to read from
-    DEEPAI_API_KEY environment variable.
+    HuggingFace API token. If not provided, will attempt to read from
+    HUGGINGFACE_API_KEY environment variable.
+
+.PARAMETER Model
+    HuggingFace model ID to use for image generation. Defaults to black-forest-labs/FLUX.1-dev.
 
 .EXAMPLE
     ./Generate-BlogImage.ps1 -PostTitle "Understanding SOLID Principles" -PostContent "Software design principles for maintainable code" -OutputFileName "solid-principles.png"
 
 .NOTES
-    Requires: DeepAI API key with Pro account (paid subscription required)
+    Requires: HuggingFace API token (free tier available)
     Output: PNG image in posts/images/ directory
     Style: Pseudo realistic cell-shaded with focus and blur effects
-    API: https://deepai.org/docs
+    API: https://huggingface.co/docs/inference-providers/tasks/text-to-image
 #>
 
 [CmdletBinding()]
@@ -43,12 +46,15 @@ param(
     [string]$OutputFileName,
 
     [Parameter(Mandatory = $false)]
-    [string]$ApiKey = $env:DEEPAI_API_KEY
+    [string]$ApiKey = $env:HUGGINGFACE_API_KEY,
+
+    [Parameter(Mandatory = $false)]
+    [string]$Model = "black-forest-labs/FLUX.1-dev"
 )
 
 # Validate API key
 if ([string]::IsNullOrWhiteSpace($ApiKey)) {
-    Write-Error "DeepAI API key not provided. Set DEEPAI_API_KEY environment variable or pass -ApiKey parameter."
+    Write-Error "HuggingFace API token not provided. Set HUGGINGFACE_API_KEY environment variable or pass -ApiKey parameter."
     exit 1
 }
 
@@ -101,45 +107,32 @@ Write-Host "----------------------------------------"
 Write-Host $imagePrompt
 Write-Host "----------------------------------------`n"
 
-# DeepAI API endpoint for text-to-image generation
-# Refer to https://deepai.org/docs for latest API documentation
-$apiEndpoint = "https://api.deepai.org/api/text2img"
+# HuggingFace Inference API endpoint for text-to-image generation
+# Refer to https://huggingface.co/docs/inference-providers/tasks/text-to-image for latest API documentation
+$apiEndpoint = "https://api-inference.huggingface.co/models/$Model"
 
-# Construct request body for DeepAI API
-# DeepAI accepts form data with 'text' parameter for the prompt
-$boundary = [System.Guid]::NewGuid().ToString()
-$bodyLines = @()
-$bodyLines += "--$boundary"
-$bodyLines += 'Content-Disposition: form-data; name="text"'
-$bodyLines += ''
-$bodyLines += $imagePrompt
-$bodyLines += "--$boundary--"
-$bodyLines += ''
-
-$requestBody = $bodyLines -join "`r`n"
+# Construct request body for HuggingFace API
+# HuggingFace accepts JSON with 'inputs' parameter for the prompt
+$requestBody = @{
+    inputs = $imagePrompt
+    parameters = @{
+        guidance_scale = 7.5
+    }
+} | ConvertTo-Json -Depth 10
 
 try {
-    Write-Host "Calling DeepAI API..."
+    Write-Host "Calling HuggingFace Inference API with model: $Model"
     
     # Make API request
     $headers = @{
-        "api-key" = $ApiKey
-        "Content-Type" = "multipart/form-data; boundary=$boundary"
+        "Authorization" = "Bearer $ApiKey"
+        "Content-Type" = "application/json"
     }
     
-    $response = Invoke-RestMethod -Uri $apiEndpoint -Method Post -Headers $headers -Body $requestBody -TimeoutSec 120
+    # HuggingFace returns the image directly as binary data
+    $imageBytes = Invoke-RestMethod -Uri $apiEndpoint -Method Post -Headers $headers -Body $requestBody -TimeoutSec 120
     
-    # Extract image URL from response
-    # DeepAI response is: { "id": "...", "output_url": "https://..." }
-    if (-not $response.output_url) {
-        Write-Error "No image URL received from API. Response: $($response | ConvertTo-Json -Depth 3 -Compress)"
-        exit 1
-    }
-    
-    Write-Host "Image generated, downloading from: $($response.output_url)"
-    
-    # Download the image from the URL
-    $imageBytes = Invoke-RestMethod -Uri $response.output_url -Method Get -TimeoutSec 60
+    # Save the binary image data directly
     [System.IO.File]::WriteAllBytes($outputPath, $imageBytes)
     
     Write-Host "✓ Image generated successfully!"
@@ -176,11 +169,16 @@ try {
     # Check for specific error conditions and provide helpful messages
     if ($_.Exception.Response) {
         $statusCode = $_.Exception.Response.StatusCode.value__
-        if ($statusCode -eq 402) {
+        if ($statusCode -eq 401) {
             Write-Host ""
-            Write-Host "⚠️  DeepAI API Error: Payment Required" -ForegroundColor Yellow
-            Write-Host "   The free tier of DeepAI has limited access to image generation APIs." -ForegroundColor Yellow
-            Write-Host "   Please upgrade to a Pro account at: https://deepai.org/dashboard" -ForegroundColor Yellow
+            Write-Host "⚠️  HuggingFace API Error: Unauthorized" -ForegroundColor Yellow
+            Write-Host "   Your API token is invalid or has expired." -ForegroundColor Yellow
+            Write-Host "   Please generate a new token at: https://huggingface.co/settings/tokens" -ForegroundColor Yellow
+            Write-Host ""
+        } elseif ($statusCode -eq 503) {
+            Write-Host ""
+            Write-Host "⚠️  HuggingFace API Error: Model Loading" -ForegroundColor Yellow
+            Write-Host "   The model is currently loading. Please wait and try again in a few moments." -ForegroundColor Yellow
             Write-Host ""
         }
     }

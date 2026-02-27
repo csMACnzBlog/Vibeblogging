@@ -6,27 +6,28 @@ This directory contains utility scripts for managing and generating blog content
 
 ### Generate-BlogImage.ps1
 
-PowerShell script that generates blog post featured images using DeepAI's text-to-image API.
+PowerShell script that generates blog post featured images using HuggingFace's Inference API.
 
 **Purpose**: Creates abstract, cell-shaded featured images for blog posts with consistent style.
 
 **Requirements**:
 - PowerShell Core (pwsh) 7.0+
-- DeepAI API key with **Pro account** (image generation requires paid subscription)
+- HuggingFace API token (free tier available)
 - Internet connection
 
-**Note**: DeepAI's text-to-image API requires a Pro membership. Free tier API keys will return a 402 Payment Required error. Upgrade at https://deepai.org/dashboard
+**Note**: HuggingFace offers a generous free tier for text-to-image generation with several hundred requests per hour.
 
 **Setup**:
 
-1. Obtain a DeepAI API key with Pro access from [DeepAI.org](https://deepai.org/docs)
-2. Set the API key as an environment variable:
+1. Create a free account at [HuggingFace.co](https://huggingface.co/)
+2. Generate an API token at [HuggingFace Settings](https://huggingface.co/settings/tokens)
+3. Set the API token as an environment variable:
    ```bash
    # Linux/macOS
-   export DEEPAI_API_KEY="your-api-key-here"
+   export HUGGINGFACE_API_KEY="your-token-here"
    
    # Windows PowerShell
-   $env:DEEPAI_API_KEY="your-api-key-here"
+   $env:HUGGINGFACE_API_KEY="your-token-here"
    ```
 
 **Usage**:
@@ -42,7 +43,8 @@ pwsh scripts/Generate-BlogImage.ps1 \
 - `-PostTitle` (required): The title of the blog post
 - `-PostContent` (required): Summary of key themes/concepts for visual inspiration
 - `-OutputFileName` (required): Filename for the image (e.g., "my-post.png")
-- `-ApiKey` (optional): DeepAI API key (defaults to `$env:DEEPAI_API_KEY`)
+- `-ApiKey` (optional): HuggingFace API token (defaults to `$env:HUGGINGFACE_API_KEY`)
+- `-Model` (optional): HuggingFace model ID (defaults to `black-forest-labs/FLUX.1-dev`)
 
 **Output**:
 - Location: `posts/images/[filename].png`
@@ -86,7 +88,7 @@ All generated images follow a consistent visual style:
 
 This script is designed to be used by the `image-generator` Copilot agent (`.copilot/agents/image-generator.md`). The agent handles:
 - Analyzing post content to extract visual concepts
-- Constructing effective DeepAI API prompts
+- Constructing effective HuggingFace API prompts
 - Running this script with appropriate parameters
 - Validating generated images
 
@@ -148,15 +150,20 @@ When adding new scripts to this directory:
 
 ### Generate-BlogImage.ps1 Issues
 
-**"DeepAI API key not provided"**
-- Ensure `DEEPAI_API_KEY` environment variable is set
+**"HuggingFace API token not provided"**
+- Ensure `HUGGINGFACE_API_KEY` environment variable is set
 - Or pass `-ApiKey` parameter explicitly
-- Verify the API key is valid
+- Generate a token at https://huggingface.co/settings/tokens
 
-**"No image URL received from API"**
-- DeepAI API may have changed; check current API documentation
-- Verify your API key is active and has remaining quota
-- Check the error response for specific error messages
+**"Unauthorized (401)"**
+- Your API token is invalid or has expired
+- Generate a new token at https://huggingface.co/settings/tokens
+- Verify you're using the correct environment variable
+
+**"Model Loading (503)"**
+- The model is currently loading on HuggingFace's servers
+- Wait a few moments and try again
+- This is common with free tier after inactivity
 
 **"Cannot write to posts/images/"**
 - Ensure the directory exists: `mkdir -p posts/images`
@@ -164,9 +171,9 @@ When adding new scripts to this directory:
 - Verify disk space is available
 
 **Rate limiting errors**
-- Pro account required for image generation API
-- Check your subscription status at https://deepai.org/dashboard
-- Ensure your API key has Pro membership access
+- Free tier: Several hundred requests per hour
+- Wait and retry, or consider upgrading to PRO for higher limits
+- Check your usage at https://huggingface.co/settings/billing
 
 ### General Script Issues
 
