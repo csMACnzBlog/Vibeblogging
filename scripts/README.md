@@ -6,25 +6,25 @@ This directory contains utility scripts for managing and generating blog content
 
 ### Generate-BlogImage.ps1
 
-PowerShell script that generates blog post featured images using Google's Gemini API (Imagen).
+PowerShell script that generates blog post featured images using DeepAI's text-to-image API.
 
 **Purpose**: Creates abstract, cell-shaded featured images for blog posts with consistent style.
 
 **Requirements**:
 - PowerShell Core (pwsh) 7.0+
-- Google Gemini API key with Imagen access
+- DeepAI API key (free tier: 500 calls/month)
 - Internet connection
 
 **Setup**:
 
-1. Obtain a Google Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+1. Obtain a DeepAI API key from [DeepAI.org](https://deepai.org/docs)
 2. Set the API key as an environment variable:
    ```bash
    # Linux/macOS
-   export GEMINI_API_KEY="your-api-key-here"
+   export DEEPAI_API_KEY="your-api-key-here"
    
    # Windows PowerShell
-   $env:GEMINI_API_KEY="your-api-key-here"
+   $env:DEEPAI_API_KEY="your-api-key-here"
    ```
 
 **Usage**:
@@ -40,7 +40,7 @@ pwsh scripts/Generate-BlogImage.ps1 \
 - `-PostTitle` (required): The title of the blog post
 - `-PostContent` (required): Summary of key themes/concepts for visual inspiration
 - `-OutputFileName` (required): Filename for the image (e.g., "my-post.png")
-- `-ApiKey` (optional): Gemini API key (defaults to `$env:GEMINI_API_KEY`)
+- `-ApiKey` (optional): DeepAI API key (defaults to `$env:DEEPAI_API_KEY`)
 
 **Output**:
 - Location: `posts/images/[filename].png`
@@ -84,7 +84,7 @@ All generated images follow a consistent visual style:
 
 This script is designed to be used by the `image-generator` Copilot agent (`.copilot/agents/image-generator.md`). The agent handles:
 - Analyzing post content to extract visual concepts
-- Constructing effective Gemini API prompts
+- Constructing effective DeepAI API prompts
 - Running this script with appropriate parameters
 - Validating generated images
 
@@ -146,15 +146,15 @@ When adding new scripts to this directory:
 
 ### Generate-BlogImage.ps1 Issues
 
-**"Gemini API key not provided"**
-- Ensure `GEMINI_API_KEY` environment variable is set
+**"DeepAI API key not provided"**
+- Ensure `DEEPAI_API_KEY` environment variable is set
 - Or pass `-ApiKey` parameter explicitly
-- Verify the API key is valid and has Imagen access
+- Verify the API key is valid
 
-**"Unexpected API response structure"**
-- Gemini API may have changed; check current API documentation
-- Update script endpoint or response parsing as needed
-- File an issue with the API response structure received
+**"No image URL received from API"**
+- DeepAI API may have changed; check current API documentation
+- Verify your API key is active and has remaining quota
+- Check the error response for specific error messages
 
 **"Cannot write to posts/images/"**
 - Ensure the directory exists: `mkdir -p posts/images`
@@ -162,9 +162,9 @@ When adding new scripts to this directory:
 - Verify disk space is available
 
 **Rate limiting errors**
-- Wait a few minutes and retry
-- Consider implementing exponential backoff
-- Check your API quota and limits
+- Free tier: 500 calls/month limit
+- Wait and retry, or upgrade to a paid plan
+- Check your API quota at https://deepai.org/dashboard
 
 ### General Script Issues
 

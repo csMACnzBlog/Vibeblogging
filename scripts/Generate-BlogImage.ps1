@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Generates a blog post featured image using Google's Gemini API.
+    Generates a blog post featured image using DeepAI API.
 
 .DESCRIPTION
-    This script calls Google's Gemini API (Imagen) to generate a featured image
+    This script calls DeepAI's text-to-image API to generate a featured image
     for a blog post based on the post content and title. The image is saved
     to the posts/images/ directory with the specified filename.
 
@@ -18,14 +18,14 @@
     The filename for the generated image (e.g., "my-post-slug.png").
 
 .PARAMETER ApiKey
-    Google Gemini API key. If not provided, will attempt to read from
-    GEMINI_API_KEY environment variable.
+    DeepAI API key. If not provided, will attempt to read from
+    DEEPAI_API_KEY environment variable.
 
 .EXAMPLE
     ./Generate-BlogImage.ps1 -PostTitle "Understanding SOLID Principles" -PostContent "Software design principles for maintainable code" -OutputFileName "solid-principles.png"
 
 .NOTES
-    Requires: Google Gemini API key with Imagen access
+    Requires: DeepAI API key (free tier: 500 calls/month)
     Output: 800x500px PNG image in posts/images/ directory
     Style: Pseudo realistic cell-shaded with focus and blur effects
 #>
@@ -42,12 +42,12 @@ param(
     [string]$OutputFileName,
 
     [Parameter(Mandatory = $false)]
-    [string]$ApiKey = $env:GEMINI_API_KEY
+    [string]$ApiKey = $env:DEEPAI_API_KEY
 )
 
 # Validate API key
 if ([string]::IsNullOrWhiteSpace($ApiKey)) {
-    Write-Error "Gemini API key not provided. Set GEMINI_API_KEY environment variable or pass -ApiKey parameter."
+    Write-Error "DeepAI API key not provided. Set DEEPAI_API_KEY environment variable or pass -ApiKey parameter."
     exit 1
 }
 
@@ -100,68 +100,45 @@ Write-Host "----------------------------------------"
 Write-Host $imagePrompt
 Write-Host "----------------------------------------`n"
 
-# Gemini API endpoint for Imagen 4 Generate
-# Using imagen-4.0-generate-001 model for high-quality image generation
-# Refer to https://ai.google.dev/docs for latest API documentation
-$apiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict"
+# DeepAI API endpoint for text-to-image generation
+# Refer to https://deepai.org/docs for latest API documentation
+$apiEndpoint = "https://api.deepai.org/api/text2img"
 
-# Construct request body for predict API
-$requestBody = @{
-    instances = @(
-        @{
-            prompt = $imagePrompt
-        }
-    )
-    parameters = @{
-        sampleCount = 1
-        aspectRatio = "16:9"  # Closest to 800x500 (16:10) - will be 800x450 or similar
-    }
-} | ConvertTo-Json -Depth 10
+# Construct request body for DeepAI API
+# DeepAI accepts form data with 'text' parameter for the prompt
+$boundary = [System.Guid]::NewGuid().ToString()
+$bodyLines = @()
+$bodyLines += "--$boundary"
+$bodyLines += 'Content-Disposition: form-data; name="text"'
+$bodyLines += ''
+$bodyLines += $imagePrompt
+$bodyLines += "--$boundary--"
+$bodyLines += ''
+
+$requestBody = $bodyLines -join "`r`n"
 
 try {
-    Write-Host "Calling Gemini API..."
+    Write-Host "Calling DeepAI API..."
     
     # Make API request
     $headers = @{
-        "Content-Type" = "application/json"
-        "x-goog-api-key" = $ApiKey
+        "api-key" = $ApiKey
+        "Content-Type" = "multipart/form-data; boundary=$boundary"
     }
     
     $response = Invoke-RestMethod -Uri $apiEndpoint -Method Post -Headers $headers -Body $requestBody -TimeoutSec 120
     
-    # Extract base64 image data from response
-    # Note: Response structure may vary based on API version
-    $imageData = $null
-    
-    # For predict endpoint, response is: { "predictions": [{ "bytesBase64Encoded": "..." }] }
-    if ($response.predictions -and $response.predictions[0].bytesBase64Encoded) {
-        $imageData = $response.predictions[0].bytesBase64Encoded
-    } elseif ($response.predictions -and $response.predictions[0].image) {
-        $imageData = $response.predictions[0].image
-    } 
-    # Fallback to generateContent API format (for backward compatibility)
-    elseif ($response.candidates -and $response.candidates[0].content.parts) {
-        $parts = $response.candidates[0].content.parts
-        foreach ($part in $parts) {
-            if ($part.inlineData -and $part.inlineData.data) {
-                $imageData = $part.inlineData.data
-                break
-            }
-        }
-    }
-    elseif ($response.generatedImages -and $response.generatedImages[0].bytesBase64Encoded) {
-        $imageData = $response.generatedImages[0].bytesBase64Encoded
-    } elseif ($response.images -and $response.images[0]) {
-        $imageData = $response.images[0]
-    }
-    
-    if ([string]::IsNullOrWhiteSpace($imageData)) {
-        Write-Error "No image data received from API. Response structure: $($response | ConvertTo-Json -Depth 3 -Compress)"
+    # Extract image URL from response
+    # DeepAI response is: { "id": "...", "output_url": "https://..." }
+    if (-not $response.output_url) {
+        Write-Error "No image URL received from API. Response: $($response | ConvertTo-Json -Depth 3 -Compress)"
         exit 1
     }
     
-    # Decode base64 and save to file
-    $imageBytes = [Convert]::FromBase64String($imageData)
+    Write-Host "Image generated, downloading from: $($response.output_url)"
+    
+    # Download the image from the URL
+    $imageBytes = Invoke-RestMethod -Uri $response.output_url -Method Get -TimeoutSec 60
     [System.IO.File]::WriteAllBytes($outputPath, $imageBytes)
     
     Write-Host "✓ Image generated successfully!"
