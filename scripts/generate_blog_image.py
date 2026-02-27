@@ -69,11 +69,37 @@ def get_output_path(filename: str) -> Path:
     return output_path
 
 
-def construct_image_prompt(title: str, content: str) -> str:
-    """Construct the image generation prompt."""
+def construct_image_prompt(title: str, content: str, scene: str = None) -> str:
+    """Construct the image generation prompt.
+    
+    Args:
+        title: The blog post title
+        content: Brief summary of post themes
+        scene: Optional specific scene description. If provided, this creative
+               description is used directly. If not provided, generic guidance is given.
+    """
     style_prompt = "pseudo realistic cell-shaded style with focus and focus blur effects"
     
-    prompt = f"""Create a tech-oriented featured image for a blog post using everyday scenes or objects.
+    if scene:
+        # Creative scene provided - use it directly with style requirements
+        prompt = f"""Create a tech-oriented featured image for a blog post.
+
+Scene: {scene}
+
+Style Requirements:
+- {style_prompt}
+- Modern, tech-oriented color scheme
+- Limited color palette (3-5 colors)
+- Include at least one element in sharp focus and one element with blur/depth-of-field effect
+- No people or animals
+- No text or words in the image
+- Landscape orientation suitable for a blog header
+
+Technical aesthetic: Clean, modern, minimalist with depth
+"""
+    else:
+        # No scene provided - use generic guidance with examples
+        prompt = f"""Create a tech-oriented featured image for a blog post using everyday scenes or objects.
 
 Post Title: {title}
 Post Theme: {content}
@@ -106,9 +132,19 @@ def generate_image(
     content: str,
     output_filename: str,
     api_key: str,
-    model: str = "black-forest-labs/FLUX.1-schnell"
+    model: str = "black-forest-labs/FLUX.1-schnell",
+    scene: str = None
 ) -> None:
-    """Generate a blog post featured image using HuggingFace API."""
+    """Generate a blog post featured image using HuggingFace API.
+    
+    Args:
+        title: The blog post title
+        content: Brief summary of post themes
+        output_filename: Name for the output file
+        api_key: HuggingFace API token
+        model: Model ID to use for generation
+        scene: Optional specific scene description for creative prompting
+    """
     
     # Validate inputs
     api_key = validate_api_key(api_key)
@@ -119,7 +155,7 @@ def generate_image(
     print(f"Output file: {output_path}")
     
     # Construct the image prompt
-    image_prompt = construct_image_prompt(title, content)
+    image_prompt = construct_image_prompt(title, content, scene)
     
     print("\nGenerating image with prompt:")
     print("----------------------------------------")
@@ -209,16 +245,18 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+  # With creative scene description (recommended):
   python scripts/generate_blog_image.py \\
     --title "Understanding SOLID Principles" \\
     --content "Software design principles for maintainable code" \\
+    --scene "A carpenter's workbench with precision measuring tools in focus, hand plane and wood shavings blurred behind. Natural wood and blue tones." \\
     --output "solid-principles.png"
   
+  # Without scene (uses generic guidance):
   python scripts/generate_blog_image.py \\
     --title "Composition Over Inheritance" \\
     --content "Software design pattern emphasizing flexible composition" \\
-    --output "composition-over-inheritance.png" \\
-    --model "stabilityai/stable-diffusion-xl-base-1.0"
+    --output "composition-over-inheritance.png"
         """
     )
     
@@ -232,6 +270,11 @@ Examples:
         '--content',
         required=True,
         help='A summary or key themes from the blog post content'
+    )
+    
+    parser.add_argument(
+        '--scene',
+        help='Optional specific scene description (e.g., "A modern office desk with a red stapler in focus and a blurred keyboard in the background"). If not provided, a generic prompt is constructed from title and content.'
     )
     
     parser.add_argument(
@@ -259,7 +302,8 @@ Examples:
         content=args.content,
         output_filename=args.output,
         api_key=args.api_key,
-        model=args.model
+        model=args.model,
+        scene=args.scene
     )
 
 
