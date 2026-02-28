@@ -4,6 +4,19 @@
     box-sizing: border-box;
 }
 
+/* Screen reader only - visually hidden but accessible to screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 body {
     background-color: #4b4b4b;
     color: #000000;
@@ -507,14 +520,14 @@ article h1 {
 .vibeblog-animated span:nth-child(8) { animation-delay: 1.4s; }
 
 @keyframes rainbow-cycle {
-    0% { color: #fabb45; } /* Orange */
-    14% { color: #ec9c06; } /* Dark orange */
-    28% { color: #f0d078; } /* Light orange */
-    42% { color: #00bbf2; } /* Blue */
-    56% { color: #0080a6; } /* Dark blue */
-    70% { color: #7dd4f0; } /* Light blue */
-    84% { color: #3a3a3a; } /* Dark gray - better contrast */
-    100% { color: #fabb45; } /* Orange - loop back */
+    0% { color: #c98700; } /* Darker orange for contrast */
+    14% { color: #a67300; } /* Even darker orange */
+    28% { color: #b38100; } /* Medium dark orange */
+    42% { color: #0080a6; } /* Dark blue - good contrast */
+    56% { color: #006b8f; } /* Darker blue */
+    70% { color: #0090b8; } /* Medium blue */
+    84% { color: #3a3a3a; } /* Dark gray - good contrast */
+    100% { color: #c98700; } /* Darker orange - loop back */
 }
 
 /* Respect user motion preferences */
