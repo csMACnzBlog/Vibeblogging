@@ -286,11 +286,11 @@ public IShippingStrategy GetShippingStrategy(Order order)
 }
 ```
 
-## Strategy Pattern in .NET
+## Strategy Pattern in dotNET
 
 You're probably already using the Strategy Pattern without realizing it. Here are some examples from the .NET framework:
 
-**IComparer<T>** – Different sorting strategies:
+**IComparer\<T\>** – Different sorting strategies:
 
 ```csharp
 var people = new List<Person>();
