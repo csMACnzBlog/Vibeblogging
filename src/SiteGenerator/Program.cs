@@ -139,10 +139,7 @@ public class StaticSiteGenerator
                 var value = parts[1].Trim();
                 
                 // Strip surrounding quotes from value if present
-                if (value.Length >= 2 && value.StartsWith('"') && value.EndsWith('"'))
-                {
-                    value = value.Substring(1, value.Length - 2);
-                }
+                value = value.Trim('"');
                 
                 switch (key)
                 {
