@@ -493,6 +493,7 @@ article h1 {
 .vibeblog-animated span {
     display: inline-block;
     animation: rainbow-cycle 6s ease-in-out infinite;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 /* Staggered animation delays for out-of-sync effect */
