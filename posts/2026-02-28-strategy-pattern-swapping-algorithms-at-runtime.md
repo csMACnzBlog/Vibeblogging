@@ -308,16 +308,16 @@ people.Sort((a, b) => a.LastName.CompareTo(b.LastName));
 **Stream processing** – Different compression strategies:
 
 ```csharp
-using var file = File.Create("data.bin");
-
 // No compression strategy
-using var stream = file;
+using var file = File.Create("data.bin");
+await file.WriteAsync(data);
 
 // GZip compression strategy
-using var compressed = new GZipStream(file, CompressionMode.Compress);
+using var file2 = File.Create("data.gz");
+using var compressed = new GZipStream(file2, CompressionMode.Compress);
+await compressed.WriteAsync(data);
 
-// Both use the same Stream interface
-await stream.WriteAsync(data);
+// Both streams use the same Stream interface
 ```
 
 **Authentication handlers in ASP.NET Core** – Different auth strategies:
