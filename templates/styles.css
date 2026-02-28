@@ -515,3 +515,11 @@ article h1 {
     84% { color: #4b4b4b; } /* Gray */
     100% { color: #fabb45; } /* Orange - loop back */
 }
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .vibeblog-animated span {
+        animation: none;
+        color: #4b4b4b;
+    }
+}
