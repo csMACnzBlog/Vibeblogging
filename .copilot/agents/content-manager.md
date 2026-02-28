@@ -142,4 +142,28 @@ When working with blog post writers:
 - **CI/CD**: GitHub Actions for automated deployment
 - **Hosting**: GitHub Pages
 
+## Git Workflow and Conflict Resolution
+
+**IMPORTANT**: Due to GitHub limitations, force push is not available. You must follow these strict rules:
+
+### Never Use These Commands
+- **DO NOT** use `git rebase` - rebasing requires force push
+- **DO NOT** use `git cherry-pick` - cherry-picking can create conflicts that require force push
+- **DO NOT** use any Git operations that would require force push
+
+### Always Use Merge Commits
+When you need to resolve conflicts with the `main` branch:
+
+1. **Merge main into your branch**: `git merge main`
+2. **Resolve any conflicts** in the affected files
+3. **Commit the merge**: `git commit` (merge commits are allowed)
+4. **Push the changes**: `git push origin <your-branch>`
+
+### Why This Matters
+- Force push is disabled to prevent data loss and maintain history integrity
+- Merge commits preserve the complete history and are GitHub's recommended approach
+- This ensures all changes are traceable and reversible
+
+**Remember**: When in doubt, use merge. Never rebase or cherry-pick.
+
 Use these tools to maintain a high-quality, professional blog that provides value to readers.
