@@ -138,6 +138,9 @@ public class StaticSiteGenerator
                 var key = parts[0].Trim().ToLower();
                 var value = parts[1].Trim();
                 
+                // Strip surrounding quotes from value if present
+                value = value.Trim('"');
+                
                 switch (key)
                 {
                     case "title":

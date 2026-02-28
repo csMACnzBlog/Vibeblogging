@@ -208,6 +208,25 @@ public class StaticSiteGeneratorTests
         Assert.True(File.Exists(Path.Combine(outputImagesDir, "test.png")));
     }
 
+    [Fact]
+    public void Generate_StripsQuotesFromTitle()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPostWithQuotedTitle("2026-02-25-quoted-title.md", "\"Quoted Title: With Colon\"", "2026-02-25", "test");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postPath = Path.Combine(_outputDir, "quoted-title.html");
+        var content = File.ReadAllText(postPath);
+        // Title should not have surrounding quotes in rendered HTML
+        Assert.Contains("<h1>Quoted Title: With Colon</h1>", content);
+        Assert.DoesNotContain("<h1>\"Quoted Title: With Colon\"</h1>", content);
+    }
+
     private StaticSiteGenerator CreateGenerator()
     {
         // Save current directory
@@ -285,6 +304,19 @@ title: {title}
 date: {date}
 tags: {tags}
 image: {image}
+---
+
+{content}";
+
+        File.WriteAllText(Path.Combine(_postsDir, filename), frontmatter);
+    }
+
+    private void CreateTestPostWithQuotedTitle(string filename, string title, string date, string tags, string content = "Test content")
+    {
+        var frontmatter = $@"---
+title: {title}
+date: {date}
+tags: {tags}
 ---
 
 {content}";
