@@ -290,7 +290,7 @@ Before completing image generation, verify:
 
 ### Never Use These Commands
 - **DO NOT** use `git rebase` - rebasing requires force push
-- **DO NOT** use `git cherry-pick` - cherry-picking can create conflicts that require force push
+- **DO NOT** use `git cherry-pick` - cherry-picking can create commit history issues that may require force push to resolve
 - **DO NOT** use any Git operations that would require force push
 
 ### Always Use Merge Commits
