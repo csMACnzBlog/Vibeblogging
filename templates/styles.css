@@ -4,6 +4,19 @@
     box-sizing: border-box;
 }
 
+/* Screen reader only - visually hidden but accessible to screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 body {
     background-color: #4b4b4b;
     color: #000000;
@@ -480,5 +493,47 @@ article h1 {
         height: 32px;
         margin: -15px -15px 10px -15px;
         padding-left: 36px;
+    }
+}
+
+/* VibeBlog animated rainbow text */
+.vibeblog-animated {
+    font-size: 1.7em;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.vibeblog-animated span {
+    display: inline-block;
+    animation: rainbow-cycle 6s ease-in-out infinite;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Staggered animation delays for out-of-sync effect */
+.vibeblog-animated span:nth-child(1) { animation-delay: 0s; }
+.vibeblog-animated span:nth-child(2) { animation-delay: 0.2s; }
+.vibeblog-animated span:nth-child(3) { animation-delay: 0.4s; }
+.vibeblog-animated span:nth-child(4) { animation-delay: 0.6s; }
+.vibeblog-animated span:nth-child(5) { animation-delay: 0.8s; }
+.vibeblog-animated span:nth-child(6) { animation-delay: 1s; }
+.vibeblog-animated span:nth-child(7) { animation-delay: 1.2s; }
+.vibeblog-animated span:nth-child(8) { animation-delay: 1.4s; }
+
+@keyframes rainbow-cycle {
+    0% { color: #c98700; } /* Darker orange for contrast */
+    14% { color: #a67300; } /* Even darker orange */
+    28% { color: #b38100; } /* Medium dark orange */
+    42% { color: #0080a6; } /* Dark blue - good contrast */
+    56% { color: #006b8f; } /* Darker blue */
+    70% { color: #0090b8; } /* Medium blue */
+    84% { color: #3a3a3a; } /* Dark gray - good contrast */
+    100% { color: #c98700; } /* Darker orange - loop back */
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .vibeblog-animated span {
+        animation: none;
+        color: #4b4b4b;
     }
 }
