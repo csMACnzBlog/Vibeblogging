@@ -47,6 +47,7 @@ Blog posts can include AI-generated featured images:
 python scripts/generate_blog_image.py \
   --title "Your Post Title" \
   --content "Brief description of post themes" \
+  --scene "A creative scene description with everyday objects" \
   --output "post-slug.png"
 ```
 

@@ -177,6 +177,7 @@ Blog posts can include AI-generated featured images created using HuggingFace In
 python scripts/generate_blog_image.py \
   --title "Your Post Title" \
   --content "Brief description of themes" \
+  --scene "A creative scene description with everyday objects" \
   --output "post-slug.png"
 ```
 
