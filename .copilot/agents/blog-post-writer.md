@@ -451,7 +451,9 @@ When you need to resolve conflicts with the `main` branch:
 1. **Merge main into your branch**: `git merge main`
 2. **Resolve any conflicts** in the affected files
 3. **Commit the merge**: `git commit` (merge commits are allowed)
-4. **Push the changes**: `git push origin <your-branch>`
+4. **Push the changes**: `git push origin <your-branch>` (replace `<your-branch>` with your current branch name, e.g., `copilot/my-feature`)
+
+**Tip**: You can find your current branch name with `git branch --show-current`
 
 ### Why This Matters
 - Force push is disabled to prevent data loss and maintain history integrity
