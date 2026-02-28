@@ -284,6 +284,32 @@ Before completing image generation, verify:
 - **With content-manager**: Coordinate on image optimization and organization
 - **With user**: Clarify visual preferences or regenerate if style doesn't match expectations
 
+## Git Workflow and Conflict Resolution
+
+**IMPORTANT**: Due to GitHub limitations, force push is not available. You must follow these strict rules:
+
+### Never Use These Commands
+- **DO NOT** use `git rebase` - rebasing requires force push
+- **DO NOT** use `git cherry-pick` - cherry-picking can create commit history issues that may require force push to resolve
+- **DO NOT** use any Git operations that would require force push
+
+### Always Use Merge Commits
+When you need to resolve conflicts with the `main` branch:
+
+1. **Merge main into your branch**: `git merge main`
+2. **Resolve any conflicts** in the affected files
+3. **Commit the merge**: `git commit` (merge commits are allowed)
+4. **Push the changes**: `git push origin <your-branch>` (replace `<your-branch>` with your current branch name, e.g., `copilot/my-feature`)
+
+**Tip**: You can find your current branch name with `git branch --show-current`
+
+### Why This Matters
+- Force push is disabled to prevent data loss and maintain history integrity
+- Merge commits preserve the complete history and are GitHub's recommended approach
+- This ensures all changes are traceable and reversible
+
+**Remember**: When in doubt, use merge. Never rebase or cherry-pick.
+
 ## Remember: Be Creative!
 
 Every blog post deserves a unique, thoughtfully composed scene. Don't default to the same objects or settings. Think about what everyday items or spaces could metaphorically represent the post's themes, then craft a specific scene description that brings that metaphor to life.
