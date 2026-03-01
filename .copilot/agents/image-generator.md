@@ -310,6 +310,47 @@ When you need to resolve conflicts with the `main` branch:
 
 **Remember**: When in doubt, use merge. Never rebase or cherry-pick.
 
+## Process Management and Bash Tool Usage
+
+When working with processes (e.g., test web servers, development servers, background tasks):
+
+### Terminating Processes
+
+**ALWAYS** use `kill <PID>` with a specific process ID. **NEVER** use name-based process killing commands.
+
+**Allowed:**
+- `kill <PID>` - Terminate a specific process by its ID
+- `kill -9 <PID>` - Force terminate a specific process by its ID
+
+**Not Allowed:**
+- `pkill` - Name-based process killing (not allowed)
+- `killall` - Name-based process killing (not allowed)
+- Any other name-based process termination commands
+
+### Finding Process IDs
+
+Before terminating a process, look up its process ID:
+
+```bash
+# For web servers running on a specific port
+lsof -ti:8000  # Returns PID of process using port 8000
+
+# For named processes
+ps aux | grep "process-name"  # Find PID in output
+
+# Store PID when starting process
+python -m http.server 8000 &
+SERVER_PID=$!  # Capture the PID
+# Later: kill $SERVER_PID
+```
+
+### Why This Matters
+
+- **Precision**: `kill <PID>` terminates exactly the process you intend
+- **Safety**: Prevents accidentally terminating unrelated processes with similar names
+- **Debugging**: Explicit PIDs make it clear which process is being managed
+- **Best Practice**: Industry standard for process management in scripts and automation
+
 ## Remember: Be Creative!
 
 Every blog post deserves a unique, thoughtfully composed scene. Don't default to the same objects or settings. Think about what everyday items or spaces could metaphorically represent the post's themes, then craft a specific scene description that brings that metaphor to life.
