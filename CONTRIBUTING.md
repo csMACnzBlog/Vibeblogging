@@ -225,10 +225,6 @@ We welcome feature requests! Please:
 - Provide constructive feedback
 - Follow the code of conduct
 
-## 📄 License
-
-By contributing, you agree that your contributions will be licensed under the same license as the project (MIT License).
-
 ## ❓ Questions?
 
 If you have questions:

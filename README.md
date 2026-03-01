@@ -229,10 +229,6 @@ dotnet test
 dotnet format
 ```
 
-## 📄 License
-
-This project is open source and available under the MIT License.
-
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
