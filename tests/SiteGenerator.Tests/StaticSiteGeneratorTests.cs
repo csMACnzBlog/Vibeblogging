@@ -227,6 +227,27 @@ public class StaticSiteGeneratorTests
         Assert.DoesNotContain("<h1>\"Quoted Title: With Colon\"</h1>", content);
     }
 
+    [Fact]
+    public void Generate_RemovesDotsFromHeadingIds()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-dotid-test.md", "Dot ID Test", "2026-02-25", "test",
+            "## Memoisation vs IMemoryCache in ASP.NET Core\n\nSome content.");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postPath = Path.Combine(_outputDir, "dotid-test.html");
+        var content = File.ReadAllText(postPath);
+        // ID must not contain dots
+        Assert.DoesNotMatch(@"id=""[^""]*\.[^""]*""", content);
+        // The heading should still be present
+        Assert.Contains("Memoisation vs IMemoryCache in ASP.NET Core", content);
+    }
+
     private StaticSiteGenerator CreateGenerator()
     {
         // Save current directory
