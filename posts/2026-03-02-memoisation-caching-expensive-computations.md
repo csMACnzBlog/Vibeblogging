@@ -213,13 +213,14 @@ public class CurrencyConverter
     private decimal FetchExchangeRate(string from, string to)
     {
         // Real implementation would call an external API
-        var response = _httpClient
-            .GetFromJsonAsync<ExchangeRateResponse>(
-                $"https://api.exchangerates.example.com/latest?from={from}&to={to}")
-            .GetAwaiter()
-            .GetResult();
+        using var request = new HttpRequestMessage(HttpMethod.Get,
+            $"https://api.exchangerates.example.com/latest?from={from}&to={to}");
+        using var response = _httpClient.Send(request);
+        response.EnsureSuccessStatusCode();
 
-        return response!.Rate;
+        var content = response.Content.ReadAsStream();
+        var result = JsonSerializer.Deserialize<ExchangeRateResponse>(content);
+        return result!.Rate;
     }
 }
 ```
