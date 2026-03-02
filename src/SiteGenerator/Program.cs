@@ -118,7 +118,7 @@ public class StaticSiteGenerator
         }
         
         // Convert markdown to HTML
-        post.Content = Markdown.ToHtml(content, _pipeline);
+        post.Content = SanitizeIds(Markdown.ToHtml(content, _pipeline));
         
         // Generate slug from filename or title
         post.Slug = GenerateSlug(post.FileName);
@@ -300,6 +300,17 @@ public class StaticSiteGenerator
         rss.AppendLine("</rss>");
         
         File.WriteAllText(Path.Combine(_outputDir, "rss.xml"), rss.ToString());
+    }
+
+    private static readonly Regex _idAttributeRegex = new(@"id=""([^""]*)""", RegexOptions.Compiled);
+
+    private string SanitizeIds(string html)
+    {
+        return _idAttributeRegex.Replace(html, m =>
+        {
+            var id = m.Groups[1].Value.Replace(".", "");
+            return $"id=\"{id}\"";
+        });
     }
 
     private string EscapeXml(string text)
