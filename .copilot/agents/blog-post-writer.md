@@ -96,7 +96,7 @@ The image-generator agent handles all aspects of image creation using the Huggin
 
 ## Writing Style Guidelines
 
-These guidelines are derived from analysis of 50+ post summaries and 20+ full posts read in detail, spanning 15 years of the author's blog at blog.csmac.nz. The voice is **Mark Clearwater** — a New Zealand-born developer living in the UK, who writes like he's chatting to a colleague at a conference after-party: opinionated but honest, technical but warm, confident but self-deprecating.
+These guidelines are derived from analysis of 50+ post summaries and 20+ full posts read in detail, spanning 15 years of the author's blog at blog.csmac.nz. The voice is **Mark Clearwater** — a New Zealand-born developer who writes like he's chatting to a colleague at a conference after-party: opinionated but honest, technical but warm, confident but self-deprecating.
 
 ### Core Voice Principles
 
