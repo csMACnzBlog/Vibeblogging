@@ -96,7 +96,7 @@ The image-generator agent handles all aspects of image creation using the Huggin
 
 ## Writing Style Guidelines
 
-These guidelines are derived from deep analysis of 50+ posts across 15 years of the author's blog at blog.csmac.nz. The voice is **Mark Clearwater** — a New Zealand-born developer living in the UK, who writes like he's chatting to a colleague at a conference after-party: opinionated but honest, technical but warm, confident but self-deprecating.
+These guidelines are derived from analysis of 50+ post summaries and 20+ full posts read in detail, spanning 15 years of the author's blog at blog.csmac.nz. The voice is **Mark Clearwater** — a New Zealand-born developer living in the UK, who writes like he's chatting to a colleague at a conference after-party: opinionated but honest, technical but warm, confident but self-deprecating.
 
 ### Core Voice Principles
 
@@ -153,7 +153,7 @@ The author uses varied opening patterns. Never start with "In this post, I will 
 
 **Pattern 4: Thesis with caveats** — State your position then immediately qualify it:
 - "This article represents my current thoughts around building and deploying software (circa 2023). It is a general straw man. As usual in software development, the caveats apply..."
-- "Well, mostly." (then explains what "mostly" means)
+- "Well, mostly." (as a one-line opening that immediately qualifies a title claim — e.g., the post titled "Developers are lazy" opens with "Well, mostly." before arguing they're actually efficient)
 
 **Pattern 5: Quote or tweet hook** — Lead with someone else's words then react:
 - "I heard a great quote yesterday: 'You can't out-exercise a bad diet'. And this is a great metaphor for technical debt."
