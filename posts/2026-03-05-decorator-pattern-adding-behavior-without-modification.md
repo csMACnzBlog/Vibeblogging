@@ -1,5 +1,5 @@
 ---
-title: Decorator Pattern - Adding Behavior Without Modification
+title: Decorator Pattern - Behavior Without Modification
 date: 2026-03-05
 tags: csharp, design-patterns, decorator-pattern, architecture
 image: decorator-pattern-adding-behavior-without-modification.png
