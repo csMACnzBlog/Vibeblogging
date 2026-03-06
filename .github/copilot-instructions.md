@@ -48,6 +48,8 @@ image: post-slug.png
 ---
 ```
 
+**Title length limit**: The `title` value must not exceed 54 characters. The HTML template appends " - Vibeblogging" to create the page `<title>`, and html-validate enforces a 70-character maximum on the full `<title>` text. **If a title is suggested that is too long, always create a shorter alternative — this limit takes priority over matching the suggested wording.**
+
 **Note**: The `image` field is optional but recommended. Use the `@image-generator` agent to create AI-generated featured images.
 
 ### File Naming Convention

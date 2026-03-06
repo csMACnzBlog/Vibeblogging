@@ -1,5 +1,5 @@
 ---
-title: Chain of Responsibility - Passing Requests Through Handlers
+title: Chain of Responsibility - Handling Requests
 date: 2026-03-06
 tags: csharp, design-patterns, chain-of-responsibility, architecture, middleware
 image: chain-of-responsibility-passing-requests-through-handlers.png

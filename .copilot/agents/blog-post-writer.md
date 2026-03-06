@@ -34,7 +34,7 @@ Every post must satisfy **all** of the following before it is considered done:
 
 - [ ] Markdown file created in `/posts` with correct `YYYY-MM-DD-slug.md` naming
 - [ ] Frontmatter includes `title`, `date`, `tags`, and `image` fields
-- [ ] Title in frontmatter does not exceed 54 characters
+- [ ] Title in frontmatter does not exceed 54 characters — **if a title was suggested that is too long, you MUST shorten it; the character limit takes priority over the suggested wording**
 - [ ] Content follows the writing style guidelines
 - [ ] **Featured image generated** using the image generation script and saved to `posts/images/[post-slug].png`
 - [ ] `image` field in frontmatter matches the generated filename
@@ -76,6 +76,7 @@ Wrap up with key takeaways...
 
 **Important**: 
 - The title in frontmatter must not exceed 54 characters. The HTML template adds " - Vibeblogging" (16 chars) to create the page title, and the total HTML `<title>` tag content must not exceed 70 characters to pass html-validate validation.
+- **⚠️ Title length is non-negotiable: if a title is suggested or requested that exceeds 54 characters, do NOT use it as-is. Create a shorter alternative that captures the same meaning. This limit has higher priority than matching the exact suggested title wording.**
 - Every post must include an `image` field in the frontmatter. After writing the post, use the **image-generator** agent to create a featured image.
 
 ## Featured Image Requirements
