@@ -187,6 +187,7 @@ To generate an image, use `@image-generator` with the post title and key themes.
 3. Use descriptive headings and short paragraphs
 4. Add relevant tags (2-5 per post)
 5. Proofread and test rendering before committing
+6. **⚠️ MANDATORY: Generate a featured image** — every post requires a real `.png` image file in `posts/images/`. Use the `@image-generator` agent or run `python scripts/generate_blog_image.py` directly. A post is **not complete** until `posts/images/[post-slug].png` physically exists. Never skip this step, never instruct sub-agents to skip it, and never commit or report a post as done without the image file present.
 
 ### When Modifying Templates
 1. Maintain responsive design
@@ -202,6 +203,8 @@ To generate an image, use `@image-generator` with the post title and key themes.
 # Let Copilot assist by mentioning @blog-post-writer
 # Or manually create: posts/YYYY-MM-DD-title-slug.md
 ```
+
+**⚠️ Every new blog post requires a generated featured image.** After writing the markdown, immediately generate the image before committing. Never tell a sub-agent to skip image generation. Never commit a post without the image file at `posts/images/[post-slug].png`.
 
 ### Generate a Featured Image
 ```bash
