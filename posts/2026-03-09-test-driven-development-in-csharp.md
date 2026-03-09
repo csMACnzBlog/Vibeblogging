@@ -198,7 +198,7 @@ Run the tests. Still green. The refactor is complete — the code is now easier 
 
 ## TDD with the Repository Pattern
 
-If you've been following along with this blog's [design patterns series](design-patterns-in-csharp-for-dotnet-developers.html), you already know `IOrderRepository`. Here's something interesting: TDD would have *driven* you to that interface.
+If you've been following along with this blog's [design patterns series](design-patterns-series-composition-over-complexity.html), you already know `IOrderRepository`. Here's something interesting: TDD would have *driven* you to that interface.
 
 When you write a test for a service that needs to load orders, you immediately hit a problem:
 
