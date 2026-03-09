@@ -171,7 +171,7 @@ Now that all tests are green, let's clean things up. The `Validate` method will 
 ```csharp
 public class PasswordValidator
 {
-    private static readonly List<(Func<string, bool> Rule, string Error)> Rules =
+    private static readonly IReadOnlyList<(Func<string, bool> Rule, string Error)> Rules =
     [
         (p => p.Length >= 8, "Password must be at least 8 characters."),
         (p => p.Any(char.IsDigit), "Password must contain at least one digit."),
