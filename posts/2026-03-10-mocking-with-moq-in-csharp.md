@@ -131,7 +131,7 @@ This is useful to catch cases where your code never called a dependency it shoul
 
 ## Argument Matching
 
-Hard-coding argument values in `Setup()` only matches that exact call. When you want to match *any* argument of a type, use `It.IsAny\<T\>()`:
+Hard-coding argument values in `Setup()` only matches that exact call. When you want to match *any* argument of a type, use `It.IsAny<T>()`:
 
 ```csharp
 mockRepo.Setup(r => r.GetStock(It.IsAny<string>())).Returns(50);
@@ -139,7 +139,7 @@ mockRepo.Setup(r => r.GetStock(It.IsAny<string>())).Returns(50);
 
 Now the mock returns `50` regardless of which product ID is passed in.
 
-For more precise control, use `It.Is\<T\>()` with a predicate:
+For more precise control, use `It.Is<T>()` with a predicate:
 
 ```csharp
 mockRepo.Setup(r => r.GetStock(It.Is<string>(id => id.StartsWith("WIDGET"))))
