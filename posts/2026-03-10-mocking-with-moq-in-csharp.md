@@ -191,4 +191,4 @@ Moq removes the friction from testing code with dependencies. You set up what yo
 
 Combined with the xUnit and TDD techniques from the last two posts, you've now got a solid testing toolkit. Write the test first, mock the dependencies, drive your design from the outside in. That's a powerful loop.
 
-Tomorrow we'll look at integration testing — where we *don't* mock the dependencies, and actually wire things together. Stay tuned.
+Tomorrow we'll look at [Imposter](https://github.com/themidnightgospel/Imposter) — another .NET testing library worth adding to your toolkit. Stay tuned.
