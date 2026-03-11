@@ -1,6 +1,6 @@
 ---
 title: Integration Testing in ASP.NET Core
-date: 2026-03-11
+date: 2026-03-12
 tags: dotnet, csharp, testing, aspnetcore
 image: integration-testing-in-aspnet-core.png
 ---
