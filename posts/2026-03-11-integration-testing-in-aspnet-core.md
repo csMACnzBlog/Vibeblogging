@@ -36,10 +36,10 @@ Your test project also needs a reference to your web project. In your `.csproj`:
 </ItemGroup>
 ```
 
-One more thing: `WebApplicationFactory` needs access to your app's internals. In your web project's `Program.cs`, make sure internal types are visible to your test assembly. The easiest way is to add this at the top of `Program.cs`:
+One more thing: `WebApplicationFactory` needs access to your app's internals. In your web project, make sure `Program` is a public partial class so the test assembly can reference it. Add this at the bottom of `Program.cs` (or in a separate file like `ProgramExtensions.cs`):
 
 ```csharp
-// At the bottom of Program.cs, or in a separate file
+// Program.cs (bottom) — exposes Program as a type parameter for WebApplicationFactory
 public partial class Program { }
 ```
 
