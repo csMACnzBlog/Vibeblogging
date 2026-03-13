@@ -233,7 +233,7 @@ Property-based testing isn't a replacement for example-based testing — it's a 
 
 **Use properties when:**
 
-- You're implementing something with well-defined mathematical laws (serialisation round-trips, codec symmetry, algebraic structures like commutativity or associativity)
+- You're implementing something with well-defined mathematical laws (serialization round-trips, codec symmetry, algebraic structures like commutativity or associativity)
 - You're dealing with a large input space where edge cases are hard to anticipate
 - You want to verify invariants that should hold across your entire domain
 - You're building parsers, formatters, or transformations where correctness is hard to characterise with a handful of examples
