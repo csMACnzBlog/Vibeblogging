@@ -228,7 +228,7 @@ public class StaticSiteGenerator
 
     private void GenerateIndexPages(List<BlogPost> posts)
     {
-        const int pageSize = 5;
+        const int pageSize = 15;
         var template = File.ReadAllText(Path.Combine(_templatesDir, "index.html"));
 
         var totalPages = Math.Max(1, (int)Math.Ceiling((double)posts.Count / pageSize));

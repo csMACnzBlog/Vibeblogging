@@ -253,9 +253,9 @@ public class StaticSiteGeneratorTests
     {
         // Arrange
         SetupTestEnvironment();
-        for (int i = 1; i <= 6; i++)
+        for (int i = 1; i <= 16; i++)
         {
-            CreateTestPost($"2026-02-{i:D2}-post{i}.md", $"Post {i}", $"2026-02-{i:D2}", "test");
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
         }
         var generator = CreateGenerator();
 
@@ -268,13 +268,13 @@ public class StaticSiteGeneratorTests
     }
 
     [Fact]
-    public void Generate_WithFiveOrFewerPosts_DoesNotCreatePage2()
+    public void Generate_WithFifteenOrFewerPosts_DoesNotCreatePage2()
     {
         // Arrange
         SetupTestEnvironment();
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 15; i++)
         {
-            CreateTestPost($"2026-02-{i:D2}-post{i}.md", $"Post {i}", $"2026-02-{i:D2}", "test");
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
         }
         var generator = CreateGenerator();
 
@@ -291,20 +291,20 @@ public class StaticSiteGeneratorTests
     {
         // Arrange
         SetupTestEnvironment();
-        for (int i = 1; i <= 6; i++)
+        for (int i = 1; i <= 16; i++)
         {
-            CreateTestPost($"2026-02-{i:D2}-post{i}.md", $"Post {i}", $"2026-02-{i:D2}", "test");
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
         }
         var generator = CreateGenerator();
 
         // Act
         generator.Generate();
 
-        // Assert: index.html shows only the 5 newest posts (posts 6..2) not post 1
+        // Assert: index.html shows only the 15 newest posts (posts 16..2) not post 1
         var indexContent = File.ReadAllText(Path.Combine(_outputDir, "index.html"));
-        Assert.Contains("Post 6", indexContent);
-        Assert.Contains("Post 2", indexContent);
-        Assert.DoesNotContain("Post 1", indexContent);
+        Assert.Contains("post16.html", indexContent);
+        Assert.Contains("post2.html", indexContent);
+        Assert.DoesNotContain("post1.html", indexContent);
     }
 
     [Fact]
@@ -312,9 +312,9 @@ public class StaticSiteGeneratorTests
     {
         // Arrange
         SetupTestEnvironment();
-        for (int i = 1; i <= 6; i++)
+        for (int i = 1; i <= 16; i++)
         {
-            CreateTestPost($"2026-02-{i:D2}-post{i}.md", $"Post {i}", $"2026-02-{i:D2}", "test");
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
         }
         var generator = CreateGenerator();
 
@@ -323,8 +323,8 @@ public class StaticSiteGeneratorTests
 
         // Assert: page2.html contains the oldest post (post 1)
         var page2Content = File.ReadAllText(Path.Combine(_outputDir, "page2.html"));
-        Assert.Contains("Post 1", page2Content);
-        Assert.DoesNotContain("Post 6", page2Content);
+        Assert.Contains("post1.html", page2Content);
+        Assert.DoesNotContain("post16.html", page2Content);
     }
 
     [Fact]
@@ -332,9 +332,9 @@ public class StaticSiteGeneratorTests
     {
         // Arrange
         SetupTestEnvironment();
-        for (int i = 1; i <= 6; i++)
+        for (int i = 1; i <= 16; i++)
         {
-            CreateTestPost($"2026-02-{i:D2}-post{i}.md", $"Post {i}", $"2026-02-{i:D2}", "test");
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
         }
         var generator = CreateGenerator();
 
@@ -352,9 +352,9 @@ public class StaticSiteGeneratorTests
     {
         // Arrange
         SetupTestEnvironment();
-        for (int i = 1; i <= 6; i++)
+        for (int i = 1; i <= 16; i++)
         {
-            CreateTestPost($"2026-02-{i:D2}-post{i}.md", $"Post {i}", $"2026-02-{i:D2}", "test");
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
         }
         var generator = CreateGenerator();
 
