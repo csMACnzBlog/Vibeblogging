@@ -581,6 +581,17 @@ article h1 {
     font-weight: bold;
 }
 
+.page-indicator {
+    font-size: 0.95em;
+    color: #4b4b4b;
+    margin: 0 0 1rem 0;
+    padding: 0.4rem 0.7rem;
+    background-color: #f0f0f0;
+    border-left: 4px solid #0080a6;
+    border-radius: 0 4px 4px 0;
+    display: inline-block;
+}
+
 
 @media (prefers-reduced-motion: reduce) {
     .vibeblog-animated span {

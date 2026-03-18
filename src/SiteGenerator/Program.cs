@@ -238,10 +238,12 @@ public class StaticSiteGenerator
             var pagePosts = posts.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             var postList = BuildPostListHtml(pagePosts);
             var pagination = BuildPaginationHtml(pageNumber, totalPages);
+            var pageIndicator = BuildPageIndicatorHtml(pageNumber, totalPages);
 
             var html = template
                 .Replace("{{POST_LIST}}", postList)
-                .Replace("{{PAGINATION}}", pagination);
+                .Replace("{{PAGINATION}}", pagination)
+                .Replace("{{PAGE_INDICATOR}}", pageIndicator);
 
             var fileName = pageNumber == 1 ? "index.html" : $"page{pageNumber}.html";
             File.WriteAllText(Path.Combine(_outputDir, fileName), html);
@@ -314,6 +316,14 @@ public class StaticSiteGenerator
 
         pagination.AppendLine("</nav>");
         return pagination.ToString();
+    }
+
+    private string BuildPageIndicatorHtml(int currentPage, int totalPages)
+    {
+        if (currentPage <= 1 || totalPages <= 1)
+            return "";
+
+        return $"<p class=\"page-indicator\">Page {currentPage} of {totalPages}</p>\n";
     }
 
     private string GetExcerpt(string htmlContent)
