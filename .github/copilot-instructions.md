@@ -142,6 +142,8 @@ dotnet test
 - Build must succeed with `--configuration Release`
 - All tests must pass
 - Generated site must render correctly
+- HTML validation must pass (`html-validate 'output/**/*.html'`)
+- Accessibility tests must pass (`bash scripts/run-a11y-tests.sh`)
 - Code should follow C# conventions
 
 ## Copilot Agent Instructions
@@ -179,7 +181,7 @@ To generate an image, use `@image-generator` with the post title and key themes.
 2. Maintain backward compatibility with existing posts
 3. Add tests for new functionality
 4. Update documentation and templates as needed
-5. Test the generated site locally before pushing
+5. **After generating the site, always run HTML validation and accessibility tests** (see "Test Changes" below) before pushing
 
 ### When Writing Blog Posts
 1. Follow the established writing style (conversational, direct, progressive)
@@ -194,7 +196,7 @@ To generate an image, use `@image-generator` with the post title and key themes.
 2. Keep the design minimal and readable
 3. Test on multiple screen sizes
 4. Ensure accessibility (contrast, semantic HTML)
-5. Validate HTML and CSS
+5. **Always run HTML validation and accessibility tests after regenerating the site** (see "Test Changes" below)
 
 ## Common Tasks
 
@@ -226,8 +228,22 @@ Requires `HUGGINGFACE_API_KEY` environment variable. See `scripts/README.md` for
 dotnet build --configuration Release
 dotnet test
 dotnet run --project src/SiteGenerator/SiteGenerator.csproj
-# Preview: cd output && python -m http.server 8000
 ```
+
+After generating the site, **always run HTML validation and accessibility tests** to match what the PR validation workflow checks:
+
+```bash
+# Install validation tools if not already installed
+npm install -g html-validate pa11y-ci http-server
+
+# Validate all generated HTML files
+html-validate 'output/**/*.html'
+
+# Run accessibility tests (starts a local server on port 8080, runs pa11y-ci, then stops it)
+bash scripts/run-a11y-tests.sh
+```
+
+> **⚠️ These validation steps are mandatory** whenever you change `src/SiteGenerator/`, `templates/`, or any file that affects the generated HTML output. They mirror the `Validate HTML` and `Run accessibility tests` steps in `.github/workflows/pr-validation.yml` and must pass before pushing.
 
 ### Debug Build Issues
 - Check .NET version: `dotnet --version` (should be 10+)

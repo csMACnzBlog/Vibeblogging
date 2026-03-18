@@ -248,6 +248,142 @@ public class StaticSiteGeneratorTests
         Assert.Contains("Memoisation vs IMemoryCache in ASP.NET Core", content);
     }
 
+    [Fact]
+    public void Generate_WithMoreThanPageSizePosts_CreatesPage2()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 16; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        Assert.True(File.Exists(Path.Combine(_outputDir, "index.html")));
+        Assert.True(File.Exists(Path.Combine(_outputDir, "page2.html")));
+    }
+
+    [Fact]
+    public void Generate_WithFifteenOrFewerPosts_DoesNotCreatePage2()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 15; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        Assert.True(File.Exists(Path.Combine(_outputDir, "index.html")));
+        Assert.False(File.Exists(Path.Combine(_outputDir, "page2.html")));
+    }
+
+    [Fact]
+    public void Generate_IndexPageOnlyContainsFirstPagePosts()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 16; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert: index.html shows only the 15 newest posts (posts 16..2) not post 1
+        var indexContent = File.ReadAllText(Path.Combine(_outputDir, "index.html"));
+        Assert.Contains("post16.html", indexContent);
+        Assert.Contains("post2.html", indexContent);
+        Assert.DoesNotContain("post1.html", indexContent);
+    }
+
+    [Fact]
+    public void Generate_Page2ContainsOlderPosts()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 16; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert: page2.html contains the oldest post (post 1)
+        var page2Content = File.ReadAllText(Path.Combine(_outputDir, "page2.html"));
+        Assert.Contains("post1.html", page2Content);
+        Assert.DoesNotContain("post16.html", page2Content);
+    }
+
+    [Fact]
+    public void Generate_IndexPageIncludesOlderPostsLinkWhenMultiplePages()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 16; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert: page 1 (index.html) has a "Older Posts" link to page2.html
+        var indexContent = File.ReadAllText(Path.Combine(_outputDir, "index.html"));
+        Assert.Contains("page2.html", indexContent);
+        Assert.Contains("Older Posts", indexContent);
+    }
+
+    [Fact]
+    public void Generate_Page2IncludesNewerPostsLinkBackToIndex()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 16; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert: page2.html links back to index.html for newer posts
+        var page2Content = File.ReadAllText(Path.Combine(_outputDir, "page2.html"));
+        Assert.Contains("index.html", page2Content);
+        Assert.Contains("Newer Posts", page2Content);
+    }
+
+    [Fact]
+    public void Generate_NoPaginationWhenOnlyOnePage()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-single-post.md", "Single Post", "2026-02-25", "test");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert: no pagination nav rendered when there is only one page
+        var indexContent = File.ReadAllText(Path.Combine(_outputDir, "index.html"));
+        Assert.DoesNotContain("<nav class=\"pagination\"", indexContent);
+    }
+
+
     private StaticSiteGenerator CreateGenerator()
     {
         // Save current directory
@@ -295,6 +431,7 @@ public class StaticSiteGeneratorTests
     <div class=""posts"">
 {{POST_LIST}}
     </div>
+    {{PAGINATION}}
 </body>
 </html>";
 

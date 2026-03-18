@@ -62,8 +62,8 @@ public class StaticSiteGenerator
         // Generate individual post pages
         GeneratePostPages(posts);
         
-        // Generate index page
-        GenerateIndexPage(posts);
+        // Generate paginated index pages
+        GenerateIndexPages(posts);
         
         // Generate RSS feed
         GenerateRssFeed(posts);
@@ -221,27 +221,51 @@ public class StaticSiteGenerator
                 html = Regex.Replace(html, @"\{\{#TAGS\}\}.*?\{\{/TAGS\}\}", "", RegexOptions.Singleline);
             }
             
-            var outputPath = Path.Combine(_outputDir, $"{post.Slug}.html");
+            var outputPath = Path.GetFullPath(Path.Combine(_outputDir, $"{post.Slug}.html"));
+            var outputDirNormalized = Path.GetFullPath(_outputDir) + Path.DirectorySeparatorChar;
+            if (!outputPath.StartsWith(outputDirNormalized, StringComparison.Ordinal))
+                throw new InvalidOperationException("Invalid post slug: path escapes the output directory.");
             File.WriteAllText(outputPath, html);
         }
     }
 
-    private void GenerateIndexPage(List<BlogPost> posts)
+    private void GenerateIndexPages(List<BlogPost> posts)
     {
+        const int pageSize = 15;
         var template = File.ReadAllText(Path.Combine(_templatesDir, "index.html"));
-        
+
+        var totalPages = Math.Max(1, (int)Math.Ceiling((double)posts.Count / pageSize));
+
+        for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+        {
+            var pagePosts = posts.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var postList = BuildPostListHtml(pagePosts);
+            var pagination = BuildPaginationHtml(pageNumber, totalPages);
+            var pageIndicator = BuildPageIndicatorHtml(pageNumber, totalPages);
+
+            var html = template
+                .Replace("{{POST_LIST}}", postList)
+                .Replace("{{PAGINATION}}", pagination)
+                .Replace("{{PAGE_INDICATOR}}", pageIndicator);
+
+            var fileName = pageNumber == 1 ? "index.html" : $"page{pageNumber}.html";
+            File.WriteAllText(Path.Combine(_outputDir, fileName), html);
+        }
+    }
+
+    private string BuildPostListHtml(List<BlogPost> posts)
+    {
         var postList = new StringBuilder();
         foreach (var post in posts)
         {
             var excerpt = GetExcerpt(post.Content);
             postList.AppendLine("<div class=\"post-item\">");
-            
-            // Add featured image if available
+
             if (!string.IsNullOrEmpty(post.FeaturedImage))
             {
                 postList.AppendLine($"  <img src=\"images/posts/{post.FeaturedImage}\" alt=\"{EscapeHtmlAttribute(post.Title)}\" class=\"post-thumbnail\">");
             }
-            
+
             postList.AppendLine("  <div class=\"post-item-content\">");
             postList.AppendLine($"    <h2><a href=\"{post.Slug}.html\">{post.Title}</a></h2>");
             postList.AppendLine($"    <div class=\"post-meta\">");
@@ -255,9 +279,54 @@ public class StaticSiteGenerator
             postList.AppendLine("  </div>");
             postList.AppendLine("</div>");
         }
-        
-        var html = template.Replace("{{POST_LIST}}", postList.ToString());
-        File.WriteAllText(Path.Combine(_outputDir, "index.html"), html);
+        return postList.ToString();
+    }
+
+    private string BuildPaginationHtml(int currentPage, int totalPages)
+    {
+        if (totalPages <= 1)
+            return "";
+
+        var pagination = new StringBuilder();
+        pagination.AppendLine("<nav class=\"pagination\" aria-label=\"Page navigation\">");
+
+        if (currentPage > 1)
+        {
+            var prevFile = currentPage == 2 ? "index.html" : $"page{currentPage - 1}.html";
+            pagination.AppendLine($"  <a href=\"{prevFile}\" class=\"pagination-prev\">&#8592; Newer Posts</a>");
+        }
+
+        pagination.AppendLine("  <span class=\"pagination-pages\">");
+        for (int i = 1; i <= totalPages; i++)
+        {
+            if (i == currentPage)
+            {
+                pagination.AppendLine($"    <span class=\"pagination-current\" aria-current=\"page\">{i}</span>");
+            }
+            else
+            {
+                var pageFile = i == 1 ? "index.html" : $"page{i}.html";
+                pagination.AppendLine($"    <a href=\"{pageFile}\" class=\"pagination-page\">{i}</a>");
+            }
+        }
+        pagination.AppendLine("  </span>");
+
+        if (currentPage < totalPages)
+        {
+            var nextFile = $"page{currentPage + 1}.html";
+            pagination.AppendLine($"  <a href=\"{nextFile}\" class=\"pagination-next\">Older Posts &#8594;</a>");
+        }
+
+        pagination.AppendLine("</nav>");
+        return pagination.ToString();
+    }
+
+    private string BuildPageIndicatorHtml(int currentPage, int totalPages)
+    {
+        if (currentPage <= 1 || totalPages <= 1)
+            return "";
+
+        return $"<p class=\"page-indicator\">Page {currentPage} of {totalPages}</p>\n";
     }
 
     private string GetExcerpt(string htmlContent)
