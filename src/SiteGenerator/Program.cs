@@ -221,7 +221,10 @@ public class StaticSiteGenerator
                 html = Regex.Replace(html, @"\{\{#TAGS\}\}.*?\{\{/TAGS\}\}", "", RegexOptions.Singleline);
             }
             
-            var outputPath = Path.Combine(_outputDir, $"{post.Slug}.html");
+            var outputPath = Path.GetFullPath(Path.Combine(_outputDir, $"{post.Slug}.html"));
+            var outputDirNormalized = Path.GetFullPath(_outputDir) + Path.DirectorySeparatorChar;
+            if (!outputPath.StartsWith(outputDirNormalized, StringComparison.Ordinal))
+                throw new InvalidOperationException("Invalid post slug: path escapes the output directory.");
             File.WriteAllText(outputPath, html);
         }
     }
