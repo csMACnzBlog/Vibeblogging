@@ -531,7 +531,57 @@ article h1 {
     100% { color: #c98700; } /* Darker orange - loop back */
 }
 
-/* Respect user motion preferences */
+/* Pagination */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size: 1em;
+}
+
+.pagination-pages {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pagination-page,
+.pagination-prev,
+.pagination-next {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #a36a00;
+    border: 1px solid #a36a00;
+    transition: background ease 0.3s, color ease 0.3s;
+}
+
+.pagination-page:hover,
+.pagination-prev:hover,
+.pagination-next:hover {
+    background-color: #0080a6;
+    border-color: #0080a6;
+    color: #ffffff;
+}
+
+.pagination-current {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: #4b4b4b;
+    color: #ffffff;
+    border: 1px solid #4b4b4b;
+    font-weight: bold;
+}
+
+
 @media (prefers-reduced-motion: reduce) {
     .vibeblog-animated span {
         animation: none;
