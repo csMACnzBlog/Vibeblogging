@@ -68,7 +68,10 @@ public class StaticSiteGenerator
         // Generate RSS feed
         GenerateRssFeed(posts);
         
-        // Copy CSS
+        // Generate search page
+        GenerateSearchPage(posts);
+        
+        // Copy CSS and JS assets
         CopyStyles();
         
         Console.WriteLine($"Generated {posts.Count} posts");
@@ -399,11 +402,67 @@ public class StaticSiteGenerator
             .Replace("\"", "&quot;");
     }
 
+    private void GenerateSearchPage(List<BlogPost> posts)
+    {
+        var templatePath = Path.Combine(_templatesDir, "search.html");
+        if (!File.Exists(templatePath))
+            return;
+
+        var template = File.ReadAllText(templatePath);
+        var postsJson = BuildPostsJson(posts);
+        var html = template.Replace("{{POSTS_JSON}}", postsJson);
+        File.WriteAllText(Path.Combine(_outputDir, "search.html"), html);
+    }
+
+    private string BuildPostsJson(List<BlogPost> posts)
+    {
+        var sb = new StringBuilder();
+        sb.Append("[");
+        for (int i = 0; i < posts.Count; i++)
+        {
+            var post = posts[i];
+            var excerpt = GetExcerpt(post.Content);
+            if (i > 0) sb.Append(",");
+            sb.AppendLine();
+            sb.Append("  {");
+            sb.Append($"\"title\":{JsonEscapeString(post.Title)},");
+            sb.Append($"\"slug\":{JsonEscapeString(post.Slug)},");
+            sb.Append($"\"date\":{JsonEscapeString(post.Date.ToString("yyyy-MM-dd"))},");
+            sb.Append($"\"formattedDate\":{JsonEscapeString(post.Date.ToString("MMMM dd, yyyy"))},");
+            sb.Append($"\"tags\":[{string.Join(",", post.Tags.Select(t => JsonEscapeString(t)))}],");
+            sb.Append($"\"excerpt\":{JsonEscapeString(excerpt)},");
+            sb.Append($"\"image\":{(string.IsNullOrEmpty(post.FeaturedImage) ? "null" : JsonEscapeString(post.FeaturedImage))}");
+            sb.Append("}");
+        }
+        sb.AppendLine();
+        sb.Append("]");
+        return sb.ToString();
+    }
+
+    private string JsonEscapeString(string text)
+    {
+        return "\"" + text
+            .Replace("\\", "\\\\")
+            .Replace("\"", "\\\"")
+            .Replace("\n", "\\n")
+            .Replace("\r", "\\r")
+            .Replace("\t", "\\t")
+            + "\"";
+    }
+
     private void CopyStyles()
     {
         var sourceCss = Path.Join(_templatesDir, "styles.css");
         var destCss = Path.Join(_outputDir, "styles.css");
         File.Copy(sourceCss, destCss, true);
+
+        // Copy search modal JS
+        var sourceModalJs = Path.Join(_templatesDir, "search-modal.js");
+        var destModalJs = Path.Join(_outputDir, "search-modal.js");
+        if (File.Exists(sourceModalJs))
+        {
+            File.Copy(sourceModalJs, destModalJs, true);
+        }
         
         // Copy template images folder
         var sourceImagesDir = Path.Join(_templatesDir, "images");
