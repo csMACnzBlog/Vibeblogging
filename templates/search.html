@@ -46,6 +46,35 @@
             color: #4b4b4b;
         }
 
+        .tag-filters-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .tag-toggle-btn {
+            padding: 2px 10px;
+            font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+            font-size: 13px;
+            border: 1px solid #a36a00;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #a36a00;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .tag-toggle-btn:hover {
+            background: #a36a00;
+            color: #ffffff;
+        }
+
+        .tag-toggle-btn:focus {
+            outline: 2px solid #0080a6;
+            outline-offset: 2px;
+        }
+
         .tag-filters {
             display: flex;
             flex-wrap: wrap;
@@ -78,6 +107,12 @@
         .tag-btn:focus {
             outline: 2px solid #0080a6;
             outline-offset: 2px;
+        }
+
+        .tag-btn.active:focus {
+            outline: 2px solid #0080a6;
+            outline-offset: 2px;
+            box-shadow: inset 0 0 0 2px #ffffff;
         }
 
         .results-count {
@@ -153,7 +188,10 @@
     <div class="search-header">
         <input type="search" id="search-input" placeholder="Search posts…" aria-label="Search posts" autofocus>
         <div>
-            <p class="tag-filters-label" id="tag-filters-label">Filter by tag:</p>
+            <div class="tag-filters-header">
+                <p class="tag-filters-label" id="tag-filters-label">Filter by tag:</p>
+                <button type="button" id="tag-toggle-btn" class="tag-toggle-btn" aria-expanded="false" aria-controls="tag-filters">Show tags</button>
+            </div>
             <div id="tag-filters" class="tag-filters" role="group" aria-labelledby="tag-filters-label"></div>
         </div>
     </div>
@@ -166,24 +204,52 @@
         var posts = {{POSTS_JSON}};
 
         var activeTags = [];
+        var tagsExpanded = false;
 
+        var tagCounts = {};
         var allTags = [];
         posts.forEach(function (p) {
             p.tags.forEach(function (t) {
+                tagCounts[t] = (tagCounts[t] || 0) + 1;
                 if (allTags.indexOf(t) === -1) {
                     allTags.push(t);
                 }
             });
         });
-        allTags.sort();
+        allTags.sort(function (a, b) {
+            return tagCounts[b] - tagCounts[a] || a.localeCompare(b);
+        });
 
         var tagFilters = document.getElementById('tag-filters');
+        var toggleBtn = document.getElementById('tag-toggle-btn');
+
+        function updateTagsVisibility() {
+            var buttons = tagFilters.querySelectorAll('.tag-btn');
+            buttons.forEach(function (btn) {
+                var tag = btn.dataset.tag;
+                if (tagsExpanded || activeTags.indexOf(tag) !== -1) {
+                    btn.removeAttribute('hidden');
+                } else {
+                    btn.setAttribute('hidden', '');
+                }
+            });
+            toggleBtn.textContent = tagsExpanded ? 'Hide tags' : 'Show tags';
+            toggleBtn.setAttribute('aria-expanded', tagsExpanded ? 'true' : 'false');
+        }
+
+        toggleBtn.addEventListener('click', function () {
+            tagsExpanded = !tagsExpanded;
+            updateTagsVisibility();
+        });
+
         allTags.forEach(function (tag) {
             var btn = document.createElement('button');
             btn.setAttribute('type', 'button');
             btn.className = 'tag-btn';
             btn.setAttribute('aria-pressed', 'false');
+            btn.dataset.tag = tag;
             btn.textContent = tag;
+            btn.setAttribute('hidden', '');
             btn.addEventListener('click', function () {
                 var idx = activeTags.indexOf(tag);
                 if (idx === -1) {
@@ -195,6 +261,7 @@
                     btn.classList.remove('active');
                     btn.setAttribute('aria-pressed', 'false');
                 }
+                updateTagsVisibility();
                 render();
             });
             tagFilters.appendChild(btn);
