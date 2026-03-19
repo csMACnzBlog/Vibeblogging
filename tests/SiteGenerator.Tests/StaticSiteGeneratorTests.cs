@@ -81,6 +81,40 @@ public class StaticSiteGeneratorTests
     }
 
     [Fact]
+    public void Generate_CreatesSearchPage()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var searchPath = Path.Combine(_outputDir, "search.html");
+        Assert.True(File.Exists(searchPath));
+    }
+
+    [Fact]
+    public void Generate_SearchPageContainsPostMetadata()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-search-test.md", "Search Test Post", "2026-02-25", "dotnet, csharp");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var searchContent = File.ReadAllText(Path.Combine(_outputDir, "search.html"));
+        Assert.Contains("Search Test Post", searchContent);
+        Assert.Contains("search-test", searchContent);
+        Assert.Contains("dotnet", searchContent);
+        Assert.Contains("csharp", searchContent);
+    }
+
+    [Fact]
     public void Generate_CopiesStylesheet()
     {
         // Arrange
@@ -436,10 +470,21 @@ public class StaticSiteGeneratorTests
 </html>";
 
         var cssContent = "body { font-family: sans-serif; }";
+        var searchTemplate = @"<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <div id=""results""></div>
+    <script>var posts = {{POSTS_JSON}};</script>
+</body>
+</html>";
 
         File.WriteAllText(Path.Combine(_templatesDir, "post.html"), postTemplate);
         File.WriteAllText(Path.Combine(_templatesDir, "index.html"), indexTemplate);
         File.WriteAllText(Path.Combine(_templatesDir, "styles.css"), cssContent);
+        File.WriteAllText(Path.Combine(_templatesDir, "search.html"), searchTemplate);
     }
 
     private void CreateTestPost(string filename, string title, string date, string tags, string content = "Test content")
