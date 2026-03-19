@@ -169,7 +169,8 @@ pre code {
 }
 
 .menu-item-content {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     background-color: inherit;
     color: #fabb45;
     margin: 0;
@@ -606,8 +607,6 @@ button.menu-item-content {
     cursor: pointer;
     font-family: inherit;
     font-size: inherit;
-    line-height: inherit;
-    vertical-align: middle;
 }
 
 /* Search Modal */
