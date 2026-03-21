@@ -144,7 +144,7 @@ That would've been a four-line if-block in older C#. I think it's genuinely nice
 
 The real power of nullable reference types emerges when you think about how you model your data.
 
-**Initialise everything in the constructor:**
+**Initialize everything in the constructor:**
 
 ```csharp
 public class UserProfile
