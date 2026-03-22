@@ -27,7 +27,7 @@
 name: "Daily Blog Post Generator"
 "on":
   schedule:
-  - cron: "0 2 * * *"
+  - cron: "5 0 * * *"
   # skip-if-match: is:pr is:open in:title "[daily-post]" # Skip-if-match processed as search check in pre-activation job
   workflow_dispatch:
 
@@ -607,6 +607,7 @@ jobs:
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
+          HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
           XDG_CONFIG_HOME: /home/runner
       - name: Detect inference access error
         id: detect-inference-error
@@ -661,11 +662,12 @@ jobs:
             const { main } = require('${{ runner.temp }}/gh-aw/actions/redact_secrets.cjs');
             await main();
         env:
-          GH_AW_SECRET_NAMES: 'COPILOT_GITHUB_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN'
+          GH_AW_SECRET_NAMES: 'COPILOT_GITHUB_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN,HUGGINGFACE_API_KEY'
           SECRET_COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           SECRET_GH_AW_GITHUB_MCP_SERVER_TOKEN: ${{ secrets.GH_AW_GITHUB_MCP_SERVER_TOKEN }}
           SECRET_GH_AW_GITHUB_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
           SECRET_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
       - name: Append agent step summary
         if: always()
         run: bash ${RUNNER_TEMP}/gh-aw/actions/append_agent_step_summary.sh

@@ -2,7 +2,7 @@
 description: Generate a daily blog post and open a pull request with the new post
 on:
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "5 0 * * *"
   workflow_dispatch:
   skip-if-match: "is:pr is:open in:title \"[daily-post]\""
 permissions:
@@ -23,6 +23,8 @@ secrets:
   HUGGINGFACE_API_KEY:
     value: ${{ secrets.HUGGINGFACE_API_KEY }}
     description: "API key for HuggingFace image generation"
+env:
+  HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
 steps:
   - name: Setup .NET
     uses: actions/setup-dotnet@v4
