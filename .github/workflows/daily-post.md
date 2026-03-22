@@ -23,9 +23,9 @@ secrets:
   HUGGINGFACE_API_KEY:
     value: ${{ secrets.HUGGINGFACE_API_KEY }}
     description: "API key for HuggingFace image generation"
-env:
-  HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
 steps:
+  - name: Export HuggingFace API key
+    run: echo "HUGGINGFACE_API_KEY=${{ secrets.HUGGINGFACE_API_KEY }}" >> "$GITHUB_ENV"
   - name: Setup .NET
     uses: actions/setup-dotnet@v4
     with:
