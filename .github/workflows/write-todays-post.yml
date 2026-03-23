@@ -13,6 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     environment: write-todays-post
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+
       - name: Find post-request issue
         id: find-or-create-issue
         uses: actions/github-script@v7
@@ -51,7 +64,7 @@ jobs:
       - name: Start agent session
         if: steps.find-or-create-issue.outputs.skip != 'true'
         env:
-          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.find-or-create-issue.outputs.issue-number }}
           ISSUE_TITLE: ${{ steps.find-or-create-issue.outputs.issue-title }}
           ISSUE_BODY: ${{ steps.find-or-create-issue.outputs.issue-body }}
@@ -67,4 +80,4 @@ jobs:
           fi
           echo "Starting agent session with prompt:"
           echo "$PROMPT"
-          echo "$PROMPT" | gh agent-task create -F - --repo "${{ github.repository }}"
+          copilot -p "$PROMPT" --no-ask-user
