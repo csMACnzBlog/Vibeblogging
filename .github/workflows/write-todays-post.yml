@@ -65,6 +65,7 @@ jobs:
         if: steps.find-or-create-issue.outputs.skip != 'true'
         env:
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
           ISSUE_NUMBER: ${{ steps.find-or-create-issue.outputs.issue-number }}
           ISSUE_TITLE: ${{ steps.find-or-create-issue.outputs.issue-title }}
           ISSUE_BODY: ${{ steps.find-or-create-issue.outputs.issue-body }}
