@@ -59,9 +59,9 @@ jobs:
           if [ -n "$ISSUE_TITLE" ]; then
             PROMPT="write todays post implementing the issue
 
-Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}
+            Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}
 
-${ISSUE_BODY}"
+            ${ISSUE_BODY}"
           else
             PROMPT="write todays post"
           fi
