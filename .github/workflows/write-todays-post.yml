@@ -45,7 +45,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: relevantIssue.number,
-                assignees: ['copilot']
+                assignees: ['@copilot']
               });
             } else {
               const today = new Date().toISOString().split('T')[0];
@@ -55,6 +55,6 @@ jobs:
                 repo: context.repo.repo,
                 title: `[daily-post] Write today's post - ${today}`,
                 body: "write today's post",
-                assignees: ['copilot']
+                assignees: ['@copilot']
               });
             }
