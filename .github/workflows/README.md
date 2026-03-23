@@ -118,17 +118,35 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 
 **Trigger**: Daily schedule (00:05 UTC) or manual workflow dispatch
 
-**Purpose**: Checks for an open issue requesting a blog post topic (or creates one), then starts an agent session via the `daily-post` agentic workflow to write the post.
+**Purpose**: Checks for an open issue requesting a blog post topic (or creates one), then starts a Copilot agent session directly via `gh agent-task create`.
 
 **Steps**:
 1. Skip if a `[daily-post]` PR is already open
 2. Search for open, unassigned issues that look like post requests (keywords: write, post, blog, article, topic)
-3. If a suitable issue is found: dispatch the `daily-post.lock.yml` agentic workflow, which starts a Copilot agent session with the prompt `write todays post implementing the issue` and the issue title/body as context
-4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD` with the body `write today's post`, then dispatch the agentic workflow
+3. If a suitable issue is found: run `gh agent-task create` with the prompt `write todays post implementing the issue` and the issue title/body as context
+4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD` with the body `write today's post`, then run `gh agent-task create` with the prompt `write todays post`
 
-**Required permissions**: The built-in `GITHUB_TOKEN` is used with `issues: write` (to create issues) and `actions: write` (to dispatch the agentic workflow). No additional secrets or environments are required.
+**Required Secret**: `COPILOT_GITHUB_TOKEN` (environment secret in the `write-todays-post` environment)
 
-> **Note**: The actual Copilot agent session is created by the `daily-post.lock.yml` agentic workflow, which uses the `COPILOT_GITHUB_TOKEN` secret configured for that workflow.
+The `COPILOT_GITHUB_TOKEN` is set as `GH_TOKEN` for the `gh agent-task create` command, which requires a token from an account that has Copilot enabled. The built-in `GITHUB_TOKEN` cannot create agent tasks.
+
+The secret is scoped to the `write-todays-post` **GitHub Actions environment** so it is accessible only to this workflow and not exposed to other workflows in the repository.
+
+You must create a **Personal Access Token (PAT)** and store it as the `COPILOT_GITHUB_TOKEN` environment secret:
+
+| Token type | Required scopes / permissions |
+|---|---|
+| **Classic PAT** | `repo` (full repository access) |
+| **Fine-grained PAT** | Repository → **Issues** (Read and Write) |
+
+**How to configure**:
+1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens**
+2. Create a new token (classic or fine-grained) with the scopes above
+3. Navigate to the repository **Settings → Environments**
+4. Create a new environment named **`write-todays-post`**
+5. Under **Environment secrets**, add a secret named `COPILOT_GITHUB_TOKEN` with the token value
+
+> **Note**: The account that owns the PAT must have write access to the repository and have **GitHub Copilot** enabled.
 
 ### Copilot Setup Steps (`copilot-setup-steps.yml`)
 [![Copilot Setup Steps](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml)

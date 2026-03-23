@@ -6,12 +6,13 @@ on:
   workflow_dispatch:
 
 permissions:
+  contents: read
   issues: write
-  actions: write
 
 jobs:
   write-todays-post:
     runs-on: ubuntu-latest
+    environment: write-todays-post
     steps:
       - name: Find post-request issue or create one
         id: find-or-create-issue
@@ -58,31 +59,21 @@ jobs:
 
       - name: Start agent session
         if: steps.find-or-create-issue.outputs.issue-number
-        uses: actions/github-script@v7
         env:
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.find-or-create-issue.outputs.issue-number }}
           ISSUE_TITLE: ${{ steps.find-or-create-issue.outputs.issue-title }}
           ISSUE_BODY: ${{ steps.find-or-create-issue.outputs.issue-body }}
-        with:
-          script: |
-            const issueNumber = parseInt(process.env.ISSUE_NUMBER);
-            const issueTitle = process.env.ISSUE_TITLE;
-            const issueBody = process.env.ISSUE_BODY;
+        run: |
+          if [ -n "$ISSUE_TITLE" ]; then
+            PROMPT="write todays post implementing the issue
 
-            let prompt = 'write todays post';
-            if (issueTitle) {
-              const bodySnippet = issueBody ? `\n\n${issueBody}` : '';
-              prompt = `write todays post implementing the issue\n\n**Issue #${issueNumber}: ${issueTitle}**${bodySnippet}`.trim();
-            }
+Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}
 
-            console.log(`Starting agent session for issue #${issueNumber}`);
-            console.log(`Prompt: ${prompt}`);
-
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'daily-post.lock.yml',
-              ref: 'main',
-              inputs: {}
-            });
-            console.log('Agent session workflow dispatched successfully.');
+${ISSUE_BODY}"
+          else
+            PROMPT="write todays post"
+          fi
+          echo "Starting agent session with prompt:"
+          echo "$PROMPT"
+          echo "$PROMPT" | gh agent-task create -F - --repo "${{ github.repository }}"
