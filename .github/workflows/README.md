@@ -118,13 +118,12 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 
 **Trigger**: Daily schedule (00:05 UTC) or manual workflow dispatch
 
-**Purpose**: Checks for an open issue requesting a blog post topic (or creates one), then starts a Copilot agent session directly via `gh agent-task create`.
+**Purpose**: Looks for an open issue requesting a blog post topic, then starts a Copilot agent session directly via `gh agent-task create`.
 
 **Steps**:
 1. Skip if a `[daily-post]` PR is already open
 2. Search for open, unassigned issues that look like post requests (keywords: write, post, blog, article, topic)
-3. If a suitable issue is found: run `gh agent-task create` with the prompt `write todays post implementing the issue` and the issue title/body as context
-4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD` with the body `write today's post`, then run `gh agent-task create` with the prompt `write todays post`
+3. Run `gh agent-task create` with the prompt `write todays post implementing the issue` and the issue title/body as context (if a matching issue was found), or with the prompt `write todays post` (if no matching issue was found)
 
 **Required Secret**: `COPILOT_GITHUB_TOKEN` (environment secret in the `write-todays-post` environment)
 
@@ -137,7 +136,7 @@ You must create a **Personal Access Token (PAT)** and store it as the `COPILOT_G
 | Token type | Required scopes / permissions |
 |---|---|
 | **Classic PAT** | `repo` (full repository access) |
-| **Fine-grained PAT** | Repository → **Issues** (Read and Write) |
+| **Fine-grained PAT** | Repository → **Contents** (Read and Write) |
 
 **How to configure**:
 1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens**

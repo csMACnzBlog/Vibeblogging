@@ -7,14 +7,13 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   write-todays-post:
     runs-on: ubuntu-latest
     environment: write-todays-post
     steps:
-      - name: Find post-request issue or create one
+      - name: Find post-request issue
         id: find-or-create-issue
         uses: actions/github-script@v7
         with:
@@ -25,6 +24,7 @@ jobs:
             });
             if (openPRs.data.total_count > 0) {
               console.log('A [daily-post] PR is already open — skipping.');
+              core.setOutput('skip', 'true');
               return;
             }
 
@@ -45,20 +45,11 @@ jobs:
               core.setOutput('issue-title', relevantIssue.title);
               core.setOutput('issue-body', relevantIssue.body || '');
             } else {
-              const today = new Date().toISOString().split('T')[0];
-              console.log('No suitable issue found — creating one.');
-              const { data: newIssue } = await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: `[daily-post] Write today's post - ${today}`,
-                body: "write today's post"
-              });
-              console.log(`Created issue #${newIssue.number}`);
-              core.setOutput('issue-number', newIssue.number);
+              console.log('No suitable issue found — proceeding with default prompt.');
             }
 
       - name: Start agent session
-        if: steps.find-or-create-issue.outputs.issue-number
+        if: steps.find-or-create-issue.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.find-or-create-issue.outputs.issue-number }}
