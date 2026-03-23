@@ -12,6 +12,7 @@ permissions:
 jobs:
   write-todays-post:
     runs-on: ubuntu-latest
+    environment: write-todays-post
     steps:
       - name: Find post-request issue or create one for Copilot
         uses: actions/github-script@v7

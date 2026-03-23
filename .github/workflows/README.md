@@ -126,11 +126,13 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 3. If a suitable issue is found: assign it to `@copilot` to kick off the coding agent
 4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD`, assigned to `@copilot`, with the body `write today's post`
 
-**Required Secret**: `COPILOT_GITHUB_TOKEN`
+**Required Secret**: `COPILOT_GITHUB_TOKEN` (environment secret)
 
 This workflow uses the `COPILOT_GITHUB_TOKEN` secret (instead of the built-in `GITHUB_TOKEN`) because assigning issues to the Copilot coding agent requires a token from an account that has Copilot enabled. The built-in `GITHUB_TOKEN` represents the `github-actions[bot]` service account, which cannot trigger the Copilot coding agent.
 
-You must create a **Personal Access Token (PAT)** and store it as the `COPILOT_GITHUB_TOKEN` repository secret:
+The secret is scoped to the `write-todays-post` **GitHub Actions environment** so it is accessible only to this workflow and not exposed to other workflows in the repository.
+
+You must create a **Personal Access Token (PAT)** and store it as the `COPILOT_GITHUB_TOKEN` environment secret:
 
 | Token type | Required scopes / permissions |
 |---|---|
@@ -140,8 +142,9 @@ You must create a **Personal Access Token (PAT)** and store it as the `COPILOT_G
 **How to configure**:
 1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens**
 2. Create a new token (classic or fine-grained) with the scopes above
-3. Navigate to the repository **Settings → Secrets and variables → Actions**
-4. Create a new secret named `COPILOT_GITHUB_TOKEN` with the token value
+3. Navigate to the repository **Settings → Environments**
+4. Create a new environment named **`write-todays-post`**
+5. Under **Environment secrets**, add a secret named `COPILOT_GITHUB_TOKEN` with the token value
 
 > **Note**: The account that owns the PAT must have write access to the repository and have **GitHub Copilot** enabled. Only issues assigned by an account with Copilot access will trigger the coding agent.
 
