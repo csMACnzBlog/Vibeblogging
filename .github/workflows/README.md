@@ -123,8 +123,8 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 **Steps**:
 1. Skip if a `[daily-post]` PR is already open
 2. Search for open, unassigned issues that look like post requests (keywords: write, post, blog, article, topic)
-3. If a suitable issue is found: assign it to `@copilot` to kick off the coding agent
-4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD`, assigned to `@copilot`, with the body `write today's post`
+3. If a suitable issue is found: assign it to `copilot-swe-agent[bot]` to kick off the coding agent
+4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD`, assigned to `copilot-swe-agent[bot]`, with the body `write today's post`
 
 **Required Secret**: `COPILOT_GITHUB_TOKEN` (environment secret)
 

@@ -40,21 +40,21 @@ jobs:
             });
 
             if (relevantIssue) {
-              console.log(`Assigning issue #${relevantIssue.number} to @copilot: "${relevantIssue.title}"`);
+              console.log(`Assigning issue #${relevantIssue.number} to copilot-swe-agent[bot]: "${relevantIssue.title}"`);
               await github.rest.issues.addAssignees({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: relevantIssue.number,
-                assignees: ['@copilot']
+                assignees: ['copilot-swe-agent[bot]']
               });
             } else {
               const today = new Date().toISOString().split('T')[0];
-              console.log('No suitable issue found — creating one for @copilot.');
+              console.log('No suitable issue found — creating one for copilot-swe-agent[bot].');
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: `[daily-post] Write today's post - ${today}`,
                 body: "write today's post",
-                assignees: ['@copilot']
+                assignees: ['copilot-swe-agent[bot]']
               });
             }
