@@ -1,0 +1,60 @@
+name: Write Today's Post
+
+on:
+  schedule:
+    - cron: "5 0 * * *"  # 00:05 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  write-todays-post:
+    runs-on: ubuntu-latest
+    environment: write-todays-post
+    steps:
+      - name: Find post-request issue or create one for Copilot
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          script: |
+            // Skip if a daily-post PR is already open
+            const openPRs = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:open "[daily-post]" in:title`
+            });
+            if (openPRs.data.total_count > 0) {
+              console.log('A [daily-post] PR is already open — skipping.');
+              return;
+            }
+
+            // Search for open, unassigned issues that look like post requests
+            const { data: { items: issues } } = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open no:assignee`
+            });
+
+            const postKeywords = ['write', 'post', 'blog', 'article', 'topic'];
+            const relevantIssue = issues.find(issue => {
+              const text = (issue.title + ' ' + (issue.body || '')).toLowerCase();
+              return postKeywords.some(kw => text.includes(kw));
+            });
+
+            if (relevantIssue) {
+              console.log(`Assigning issue #${relevantIssue.number} to @copilot: "${relevantIssue.title}"`);
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: relevantIssue.number,
+                assignees: ['copilot']
+              });
+            } else {
+              const today = new Date().toISOString().split('T')[0];
+              console.log('No suitable issue found — creating one for @copilot.');
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `[daily-post] Write today's post - ${today}`,
+                body: "write today's post",
+                assignees: ['copilot']
+              });
+            }

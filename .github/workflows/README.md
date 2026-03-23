@@ -113,6 +113,41 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 - Automatic PR comments with findings
 - License compliance checks
 
+### Write Today's Post (`write-todays-post.yml`)
+[![Write Today's Post](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/write-todays-post.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/write-todays-post.yml)
+
+**Trigger**: Daily schedule (00:05 UTC) or manual workflow dispatch
+
+**Purpose**: A simple standard workflow that checks for an open issue requesting a blog post and hands it off to the Copilot coding agent, or creates one if none exists.
+
+**Steps**:
+1. Skip if a `[daily-post]` PR is already open
+2. Search for open, unassigned issues that look like post requests (keywords: write, post, blog, article, topic)
+3. If a suitable issue is found: assign it to `@copilot` to kick off the coding agent
+4. If no suitable issue is found: create a new issue titled `[daily-post] Write today's post - YYYY-MM-DD`, assigned to `@copilot`, with the body `write today's post`
+
+**Required Secret**: `COPILOT_GITHUB_TOKEN` (environment secret)
+
+This workflow uses the `COPILOT_GITHUB_TOKEN` secret (instead of the built-in `GITHUB_TOKEN`) because assigning issues to the Copilot coding agent requires a token from an account that has Copilot enabled. The built-in `GITHUB_TOKEN` represents the `github-actions[bot]` service account, which cannot trigger the Copilot coding agent.
+
+The secret is scoped to the `write-todays-post` **GitHub Actions environment** so it is accessible only to this workflow and not exposed to other workflows in the repository.
+
+You must create a **Personal Access Token (PAT)** and store it as the `COPILOT_GITHUB_TOKEN` environment secret:
+
+| Token type | Required scopes / permissions |
+|---|---|
+| **Classic PAT** | `repo` (full repository access) |
+| **Fine-grained PAT** | Repository → **Issues** (Read and Write) |
+
+**How to configure**:
+1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens**
+2. Create a new token (classic or fine-grained) with the scopes above
+3. Navigate to the repository **Settings → Environments**
+4. Create a new environment named **`write-todays-post`**
+5. Under **Environment secrets**, add a secret named `COPILOT_GITHUB_TOKEN` with the token value
+
+> **Note**: The account that owns the PAT must have write access to the repository and have **GitHub Copilot** enabled. Only issues assigned by an account with Copilot access will trigger the coding agent.
+
 ### Copilot Setup Steps (`copilot-setup-steps.yml`)
 [![Copilot Setup Steps](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/copilot-setup-steps.yml)
 
