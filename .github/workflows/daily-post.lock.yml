@@ -22,7 +22,7 @@
 #
 # Generate a daily blog post and open a pull request with the new post
 #
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"47c7117232cee61ee93e5287051a5c86d5f8a29261ce1f86db5ecf7c9cc7e5bf","compiler_version":"v0.63.0","strict":true,"agent_id":"copilot"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"07004ff22a93732da6d618b5fc14e8122f7fa88faf7173da478448e4c246abf3","compiler_version":"v0.63.0","strict":true,"agent_id":"copilot"}
 
 name: "Daily Blog Post Generator"
 "on":
@@ -618,6 +618,7 @@ jobs:
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
+          HUGGINGFACE_API_KEY: ${{ env.HUGGINGFACE_API_KEY }}
           XDG_CONFIG_HOME: /home/runner
       - name: Detect inference access error
         id: detect-inference-error
@@ -842,6 +843,7 @@ jobs:
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
+          HUGGINGFACE_API_KEY: ${{ env.HUGGINGFACE_API_KEY }}
           XDG_CONFIG_HOME: /home/runner
       - name: Parse threat detection results
         id: parse_detection_results

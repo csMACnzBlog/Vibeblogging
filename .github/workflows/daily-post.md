@@ -21,6 +21,10 @@ network:
     - "api-inference.huggingface.co"
 secrets:
   HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
+engine:
+  id: copilot
+  env:
+    HUGGINGFACE_API_KEY: ${{ env.HUGGINGFACE_API_KEY }}
 steps:
   - name: Export Hugging Face API key
     env:
