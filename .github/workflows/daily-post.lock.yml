@@ -22,7 +22,7 @@
 #
 # Generate a daily blog post and open a pull request with the new post
 #
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"088c4aa04bd518923a4c3f7532878db6e858ee98e872015a85a52d18c3ed1eba","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"6b4e4e6ae9035ceda0d7d00947cdf161fb2f5a12d99799409b43552222a39ebc","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
 
 name: "Daily Blog Post Generator"
 "on":
@@ -37,9 +37,6 @@ concurrency:
   group: "gh-aw-${{ github.workflow }}"
 
 run-name: "Daily Blog Post Generator"
-
-env:
-  HUGGINGFACE_API_KEY: ${{ vars.HUGGINGFACE_API_KEY }}
 
 jobs:
   activation:
@@ -287,6 +284,8 @@ jobs:
         run: bash ${RUNNER_TEMP}/gh-aw/actions/configure_gh_for_ghe.sh
         env:
           GH_TOKEN: ${{ github.token }}
+      - name: Export HuggingFace API key
+        run: echo "HUGGINGFACE_API_KEY=${{ secrets.HUGGINGFACE_API_KEY }}" >> "$GITHUB_ENV"
       - name: Setup .NET
         uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v4
         with:
@@ -664,11 +663,12 @@ jobs:
             const { main } = require('${{ runner.temp }}/gh-aw/actions/redact_secrets.cjs');
             await main();
         env:
-          GH_AW_SECRET_NAMES: 'COPILOT_GITHUB_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN'
+          GH_AW_SECRET_NAMES: 'COPILOT_GITHUB_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN,HUGGINGFACE_API_KEY'
           SECRET_COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           SECRET_GH_AW_GITHUB_MCP_SERVER_TOKEN: ${{ secrets.GH_AW_GITHUB_MCP_SERVER_TOKEN }}
           SECRET_GH_AW_GITHUB_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
           SECRET_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
       - name: Append agent step summary
         if: always()
         run: bash ${RUNNER_TEMP}/gh-aw/actions/append_agent_step_summary.sh
