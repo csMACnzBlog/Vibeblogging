@@ -19,9 +19,13 @@ network:
     - node
     - python
     - "api-inference.huggingface.co"
-env:
-  HUGGINGFACE_API_KEY: ${{ vars.HUGGINGFACE_API_KEY }}
+secrets:
+  HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
 steps:
+  - name: Export Hugging Face API key
+    env:
+      HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
+    run: echo "HUGGINGFACE_API_KEY=$HUGGINGFACE_API_KEY" >> "$GITHUB_ENV"
   - name: Setup .NET
     uses: actions/setup-dotnet@v4
     with:
