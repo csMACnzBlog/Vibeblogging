@@ -24,6 +24,8 @@ secrets:
 engine:
   id: copilot
 steps:
+  - name: Export Hugging Face API key
+    run: echo "HUGGINGFACE_API_KEY=${{ secrets.HUGGINGFACE_API_KEY }}" >> "$GITHUB_ENV"
   - name: Setup .NET
     uses: actions/setup-dotnet@v4
     with:

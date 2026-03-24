@@ -22,7 +22,7 @@
 #
 # Generate a daily blog post and open a pull request with the new post
 #
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"64c81c2821238131d4d27c30ca08c43d2a04fdacfa647dbcf5e611d3ab34ffc0","compiler_version":"v0.63.0","strict":true,"agent_id":"copilot"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"d3d7012ce42128bae78542670a5c5d661782de12187bd9170d1d66f42e015455","compiler_version":"v0.63.0","strict":true,"agent_id":"copilot"}
 
 name: "Daily Blog Post Generator"
 "on":
@@ -291,6 +291,8 @@ jobs:
         run: bash ${RUNNER_TEMP}/gh-aw/actions/configure_gh_for_ghe.sh
         env:
           GH_TOKEN: ${{ github.token }}
+      - name: Export Hugging Face API key
+        run: echo "HUGGINGFACE_API_KEY=${{ secrets.HUGGINGFACE_API_KEY }}" >> "$GITHUB_ENV"
       - name: Setup .NET
         uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v4
         with:
@@ -668,11 +670,12 @@ jobs:
             const { main } = require('${{ runner.temp }}/gh-aw/actions/redact_secrets.cjs');
             await main();
         env:
-          GH_AW_SECRET_NAMES: 'COPILOT_GITHUB_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN'
+          GH_AW_SECRET_NAMES: 'COPILOT_GITHUB_TOKEN,GH_AW_GITHUB_MCP_SERVER_TOKEN,GH_AW_GITHUB_TOKEN,GITHUB_TOKEN,HUGGINGFACE_API_KEY'
           SECRET_COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           SECRET_GH_AW_GITHUB_MCP_SERVER_TOKEN: ${{ secrets.GH_AW_GITHUB_MCP_SERVER_TOKEN }}
           SECRET_GH_AW_GITHUB_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
           SECRET_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_HUGGINGFACE_API_KEY: ${{ secrets.HUGGINGFACE_API_KEY }}
       - name: Append agent step summary
         if: always()
         run: bash ${RUNNER_TEMP}/gh-aw/actions/append_agent_step_summary.sh
