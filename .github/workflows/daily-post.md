@@ -52,22 +52,36 @@ safe-outputs:
 
 You are an AI agent that generates a new blog post for the Vibeblogging site each day. Your task is to identify the next post topic, write the post, generate a featured image, validate the site builds correctly, and open a pull request with the result.
 
-## Step 1: Audit Existing Posts
+## Step 1: Discover Topic Suggestions From Issues
 
-Read all markdown files in the `/posts` directory. For each post, extract:
+Search for **open issues** that can be used as blog topic suggestions.
 
-- Title and date
-- Tags and themes covered
-- Series connections (e.g., design patterns series, testing series)
+- Prioritize open issues that clearly request a post topic or describe a developer pain point that can become a post
+- Prefer issues that are not already represented by an open `[daily-post]` pull request
+- Capture for each candidate: issue number, title, URL, and a one-line reason it is a good blog topic
 
-Build a map of what has already been published. Identify series in progress and gaps in coverage.
+If no suitable issue is found, continue to Step 1B.
+
+## Step 1B: Audit Existing Posts For Topic Gaps
+
+Read markdown files in the `/posts` directory and map what has already been covered.
+
+- Identify recurring themes, completed series, and obvious gaps
+- Propose candidate follow-up topics that are clearly distinct from existing post topics
+- Capture each candidate with a one-line reason it is valuable next
 
 ## Step 2: Choose the Next Topic
 
-Based on the audit, pick **one** topic for today's post. Follow these rules:
+Pick **one** topic for today's post using this priority:
+
+1. Use the best candidate from Step 1 (issues-first)
+2. If no issue is suitable, use the best candidate from Step 1B (post-audit gaps)
+3. Only if neither source yields a suitable topic, choose a new topic from the categories below
+
+Follow these rules:
 
 - **Never duplicate** an existing post topic
-- **Continue active series** where possible (check for series roadmaps in existing posts)
+- **Continue active series** where possible
 - If no active series needs continuing, pick a new topic from these categories:
   - C# language features
   - .NET ecosystem tools and libraries
@@ -77,6 +91,8 @@ Based on the audit, pick **one** topic for today's post. Follow these rules:
   - Developer practices and workflows
 - The topic must be specific enough for a focused, example-driven post (e.g. "Span\<T\> and Memory\<T\> in C#", not just "Performance")
 - The topic must be valuable to a practising .NET / C# developer
+
+When an issue is selected, treat it as the source of truth for scope and examples.
 
 ## Step 3: Write the Blog Post
 
@@ -151,6 +167,11 @@ Use the `create-pull-request` safe output to open a PR with:
 - The new post markdown file
 - The generated featured image
 - Any other changed files needed for the site to build
+
+If a topic issue was used from Step 1, include it in the PR body:
+
+- Add a "Related issue" section with the issue link
+- Include a closing keyword such as `Closes #<issue-number>` so the issue is automatically linked and closed when merged
 
 The PR title should describe the post topic (the `[daily-post]` prefix is added automatically).
 
