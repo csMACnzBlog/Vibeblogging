@@ -18,6 +18,7 @@ network:
     - dotnet
     - node
     - python
+    - "huggingface.co"
     - "api-inference.huggingface.co"
 steps:
   - name: Export Hugging Face API key
