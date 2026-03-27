@@ -39,7 +39,7 @@ public class StringBenchmarks
     }
 
     [Benchmark]
-    public string StringBuilder()
+    public string UsingStringBuilder()
     {
         var sb = new System.Text.StringBuilder();
         for (int i = 0; i < Iterations; i++)
@@ -55,7 +55,7 @@ Run it in Release mode — this is critical:
 dotnet run --configuration Release
 ```
 
-BenchmarkDotNet will run dozens of warm-up and actual iterations, then print a table showing mean time, standard deviation, and memory allocations. `StringBuilder` will win by a wide margin, which confirms what we already knew — but now you have numbers.
+BenchmarkDotNet will run dozens of warm-up and actual iterations, then print a table showing mean time, standard deviation, and memory allocations. `UsingStringBuilder` will win by a wide margin, which confirms what we already knew — but now you have numbers.
 
 ## The [Params] Attribute
 
@@ -77,7 +77,7 @@ public class StringBenchmarks
     }
 
     [Benchmark]
-    public string StringBuilder()
+    public string UsingStringBuilder()
     {
         var sb = new System.Text.StringBuilder();
         for (int i = 0; i < Iterations; i++)
