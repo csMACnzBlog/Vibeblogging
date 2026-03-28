@@ -72,8 +72,14 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
 
+      - name: Run unit tests
+        run: dotnet test tests/SiteGenerator.Tests/SiteGenerator.Tests.csproj --no-build --configuration Release
+
       - name: Generate site
         run: dotnet run --project src/SiteGenerator/SiteGenerator.csproj --no-build --configuration Release
+
+      - name: Validate HTML
+        run: html-validate 'output/**/*.html'
 
       # Cache and install Playwright browsers for E2E tests
       - name: Cache Playwright browsers
@@ -88,3 +94,9 @@ jobs:
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pwsh tests/Site.PlaywrightTests/bin/Release/net10.0/playwright.ps1 install chromium
+
+      - name: Run E2E tests
+        run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --configuration Release
+
+      - name: Run accessibility tests
+        run: bash scripts/run-a11y-tests.sh
