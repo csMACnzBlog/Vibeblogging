@@ -290,6 +290,27 @@ article h1 {
     content: "Tags: ";
 }
 
+.tag-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+}
+
+.tag-link:hover {
+    color: #0080a6;
+    text-decoration-color: currentColor;
+}
+
+.tag-link:focus {
+    outline: 2px solid #0080a6;
+    outline-offset: 2px;
+}
+
 .post-content {
     font-size: 1rem;
     overflow-wrap: break-word;

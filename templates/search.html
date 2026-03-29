@@ -267,6 +267,21 @@
             tagFilters.appendChild(btn);
         });
 
+        // Pre-select tag from URL parameter (e.g. search.html?tag=dotnet)
+        var urlParams = new URLSearchParams(window.location.search);
+        var initialTag = urlParams.get('tag');
+        if (initialTag) {
+            tagFilters.querySelectorAll('.tag-btn').forEach(function (btn) {
+                if (btn.dataset.tag === initialTag && activeTags.indexOf(initialTag) === -1) {
+                    activeTags.push(initialTag);
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                    tagsExpanded = true;
+                }
+            });
+            updateTagsVisibility();
+        }
+
         function filterPosts() {
             var text = document.getElementById('search-input').value.toLowerCase().trim();
             return posts.filter(function (p) {
