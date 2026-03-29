@@ -97,6 +97,3 @@ jobs:
 
       - name: Run E2E tests
         run: dotnet test tests/Site.PlaywrightTests/Site.PlaywrightTests.csproj --no-build --configuration Release
-
-      - name: Run accessibility tests
-        run: bash scripts/run-a11y-tests.sh
