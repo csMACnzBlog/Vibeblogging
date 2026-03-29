@@ -215,9 +215,8 @@ public class StaticSiteGenerator
             // Handle tags
             if (post.Tags.Any())
             {
-                var tags = string.Join(", ", post.Tags);
                 html = Regex.Replace(html, @"\{\{#TAGS\}\}.*?\{\{/TAGS\}\}", 
-                    $"<span class=\"tags\">{tags}</span>", RegexOptions.Singleline);
+                    $"<span class=\"tags\">{BuildTagButtonsHtml(post.Tags)}</span>", RegexOptions.Singleline);
             }
             else
             {
@@ -275,7 +274,7 @@ public class StaticSiteGenerator
             postList.AppendLine($"      <time datetime=\"{post.Date:yyyy-MM-dd}\">{post.Date:MMMM dd, yyyy}</time>");
             if (post.Tags.Any())
             {
-                postList.AppendLine($"      <span class=\"tags\">{string.Join(", ", post.Tags)}</span>");
+                postList.AppendLine($"      <span class=\"tags\">{BuildTagButtonsHtml(post.Tags)}</span>");
             }
             postList.AppendLine($"    </div>");
             postList.AppendLine($"    <div class=\"post-excerpt\">{excerpt}</div>");
@@ -400,6 +399,12 @@ public class StaticSiteGenerator
         return text
             .Replace("&", "&amp;")
             .Replace("\"", "&quot;");
+    }
+
+    private string BuildTagButtonsHtml(List<string> tags)
+    {
+        return string.Join(", ", tags.Select(t =>
+            $"<button type=\"button\" class=\"tag-link\" data-tag=\"{EscapeHtmlAttribute(t)}\">{EscapeXml(t)}</button>"));
     }
 
     private void GenerateSearchPage(List<BlogPost> posts)

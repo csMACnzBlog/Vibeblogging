@@ -3,11 +3,14 @@
 
     var searchLoaded = false;
 
-    function openModal() {
+    function openModal(tag) {
         var modal = document.getElementById('search-modal');
         var iframe = document.getElementById('search-iframe');
 
-        if (!searchLoaded) {
+        if (tag) {
+            iframe.src = 'search.html?tag=' + encodeURIComponent(tag);
+            searchLoaded = true;
+        } else if (!searchLoaded) {
             iframe.src = 'search.html';
             searchLoaded = true;
         }
@@ -39,7 +42,7 @@
         var overlay = modal ? modal.querySelector('.search-modal-overlay') : null;
 
         if (searchBtn) {
-            searchBtn.addEventListener('click', openModal);
+            searchBtn.addEventListener('click', function () { openModal(); });
         }
 
         if (closeBtn) {
@@ -54,6 +57,12 @@
             if (e.key === 'Escape' && modal && !modal.hasAttribute('hidden')) {
                 closeModal();
             }
+        });
+
+        document.querySelectorAll('.tag-link').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                openModal(btn.dataset.tag);
+            });
         });
     });
 }());
