@@ -96,9 +96,9 @@ public class RequestTimingMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public RequestTimingMiddleware(RequestDelegate _next)
+    public RequestTimingMiddleware(RequestDelegate next)
     {
-        this._next = _next;
+        _next = next;
     }
 
     public async Task InvokeAsync(HttpContext context)
