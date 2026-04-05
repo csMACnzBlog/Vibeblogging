@@ -123,7 +123,7 @@ builder.Services.AddRateLimiter(options =>
 {
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
         RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: context.User?.Identity?.Name ?? context.Request.Headers.Host.ToString(),
+            partitionKey: context.User?.Identity?.Name ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             factory: _ => new FixedWindowRateLimiterOptions
             {
                 PermitLimit = 200,
@@ -190,6 +190,8 @@ builder.Services.AddRateLimiter(options =>
                     });
             }
 
+            // Fall back to remote IP for anonymous requests — never use the
+            // Host header here, as clients can spoof it to bypass the limit.
             var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
             return RateLimitPartition.GetFixedWindowLimiter(ip, _ =>
                 new FixedWindowRateLimiterOptions
