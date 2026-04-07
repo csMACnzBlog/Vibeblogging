@@ -516,6 +516,12 @@ article h1 {
         margin: -15px -15px 10px -15px;
         padding-left: 36px;
     }
+
+    .featured-image {
+        float: right;
+        margin: 10px;
+        width: 50%;
+    }
 }
 
 /* VibeBlog animated rainbow text */
