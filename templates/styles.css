@@ -517,9 +517,9 @@ article h1 {
         padding-left: 36px;
     }
 
-    .featured-image {
+    .post-featured-image {
         float: right;
-        margin: 10px;
+        margin: 10px 0px 10px 10px;
         width: 50%;
     }
 }
