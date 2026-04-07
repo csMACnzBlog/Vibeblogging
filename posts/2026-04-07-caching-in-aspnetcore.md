@@ -88,7 +88,7 @@ _cache.Set("config", config, new MemoryCacheEntryOptions()
     }));
 ```
 
-This is handy for debugging cache behaviour — if entries are being evicted more aggressively than you expect, the eviction reason tells you why.
+This is handy for debugging cache behavior — if entries are being evicted more aggressively than you expect, the eviction reason tells you why.
 
 ## IDistributedCache: Scaling Out
 
@@ -104,7 +104,7 @@ Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, Ca
 Task RemoveAsync(string key, CancellationToken token = default);
 ```
 
-You're working with `byte[]`, so you handle serialisation yourself. In practice, that usually means JSON:
+You're working with `byte[]`, so you handle serialization yourself. In practice, that usually means JSON:
 
 ```csharp
 public class ProductService
