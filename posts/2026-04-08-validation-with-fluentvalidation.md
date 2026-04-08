@@ -65,14 +65,14 @@ builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderRequestValidator>();
 ```
 
-If you're using controllers with `[ApiController]`, the automatic model state validation runs before your action — so you can leave it to the framework and not call the validator yourself. FluentValidation integrates with `ModelState` when you use the `FluentValidation.AspNetCore` package:
+If you're using controllers with `[ApiController]`, you can opt into automatic model state validation so FluentValidation runs before your action method is called. This requires adding `AddFluentValidationAutoValidation()` alongside your validator registrations:
 
 ```csharp
-// Older integration (still works, but MVC-specific)
+// MVC/controller-based integration — wires validators into ModelState automatically
 builder.Services.AddFluentValidationAutoValidation();
 ```
 
-That approach is convenient but a bit magical. For more control — and for Minimal APIs — I prefer injecting and calling validators explicitly.
+That approach is still fully supported and works well for controller-based APIs. It's convenient because you don't need to call the validator manually in each action — ModelState returns 400 errors automatically when validation fails. That said, it is MVC-specific and doesn't work with Minimal APIs. For more control, or if you're mixing both styles, I prefer injecting and calling validators explicitly.
 
 ## Explicit Validation
 
