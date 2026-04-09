@@ -246,6 +246,13 @@ One useful addition is including a correlation ID in error responses so you can 
 ```csharp
 public class DomainExceptionHandler : IExceptionHandler
 {
+    private readonly ILogger<DomainExceptionHandler> _logger;
+
+    public DomainExceptionHandler(ILogger<DomainExceptionHandler> logger)
+    {
+        _logger = logger;
+    }
+
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
@@ -253,6 +260,11 @@ public class DomainExceptionHandler : IExceptionHandler
     {
         if (exception is not DomainException domainException)
             return false;
+
+        _logger.LogWarning(
+            domainException,
+            "Domain exception: {Message}",
+            domainException.Message);
 
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
