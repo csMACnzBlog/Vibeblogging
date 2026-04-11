@@ -16,7 +16,7 @@ class Program
 
 public class StaticSiteGenerator
 {
-    private const string SiteBaseUrl = "https://csmacnzblog.github.io/Vibeblogging";
+    private const string SiteBaseUrl = "https://blog.csmac.nz/Vibeblogging";
     private const string SiteDescription = "Vibeblogging - A daily experiment in AI-generated writing, exploring GitHub's agentic workflows and automation capabilities one post at a time.";
 
     private readonly string _postsDir;
@@ -497,7 +497,7 @@ public class StaticSiteGenerator
         }
 
         sitemap.AppendLine("</urlset>");
-        File.WriteAllText(Path.Combine(_outputDir, "sitemap.xml"), sitemap.ToString());
+        File.WriteAllText(Path.Join(_outputDir, "sitemap.xml"), sitemap.ToString());
     }
 
     private void GenerateRobotsTxt()
@@ -506,7 +506,7 @@ public class StaticSiteGenerator
         robots.AppendLine("User-agent: *");
         robots.AppendLine("Allow: /");
         robots.AppendLine($"Sitemap: {SiteBaseUrl}/sitemap.xml");
-        File.WriteAllText(Path.Combine(_outputDir, "robots.txt"), robots.ToString());
+        File.WriteAllText(Path.Join(_outputDir, "robots.txt"), robots.ToString());
     }
 
     private void GenerateRssFeed(List<BlogPost> posts)

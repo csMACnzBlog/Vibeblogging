@@ -429,7 +429,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var sitemapPath = Path.Combine(_outputDir, "sitemap.xml");
+        var sitemapPath = Path.Join(_outputDir, "sitemap.xml");
         Assert.True(File.Exists(sitemapPath));
     }
 
@@ -445,7 +445,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var sitemapContent = File.ReadAllText(Path.Combine(_outputDir, "sitemap.xml"));
+        var sitemapContent = File.ReadAllText(Path.Join(_outputDir, "sitemap.xml"));
         Assert.Contains("sitemap-test.html", sitemapContent);
         Assert.Contains("<loc>", sitemapContent);
         Assert.Contains("<changefreq>", sitemapContent);
@@ -463,7 +463,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var robotsPath = Path.Combine(_outputDir, "robots.txt");
+        var robotsPath = Path.Join(_outputDir, "robots.txt");
         Assert.True(File.Exists(robotsPath));
     }
 
@@ -478,7 +478,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var robotsContent = File.ReadAllText(Path.Combine(_outputDir, "robots.txt"));
+        var robotsContent = File.ReadAllText(Path.Join(_outputDir, "robots.txt"));
         Assert.Contains("Sitemap:", robotsContent);
         Assert.Contains("sitemap.xml", robotsContent);
         Assert.Contains("User-agent: *", robotsContent);
@@ -496,7 +496,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var postContent = File.ReadAllText(Path.Combine(_outputDir, "canonical-test.html"));
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "canonical-test.html"));
         Assert.Contains("rel=\"canonical\"", postContent);
         Assert.Contains("canonical-test.html", postContent);
     }
@@ -513,7 +513,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var postContent = File.ReadAllText(Path.Combine(_outputDir, "desc-test.html"));
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "desc-test.html"));
         Assert.Contains("name=\"description\"", postContent);
         Assert.Contains("meaningful content", postContent);
     }
@@ -530,7 +530,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var postContent = File.ReadAllText(Path.Combine(_outputDir, "og-test.html"));
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "og-test.html"));
         Assert.Contains("property=\"og:title\"", postContent);
         Assert.Contains("property=\"og:description\"", postContent);
         Assert.Contains("property=\"og:url\"", postContent);
@@ -550,7 +550,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var postContent = File.ReadAllText(Path.Combine(_outputDir, "ld-test.html"));
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "ld-test.html"));
         Assert.Contains("application/ld+json", postContent);
         Assert.Contains("BlogPosting", postContent);
     }
@@ -570,7 +570,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert: RSS feed should contain all 12 posts, not just 10
-        var rssContent = File.ReadAllText(Path.Combine(_outputDir, "rss.xml"));
+        var rssContent = File.ReadAllText(Path.Join(_outputDir, "rss.xml"));
         Assert.Contains("post11.html", rssContent);
         Assert.Contains("post12.html", rssContent);
     }
@@ -586,7 +586,7 @@ public class StaticSiteGeneratorTests
         generator.Generate();
 
         // Assert
-        var rssContent = File.ReadAllText(Path.Combine(_outputDir, "rss.xml"));
+        var rssContent = File.ReadAllText(Path.Join(_outputDir, "rss.xml"));
         Assert.Contains("atom:link", rssContent);
         Assert.Contains("rel=\"self\"", rssContent);
     }
