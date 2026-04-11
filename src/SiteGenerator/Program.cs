@@ -16,6 +16,9 @@ class Program
 
 public class StaticSiteGenerator
 {
+    private const string SiteBaseUrl = "https://blog.csmac.nz/Vibeblogging";
+    private const string SiteDescription = "Vibeblogging - A daily experiment in AI-generated writing, exploring GitHub's agentic workflows and automation capabilities one post at a time.";
+
     private readonly string _postsDir;
     private readonly string _templatesDir;
     private readonly string _outputDir;
@@ -67,6 +70,12 @@ public class StaticSiteGenerator
         
         // Generate RSS feed
         GenerateRssFeed(posts);
+        
+        // Generate sitemap
+        GenerateSitemap(posts);
+        
+        // Generate robots.txt
+        GenerateRobotsTxt();
         
         // Generate search page
         GenerateSearchPage(posts);
@@ -198,7 +207,8 @@ public class StaticSiteGenerator
                 .Replace("{{TITLE}}", post.Title)
                 .Replace("{{DATE}}", post.Date.ToString("yyyy-MM-dd"))
                 .Replace("{{FORMATTED_DATE}}", post.Date.ToString("MMMM dd, yyyy"))
-                .Replace("{{CONTENT}}", post.Content);
+                .Replace("{{CONTENT}}", post.Content)
+                .Replace("{{SEO_META}}", BuildPostSeoMeta(post));
             
             // Handle featured image
             if (!string.IsNullOrEmpty(post.FeaturedImage))
@@ -248,7 +258,8 @@ public class StaticSiteGenerator
             var html = template
                 .Replace("{{POST_LIST}}", postList)
                 .Replace("{{PAGINATION}}", pagination)
-                .Replace("{{PAGE_INDICATOR}}", pageIndicator);
+                .Replace("{{PAGE_INDICATOR}}", pageIndicator)
+                .Replace("{{SEO_META}}", BuildIndexSeoMeta(pageNumber));
 
             var fileName = pageNumber == 1 ? "index.html" : $"page{pageNumber}.html";
             File.WriteAllText(Path.Combine(_outputDir, fileName), html);
@@ -333,37 +344,197 @@ public class StaticSiteGenerator
 
     private string GetExcerpt(string htmlContent)
     {
-        // Strip HTML tags
         var text = Regex.Replace(htmlContent, "<.*?>", "");
-        
-        // Get first 200 characters
         if (text.Length > 200)
-        {
             text = text.Substring(0, 200) + "...";
-        }
-        
         return text;
+    }
+
+    private string GetDescription(string htmlContent)
+    {
+        var text = Regex.Replace(htmlContent, "<.*?>", "");
+        text = text
+            .Replace("&amp;", "&")
+            .Replace("&lt;", "<")
+            .Replace("&gt;", ">")
+            .Replace("&quot;", "\"")
+            .Replace("&#39;", "'")
+            .Replace("&nbsp;", " ");
+        text = Regex.Replace(text, @"\s+", " ").Trim();
+        if (text.Length > 160)
+            text = text.Substring(0, 160) + "...";
+        return text;
+    }
+
+    private string BuildPostSeoMeta(BlogPost post)
+    {
+        var description = GetDescription(post.Content);
+        var canonicalUrl = $"{SiteBaseUrl}/{post.Slug}.html";
+        var ogImage = !string.IsNullOrEmpty(post.FeaturedImage)
+            ? $"{SiteBaseUrl}/images/posts/{post.FeaturedImage}"
+            : $"{SiteBaseUrl}/images/headerbanner_dark.png";
+        var titleAttr = EscapeHtmlAttribute(post.Title + " - Vibeblogging");
+        var descAttr = EscapeHtmlAttribute(description);
+
+        var sb = new StringBuilder();
+        sb.AppendLine($"<meta name=\"description\" content=\"{descAttr}\">");
+        sb.AppendLine($"    <link rel=\"canonical\" href=\"{canonicalUrl}\">");
+        sb.AppendLine($"    <meta property=\"og:type\" content=\"article\">");
+        sb.AppendLine($"    <meta property=\"og:title\" content=\"{titleAttr}\">");
+        sb.AppendLine($"    <meta property=\"og:description\" content=\"{descAttr}\">");
+        sb.AppendLine($"    <meta property=\"og:url\" content=\"{canonicalUrl}\">");
+        sb.AppendLine($"    <meta property=\"og:image\" content=\"{ogImage}\">");
+        sb.AppendLine($"    <meta property=\"og:site_name\" content=\"Vibeblogging\">");
+        sb.AppendLine($"    <meta property=\"article:published_time\" content=\"{post.Date:yyyy-MM-ddTHH:mm:ssZ}\">");
+        foreach (var tag in post.Tags)
+            sb.AppendLine($"    <meta property=\"article:tag\" content=\"{EscapeHtmlAttribute(tag)}\">");
+        sb.AppendLine($"    <meta name=\"twitter:card\" content=\"summary_large_image\">");
+        sb.AppendLine($"    <meta name=\"twitter:title\" content=\"{titleAttr}\">");
+        sb.AppendLine($"    <meta name=\"twitter:description\" content=\"{descAttr}\">");
+        sb.AppendLine($"    <meta name=\"twitter:image\" content=\"{ogImage}\">");
+        sb.Append(BuildPostStructuredData(post, description, canonicalUrl, ogImage));
+        return sb.ToString();
+    }
+
+    private string BuildIndexSeoMeta(int pageNumber)
+    {
+        var canonicalUrl = pageNumber == 1
+            ? $"{SiteBaseUrl}/"
+            : $"{SiteBaseUrl}/page{pageNumber}.html";
+        var ogImage = $"{SiteBaseUrl}/images/headerbanner_dark.png";
+        var descAttr = EscapeHtmlAttribute(SiteDescription);
+        var titleAttr = EscapeHtmlAttribute("Vibeblogging - A Vibe Blog");
+
+        var sb = new StringBuilder();
+        sb.AppendLine($"<meta name=\"description\" content=\"{descAttr}\">");
+        sb.AppendLine($"    <link rel=\"canonical\" href=\"{canonicalUrl}\">");
+        sb.AppendLine($"    <meta property=\"og:type\" content=\"website\">");
+        sb.AppendLine($"    <meta property=\"og:title\" content=\"{titleAttr}\">");
+        sb.AppendLine($"    <meta property=\"og:description\" content=\"{descAttr}\">");
+        sb.AppendLine($"    <meta property=\"og:url\" content=\"{canonicalUrl}\">");
+        sb.AppendLine($"    <meta property=\"og:image\" content=\"{ogImage}\">");
+        sb.AppendLine($"    <meta property=\"og:site_name\" content=\"Vibeblogging\">");
+        sb.AppendLine($"    <meta name=\"twitter:card\" content=\"summary_large_image\">");
+        sb.AppendLine($"    <meta name=\"twitter:title\" content=\"{titleAttr}\">");
+        sb.AppendLine($"    <meta name=\"twitter:description\" content=\"{descAttr}\">");
+        sb.AppendLine($"    <meta name=\"twitter:image\" content=\"{ogImage}\">");
+        sb.Append(BuildIndexStructuredData());
+        return sb.ToString();
+    }
+
+    private string BuildPostStructuredData(BlogPost post, string description, string canonicalUrl, string ogImage)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("    <script type=\"application/ld+json\">");
+        sb.AppendLine("    {");
+        sb.AppendLine("      \"@context\": \"https://schema.org\",");
+        sb.AppendLine("      \"@type\": \"BlogPosting\",");
+        sb.AppendLine($"      \"headline\": {JsonEscapeString(post.Title)},");
+        sb.AppendLine($"      \"datePublished\": \"{post.Date:yyyy-MM-ddTHH:mm:ssZ}\",");
+        sb.AppendLine($"      \"description\": {JsonEscapeString(description)},");
+        sb.AppendLine($"      \"image\": \"{ogImage}\",");
+        sb.AppendLine($"      \"url\": \"{canonicalUrl}\",");
+        if (post.Tags.Any())
+            sb.AppendLine($"      \"keywords\": {JsonEscapeString(string.Join(", ", post.Tags))},");
+        sb.AppendLine("      \"author\": {");
+        sb.AppendLine("        \"@type\": \"Person\",");
+        sb.AppendLine("        \"name\": \"csMACnz\"");
+        sb.AppendLine("      },");
+        sb.AppendLine("      \"publisher\": {");
+        sb.AppendLine("        \"@type\": \"Organization\",");
+        sb.AppendLine("        \"name\": \"Vibeblogging\",");
+        sb.AppendLine($"        \"url\": \"{SiteBaseUrl}/\"");
+        sb.AppendLine("      }");
+        sb.AppendLine("    }");
+        sb.Append("    </script>");
+        return sb.ToString();
+    }
+
+    private string BuildIndexStructuredData()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("    <script type=\"application/ld+json\">");
+        sb.AppendLine("    {");
+        sb.AppendLine("      \"@context\": \"https://schema.org\",");
+        sb.AppendLine("      \"@type\": \"Blog\",");
+        sb.AppendLine("      \"name\": \"Vibeblogging\",");
+        sb.AppendLine($"      \"url\": \"{SiteBaseUrl}/\",");
+        sb.AppendLine($"      \"description\": {JsonEscapeString(SiteDescription)},");
+        sb.AppendLine("      \"author\": {");
+        sb.AppendLine("        \"@type\": \"Person\",");
+        sb.AppendLine("        \"name\": \"csMACnz\"");
+        sb.AppendLine("      }");
+        sb.AppendLine("    }");
+        sb.Append("    </script>");
+        return sb.ToString();
+    }
+
+    private void GenerateSitemap(List<BlogPost> posts)
+    {
+        var sitemap = new StringBuilder();
+        sitemap.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        sitemap.AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+
+        // Index page
+        sitemap.AppendLine("  <url>");
+        sitemap.AppendLine($"    <loc>{SiteBaseUrl}/</loc>");
+        var newestDate = posts.FirstOrDefault()?.Date;
+        if (newestDate.HasValue)
+            sitemap.AppendLine($"    <lastmod>{newestDate.Value:yyyy-MM-dd}</lastmod>");
+        sitemap.AppendLine("    <changefreq>daily</changefreq>");
+        sitemap.AppendLine("    <priority>1.0</priority>");
+        sitemap.AppendLine("  </url>");
+
+        // Individual post pages
+        foreach (var post in posts)
+        {
+            sitemap.AppendLine("  <url>");
+            sitemap.AppendLine($"    <loc>{SiteBaseUrl}/{post.Slug}.html</loc>");
+            sitemap.AppendLine($"    <lastmod>{post.Date:yyyy-MM-dd}</lastmod>");
+            sitemap.AppendLine("    <changefreq>monthly</changefreq>");
+            sitemap.AppendLine("    <priority>0.8</priority>");
+            sitemap.AppendLine("  </url>");
+        }
+
+        sitemap.AppendLine("</urlset>");
+        File.WriteAllText(Path.Join(_outputDir, "sitemap.xml"), sitemap.ToString());
+    }
+
+    private void GenerateRobotsTxt()
+    {
+        var robots = new StringBuilder();
+        robots.AppendLine("User-agent: *");
+        robots.AppendLine("Allow: /");
+        robots.AppendLine($"Sitemap: {SiteBaseUrl}/sitemap.xml");
+        File.WriteAllText(Path.Join(_outputDir, "robots.txt"), robots.ToString());
     }
 
     private void GenerateRssFeed(List<BlogPost> posts)
     {
         var rss = new StringBuilder();
         rss.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        rss.AppendLine("<rss version=\"2.0\">");
+        rss.AppendLine("<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\">");
         rss.AppendLine("  <channel>");
         rss.AppendLine("    <title>Vibeblogging</title>");
-        rss.AppendLine("    <link>https://csmacnzblog.github.io/Vibeblogging/</link>");
-        rss.AppendLine("    <description>A vibe blog</description>");
+        rss.AppendLine($"    <link>{SiteBaseUrl}/</link>");
+        rss.AppendLine($"    <description>{EscapeXml(SiteDescription)}</description>");
         rss.AppendLine("    <language>en-us</language>");
+        rss.AppendLine($"    <atom:link href=\"{SiteBaseUrl}/rss.xml\" rel=\"self\" type=\"application/rss+xml\"/>");
+        rss.AppendLine("    <image>");
+        rss.AppendLine($"      <url>{SiteBaseUrl}/images/headerbanner_dark.png</url>");
+        rss.AppendLine("      <title>Vibeblogging</title>");
+        rss.AppendLine($"      <link>{SiteBaseUrl}/</link>");
+        rss.AppendLine("    </image>");
         
-        foreach (var post in posts.Take(10))
+        foreach (var post in posts)
         {
             rss.AppendLine("    <item>");
             rss.AppendLine($"      <title>{EscapeXml(post.Title)}</title>");
-            rss.AppendLine($"      <link>https://csmacnzblog.github.io/Vibeblogging/{post.Slug}.html</link>");
-            rss.AppendLine($"      <guid>https://csmacnzblog.github.io/Vibeblogging/{post.Slug}.html</guid>");
+            rss.AppendLine($"      <link>{SiteBaseUrl}/{post.Slug}.html</link>");
+            rss.AppendLine($"      <guid>{SiteBaseUrl}/{post.Slug}.html</guid>");
             rss.AppendLine($"      <pubDate>{post.Date:R}</pubDate>");
-            rss.AppendLine($"      <description>{EscapeXml(GetExcerpt(post.Content))}</description>");
+            rss.AppendLine($"      <description>{EscapeXml(GetDescription(post.Content))}</description>");
+            rss.AppendLine($"      <content:encoded><![CDATA[{post.Content}]]></content:encoded>");
             rss.AppendLine("    </item>");
         }
         

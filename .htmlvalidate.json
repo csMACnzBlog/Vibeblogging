@@ -2,5 +2,15 @@
   "extends": ["html-validate:recommended"],
   "rules": {
     "no-trailing-whitespace": "off"
-  }
+  },
+  "elements": [
+    "html5",
+    {
+      "meta": {
+        "attributes": {
+          "property": {}
+        }
+      }
+    }
+  ]
 }

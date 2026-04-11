@@ -418,6 +418,180 @@ public class StaticSiteGeneratorTests
     }
 
 
+    [Fact]
+    public void Generate_CreatesSitemapXml()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var sitemapPath = Path.Join(_outputDir, "sitemap.xml");
+        Assert.True(File.Exists(sitemapPath));
+    }
+
+    [Fact]
+    public void Generate_SitemapContainsPostUrls()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-sitemap-test.md", "Sitemap Test Post", "2026-02-25", "test");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var sitemapContent = File.ReadAllText(Path.Join(_outputDir, "sitemap.xml"));
+        Assert.Contains("sitemap-test.html", sitemapContent);
+        Assert.Contains("<loc>", sitemapContent);
+        Assert.Contains("<changefreq>", sitemapContent);
+        Assert.Contains("<priority>", sitemapContent);
+    }
+
+    [Fact]
+    public void Generate_CreatesRobotsTxt()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var robotsPath = Path.Join(_outputDir, "robots.txt");
+        Assert.True(File.Exists(robotsPath));
+    }
+
+    [Fact]
+    public void Generate_RobotsTxtContainsSitemapReference()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var robotsContent = File.ReadAllText(Path.Join(_outputDir, "robots.txt"));
+        Assert.Contains("Sitemap:", robotsContent);
+        Assert.Contains("sitemap.xml", robotsContent);
+        Assert.Contains("User-agent: *", robotsContent);
+    }
+
+    [Fact]
+    public void Generate_PostPageContainsCanonicalUrl()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-canonical-test.md", "Canonical Test", "2026-02-25", "test");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "canonical-test.html"));
+        Assert.Contains("rel=\"canonical\"", postContent);
+        Assert.Contains("canonical-test.html", postContent);
+    }
+
+    [Fact]
+    public void Generate_PostPageContainsMetaDescription()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-desc-test.md", "Description Test", "2026-02-25", "test", "This is some meaningful content for the description.");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "desc-test.html"));
+        Assert.Contains("name=\"description\"", postContent);
+        Assert.Contains("meaningful content", postContent);
+    }
+
+    [Fact]
+    public void Generate_PostPageContainsOpenGraphTags()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-og-test.md", "OG Test", "2026-02-25", "test");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "og-test.html"));
+        Assert.Contains("property=\"og:title\"", postContent);
+        Assert.Contains("property=\"og:description\"", postContent);
+        Assert.Contains("property=\"og:url\"", postContent);
+        Assert.Contains("property=\"og:type\"", postContent);
+        Assert.Contains("property=\"og:image\"", postContent);
+    }
+
+    [Fact]
+    public void Generate_PostPageContainsStructuredData()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        CreateTestPost("2026-02-25-ld-test.md", "LD Test", "2026-02-25", "test");
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var postContent = File.ReadAllText(Path.Join(_outputDir, "ld-test.html"));
+        Assert.Contains("application/ld+json", postContent);
+        Assert.Contains("BlogPosting", postContent);
+    }
+
+    [Fact]
+    public void Generate_RssFeedIncludesAllPosts()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        for (int i = 1; i <= 12; i++)
+        {
+            CreateTestPost($"2026-01-{i:D2}-post{i}.md", $"Post {i}", $"2026-01-{i:D2}", "test");
+        }
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert: RSS feed should contain all 12 posts, not just 10
+        var rssContent = File.ReadAllText(Path.Join(_outputDir, "rss.xml"));
+        Assert.Contains("post11.html", rssContent);
+        Assert.Contains("post12.html", rssContent);
+    }
+
+    [Fact]
+    public void Generate_RssFeedContainsAtomLink()
+    {
+        // Arrange
+        SetupTestEnvironment();
+        var generator = CreateGenerator();
+
+        // Act
+        generator.Generate();
+
+        // Assert
+        var rssContent = File.ReadAllText(Path.Join(_outputDir, "rss.xml"));
+        Assert.Contains("atom:link", rssContent);
+        Assert.Contains("rel=\"self\"", rssContent);
+    }
+
+
     private StaticSiteGenerator CreateGenerator()
     {
         // Save current directory
@@ -442,6 +616,7 @@ public class StaticSiteGeneratorTests
 <head>
     <title>{{TITLE}}</title>
     <link rel=""stylesheet"" href=""styles.css"">
+    {{SEO_META}}
 </head>
 <body>
     <article>
