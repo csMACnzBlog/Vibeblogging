@@ -1,0 +1,5 @@
+# Exclude the live blog domain — canonical URLs and OG meta tags in newly generated
+# pages point to blog.csmac.nz/Vibeblogging/ before the post has been published,
+# so lychee would fail on any PR that adds a new post. These links are validated
+# implicitly by the deploy workflow once the site is live.
+^https://blog\.csmac\.nz/Vibeblogging/
