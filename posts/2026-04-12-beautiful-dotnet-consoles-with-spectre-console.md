@@ -317,7 +317,7 @@ Spectre.Console has substantial real-world traction. Cake (the .NET build automa
 
 A Serilog sink is available too — `Serilog.Sinks.SpectreConsole` — so you can route structured log output through Spectre's markup engine.
 
-The [examples repository](https://github.com/spectreconsoles/examples) has runnable samples for every feature if you prefer to learn by running code.
+The [examples repository](https://github.com/spectreconsole/examples) has runnable samples for every feature if you prefer to learn by running code.
 
 ## Wrapping Up
 
