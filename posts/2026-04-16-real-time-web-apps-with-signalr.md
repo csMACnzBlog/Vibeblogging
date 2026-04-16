@@ -165,7 +165,8 @@ public class ChatHub : Hub<IChatClient>
 {
     public async Task SendMessage(string message)
     {
-        await Clients.All.ReceiveMessage(Context.User!.Identity!.Name!, message);
+        var userName = Context.User?.Identity?.Name ?? Context.ConnectionId;
+        await Clients.All.ReceiveMessage(userName, message);
     }
 }
 ```
