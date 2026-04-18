@@ -219,10 +219,10 @@ public class GetProductHandlerTests
     public async Task Returns_null_when_product_not_found()
     {
         var repository = Substitute.For<IProductRepository>();
-        repository.GetByIdAsync(99, default).Returns((Product?)null);
+        repository.GetByIdAsync(99, CancellationToken.None).Returns((Product?)null);
 
         var handler = new GetProductHandler(repository);
-        var result = await handler.Handle(new GetProductQuery(99), default);
+        var result = await handler.Handle(new GetProductQuery(99), CancellationToken.None);
 
         Assert.Null(result);
     }
@@ -231,11 +231,11 @@ public class GetProductHandlerTests
     public async Task Returns_dto_when_product_exists()
     {
         var repository = Substitute.For<IProductRepository>();
-        repository.GetByIdAsync(1, default).Returns(
+        repository.GetByIdAsync(1, CancellationToken.None).Returns(
             new Product { Id = 1, Name = "Widget", Price = 9.99m });
 
         var handler = new GetProductHandler(repository);
-        var result = await handler.Handle(new GetProductQuery(1), default);
+        var result = await handler.Handle(new GetProductQuery(1), CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Equal("Widget", result.Name);
