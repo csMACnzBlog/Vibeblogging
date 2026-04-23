@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using Markdig;
 
@@ -572,13 +573,7 @@ public class StaticSiteGenerator
             .Replace("\"", "&quot;");
     }
 
-    private string HtmlEncodeText(string text)
-    {
-        return text
-            .Replace("&", "&amp;")
-            .Replace("<", "&lt;")
-            .Replace(">", "&gt;");
-    }
+    private string HtmlEncodeText(string text) => WebUtility.HtmlEncode(text);
 
     private string BuildTagButtonsHtml(List<string> tags)
     {
