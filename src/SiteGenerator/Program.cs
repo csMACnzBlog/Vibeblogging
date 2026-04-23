@@ -204,7 +204,7 @@ public class StaticSiteGenerator
         foreach (var post in posts)
         {
             var html = template
-                .Replace("{{TITLE}}", post.Title)
+                .Replace("{{TITLE}}", HtmlEncodeText(post.Title))
                 .Replace("{{DATE}}", post.Date.ToString("yyyy-MM-dd"))
                 .Replace("{{FORMATTED_DATE}}", post.Date.ToString("MMMM dd, yyyy"))
                 .Replace("{{CONTENT}}", post.Content)
@@ -280,7 +280,7 @@ public class StaticSiteGenerator
             }
 
             postList.AppendLine("  <div class=\"post-item-content\">");
-            postList.AppendLine($"    <h2><a href=\"{post.Slug}.html\">{post.Title}</a></h2>");
+            postList.AppendLine($"    <h2><a href=\"{post.Slug}.html\">{HtmlEncodeText(post.Title)}</a></h2>");
             postList.AppendLine($"    <div class=\"post-meta\">");
             postList.AppendLine($"      <time datetime=\"{post.Date:yyyy-MM-dd}\">{post.Date:MMMM dd, yyyy}</time>");
             if (post.Tags.Any())
@@ -570,6 +570,14 @@ public class StaticSiteGenerator
         return text
             .Replace("&", "&amp;")
             .Replace("\"", "&quot;");
+    }
+
+    private string HtmlEncodeText(string text)
+    {
+        return text
+            .Replace("&", "&amp;")
+            .Replace("<", "&lt;")
+            .Replace(">", "&gt;");
     }
 
     private string BuildTagButtonsHtml(List<string> tags)
