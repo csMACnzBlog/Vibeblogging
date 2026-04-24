@@ -162,6 +162,19 @@ When adding new scripts to this directory:
 - Consider using `.env` files for local development (add to `.gitignore`)
 - For CI/CD, store secrets in GitHub Actions secrets
 
+#### Configuring `HUGGINGFACE_API_KEY` for the Copilot cloud agent
+
+The Copilot cloud agent reads secrets from a dedicated GitHub Actions **environment** called `copilot`. Storing the key as a plain repository secret is **not** sufficient — it must live in the `copilot` environment.
+
+To add it:
+
+1. Go to **Repository Settings → Environments**.
+2. Create or select the **`copilot`** environment.
+3. Under **Environment secrets**, click **Add environment secret**.
+4. Set **Name** to `HUGGINGFACE_API_KEY` and **Value** to your HuggingFace API token.
+
+Once the secret is in the `copilot` environment, the `.github/workflows/copilot-setup-steps.yml` workflow exposes it automatically (via `environment: copilot`) so Copilot can call `scripts/generate_blog_image.py` without any extra configuration.
+
 ## Troubleshooting
 
 ### generate_blog_image.py Issues
