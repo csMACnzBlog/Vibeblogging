@@ -170,7 +170,7 @@ Use for generating featured images for blog posts. The agent:
 - Produces pseudo realistic cell-shaded style with focus and blur effects
 - Generates images using everyday scenes and objects (no people, animals, or geometric shapes)
 - Handles image prompt construction and API integration
-- Requires `HUGGINGFACE_API_KEY` environment variable
+- Requires `HUGGINGFACE_API_KEY` — must be stored as a secret in the **`copilot` GitHub Actions environment** (repository Settings → Environments → copilot → Environment secrets), NOT as a repository-level secret
 
 To generate an image, use `@image-generator` with the post title and key themes.
 
@@ -221,7 +221,7 @@ python scripts/generate_blog_image.py \
   --output "post-slug.png"
 ```
 
-Requires `HUGGINGFACE_API_KEY` environment variable. See `scripts/README.md` for details.
+Requires `HUGGINGFACE_API_KEY` stored as a secret in the **`copilot` GitHub Actions environment** (repository Settings → Environments → copilot). See `scripts/README.md` for details.
 
 ### Test Changes
 ```bash
