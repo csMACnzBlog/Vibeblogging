@@ -346,9 +346,10 @@ public class StaticSiteGenerator
     private string GetExcerpt(string htmlContent)
     {
         var text = Regex.Replace(htmlContent, "<.*?>", "");
+        text = WebUtility.HtmlDecode(text);
         if (text.Length > 200)
             text = text.Substring(0, 200) + "...";
-        return text;
+        return WebUtility.HtmlEncode(text);
     }
 
     private string GetDescription(string htmlContent)
