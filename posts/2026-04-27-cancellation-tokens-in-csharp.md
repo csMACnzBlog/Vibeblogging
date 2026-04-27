@@ -180,7 +180,7 @@ public async Task<IActionResult> Search(
 
 When a token fires, any async operation observing it throws `OperationCanceledException`. In most cases you don't handle this — you let it propagate up to wherever you want the cancellation to stop (usually a request handler or background service loop).
 
-ASP.NET Core handles it gracefully: if the exception propagates out of a controller or minimal API handler, the framework returns a 499 or 500 response (depending on the host) and doesn't log it as an unhandled error.
+ASP.NET Core handles it gracefully: if the exception propagates out of a controller or minimal API handler due to client disconnection, the framework doesn't log it as an unhandled error — there's typically no connection left to respond to, so it quietly discards the operation.
 
 Where you do need to handle it is in background service loops where you don't want a single cancelled operation to kill the whole service:
 
