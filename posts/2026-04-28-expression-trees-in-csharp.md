@@ -211,11 +211,11 @@ Not everything compiles to an expression tree. Complex constructs like multi-sta
 ```csharp
 // This compiles but throws at runtime with EF Core
 var results = await context.Orders
-    .Where(o => MyCustomMethod(o.Total))  // can't translate
+    .Where(o => IsHighValueOrder(o.Total))  // can't translate
     .ToListAsync();
 ```
 
-The rule of thumb: if you're writing an expression to be consumed by an LINQ provider, use only the operations the provider documents as supported. If you need arbitrary logic, evaluate the complex parts in memory after the database query.
+The rule of thumb: if you're writing an expression to be consumed by a LINQ provider, use only the operations the provider documents as supported. If you need arbitrary logic, evaluate the complex parts in memory after the database query.
 
 ## Wrapping Up
 
