@@ -272,8 +272,8 @@ public class StronglyTypedIdConverterFactory : JsonConverterFactory
 {
     public override bool CanConvert(Type typeToConvert)
     {
-        // Match any record with a single Guid property named Value
-        if (!typeToConvert.IsValueType && typeToConvert.IsClass)
+        // Match any class with a single Guid property named Value
+        if (typeToConvert.IsClass)
         {
             var props = typeToConvert.GetProperties();
             return props.Length == 1
