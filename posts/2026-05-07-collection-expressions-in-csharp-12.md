@@ -185,7 +185,7 @@ Not every situation calls for a collection expression — if you need to build a
 Collection expressions in C# 12 unify the many ways to create collections into a single, readable syntax. The key things to remember:
 
 - `[1, 2, 3]` works for arrays, lists, spans, and any collection that opts in
-- `..spread` inlines another collection's contents inline
+- `..spread` inlines another collection's contents
 - `[]` gives you an empty collection — the compiler picks the best representation
 - Method arguments and constructors accept collection expressions directly
 - `Span<T>` benefits most — the compiler can avoid heap allocations for literals
