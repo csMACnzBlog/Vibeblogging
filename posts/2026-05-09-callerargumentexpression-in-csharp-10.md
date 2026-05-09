@@ -75,7 +75,7 @@ string? firstName = "Ada";
 string? lastName = null;
 
 Guard.AgainstNull(firstName + " " + lastName);
-// If null, paramName becomes: firstName + " " + lastName
+// If the result is null, paramName becomes: firstName + " " + lastName
 ```
 
 That can be great for debugging because you see exactly what the caller passed.
