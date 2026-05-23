@@ -1,7 +1,7 @@
 ---
 title: Using ProblemDetails in ASP.NET Core APIs
 date: 2026-05-17
-tags: aspnetcore, dotnet, api, errors
+tags: aspnetcore, dotnet, csharp, api, errors
 image: using-problemdetails-in-aspnetcore-apis.png
 ---
 

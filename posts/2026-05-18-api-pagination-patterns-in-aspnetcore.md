@@ -1,7 +1,7 @@
 ---
 title: API Pagination Patterns in ASP.NET Core
 date: 2026-05-18
-tags: aspnetcore, api, dotnet, performance
+tags: aspnetcore, api, dotnet, csharp, performance
 image: api-pagination-patterns-in-aspnetcore.png
 ---
 

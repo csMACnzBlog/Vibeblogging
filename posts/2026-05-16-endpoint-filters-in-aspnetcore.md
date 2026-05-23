@@ -1,7 +1,7 @@
 ---
 title: Endpoint Filters in ASP.NET Core
 date: 2026-05-16
-tags: aspnetcore, dotnet, api, middleware
+tags: aspnetcore, dotnet, csharp, api, middleware
 image: endpoint-filters-in-aspnetcore.png
 ---
 
