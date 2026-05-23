@@ -67,11 +67,11 @@ public class PlaywrightFixture : IAsyncLifetime
         var processInfo = new ProcessStartInfo
         {
             FileName = "python3",
-            Arguments = $"-m http.server 5555 --directory {OutputDir}",
+            Arguments = $"-m http.server 5555 --bind 127.0.0.1 --directory \"{OutputDir}\"",
             UseShellExecute = false,
             CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
+            RedirectStandardOutput = false,
+            RedirectStandardError = false
         };
 
         _serverProcess = Process.Start(processInfo);
