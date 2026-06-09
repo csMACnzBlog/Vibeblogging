@@ -1,5 +1,5 @@
 ---
-title: GeneratedRegex in .NET Fast Regex Patterns
+title: Fast Regex in .NET with GeneratedRegex
 date: 2026-06-09
 tags: csharp, dotnet, performance, regex
 image: generatedregex-in-dotnet-fast-regex-without-runtime-cost.png
