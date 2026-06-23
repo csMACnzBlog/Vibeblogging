@@ -113,17 +113,17 @@ This directory contains GitHub Actions workflows for the Vibeblogging project.
 - Automatic PR comments with findings
 - License compliance checks
 
-### Write Today's Post (`write-todays-post.yml`)
-[![Write Today's Post](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/write-todays-post.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/write-todays-post.yml)
+### Write This Week's Post (`write-todays-post.yml`)
+[![Write This Week's Post](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/write-todays-post.yml/badge.svg)](https://github.com/csMACnzBlog/Vibeblogging/actions/workflows/write-todays-post.yml)
 
-**Trigger**: Daily schedule (00:05 UTC) or manual workflow dispatch
+**Trigger**: Weekly schedule (Thursdays at 00:05 UTC) or manual workflow dispatch
 
 **Purpose**: Looks for an open issue requesting a blog post topic, then starts a Copilot agent session directly via `gh agent-task create`.
 
 **Steps**:
-1. Skip if a `[daily-post]` PR is already open
+1. Skip if a `[weekly-post]` PR is already open
 2. Search for open, unassigned issues that look like post requests (keywords: write, post, blog, article, topic)
-3. Run `gh agent-task create` with the prompt `write todays post implementing the issue` and the issue title/body as context (if a matching issue was found), or with the prompt `write todays post` (if no matching issue was found)
+3. Run `gh agent-task create` with the prompt `write this week's post implementing the issue` and the issue title/body as context (if a matching issue was found), or with the prompt `write this week's post` (if no matching issue was found)
 
 **Required Secret**: `COPILOT_GITHUB_TOKEN` (environment secret in the `write-todays-post` environment)
 

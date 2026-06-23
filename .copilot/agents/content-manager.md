@@ -121,7 +121,7 @@ Maintain a content calendar to plan posts:
 2. Schedule publication dates
 3. Track post ideas and drafts
 4. Balance content types and difficulty levels
-5. Ensure regular publishing cadence
+5. Ensure weekly publishing cadence (new posts on Thursdays)
 
 ## Collaboration
 
